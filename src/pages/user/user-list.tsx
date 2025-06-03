@@ -1,6 +1,6 @@
 import { userService } from "@/services/user-service";
 import { useEffect, useState } from "react";
-import { Loading } from "@/components/loading-animation";
+import { LoadingWrapper } from "@/components/loading";
 import type { User } from "@/models/user";
 import { toast } from "sonner";
 
@@ -17,12 +17,12 @@ export function UserList() {
          .finally(() => setLoading(false))
     }, [])
 
-   if(loading) return <Loading />
+   if(loading) return <LoadingWrapper />
 
    return (
       <div>
          { users.map((user) => (
-            <p>{user.nome}</p>
+            <p key={user.id}>{user.nome}</p>
          )) }
       </div>
    )

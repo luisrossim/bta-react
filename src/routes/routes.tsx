@@ -6,7 +6,6 @@ import LoginPage from "@/pages/login";
 import CustomerPage from "@/pages/customer";
 import ActivityPage from "@/pages/activity";
 import UserPage from "@/pages/user";
-import AuthGuard from "@/components/layout/auth-guard";
 
 const router = createBrowserRouter([
    {
@@ -19,11 +18,7 @@ const router = createBrowserRouter([
    },
    {
       path: "/sistema",
-      element: (
-         <AuthGuard>
-            <MainLayout />
-         </AuthGuard>
-      )
+      element: <MainLayout />
       ,
       children: [
          { path: "", element: <ActivityPage /> },

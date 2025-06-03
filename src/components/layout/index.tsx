@@ -3,6 +3,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 import Header from "./header";
 import { Toaster } from "../ui/sonner";
+import AuthGuard from "./auth-guard";
 
 export default function MainLayout() {
    return (
@@ -10,9 +11,9 @@ export default function MainLayout() {
          <AppSidebar />
          <SidebarInset>
             <Header />
-            <div className="p-4 md:p-6">
+            <AuthGuard>
                <Outlet />
-            </div>
+            </AuthGuard>
             <Toaster richColors />
          </SidebarInset>
       </SidebarProvider>

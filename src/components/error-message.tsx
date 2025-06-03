@@ -1,11 +1,17 @@
+import { X } from "lucide-react"
+
 interface ErrorMessageProps {
-   message: string
+   message?: string
 }
 
-export const ErrorMessage = (props: ErrorMessageProps) => {
+export const ErrorMessage = ({ message = "Erro" }: ErrorMessageProps) => {
    return (
-      <div className="bg-red-200 p-4 rounded-md">
-         <p className="text-red-600 text-sm">{ props.message }</p>
+      <div className="flex flex-wrap items-center text-red-600 gap-2">
+         <div>
+            <X size={18} />
+         </div>
+
+         <p className="text-sm text-wrap">{ message }</p>
       </div>
    )
 }

@@ -16,6 +16,7 @@ import {
    SidebarMenuItem,
    useSidebar,
 } from "@/components/ui/sidebar";
+import { authService } from "@/services/auth-service";
 
 export function NavUser() {
    const { isMobile } = useSidebar();
@@ -50,7 +51,7 @@ export function NavUser() {
                   align="end"
                   sideOffset={4}
                >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => authService.logout()}>
                      <LogOut /> Sair do sistema
                   </DropdownMenuItem>
                </DropdownMenuContent>

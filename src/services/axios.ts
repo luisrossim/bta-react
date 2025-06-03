@@ -1,10 +1,10 @@
 import { environment } from '@/utils/environments/environment';
-//import { UtilsService } from '@/utils/services/utils-service';
 import axios from 'axios';
 
 
 export const axiosInstance = axios.create({
-  baseURL: environment.baseURL
+  baseURL: environment.baseURL,
+  withCredentials: true
 })
 
 
