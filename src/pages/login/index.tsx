@@ -23,13 +23,10 @@ export default function LoginPage() {
                </div>
             </div>
          </div>
-         <div className="bg-muted relative hidden lg:block">
-            <img
-               src={welcome}
-               alt="Image"
-               className="absolute inset-0 h-full w-full object-cover"
-            />
-         </div>
+         <div
+            className="bg-muted relative hidden lg:block bg-cover bg-center hue-rotate-15"
+            style={{ backgroundImage: `url(${welcome})`, backgroundPosition: "bottom" }}
+         ></div>
       </div>
    );
 }

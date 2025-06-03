@@ -1,5 +1,5 @@
 import { environment } from '@/utils/environments/environment';
-import { UtilsService } from '@/utils/services/utils-service';
+//import { UtilsService } from '@/utils/services/utils-service';
 import axios from 'axios';
 
 
@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      UtilsService.actionsForExpiredToken();
+      //UtilsService.actionsForExpiredToken();
     }
 
     return Promise.reject(error);

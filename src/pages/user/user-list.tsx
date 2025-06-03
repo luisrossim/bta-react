@@ -1,10 +1,11 @@
 import { userService } from "@/services/user-service";
 import { useEffect, useState } from "react";
+import { Loading } from "@/components/loading-animation";
 import type { User } from "@/models/user";
+import { toast } from "sonner";
 
 export function UserList() {
    const [users, setUsers] = useState<User[]>([]);
-   const [error, setError] = useState<string | null>(null);
    const [loading, setLoading] = useState<boolean>(false);
 
    useEffect(() => {
@@ -12,23 +13,17 @@ export function UserList() {
       
       userService.getAll()
          .then((res) => setUsers(res))
-         .catch((err) => setError(err))
+         .catch((err) => toast.error(err.response?.data.message || err.message))
          .finally(() => setLoading(false))
     }, [])
 
-   if(error) {
-      return <div className="text-red-500">Erro</div>
-   }
-
-   if(loading) {
-      return <div>Carregando...</div>
-   }
+   if(loading) return <Loading />
 
    return (
       <div>
-         <p>
-            { JSON.stringify(users) }
-         </p>
+         { users.map((user) => (
+            <p>{user.nome}</p>
+         )) }
       </div>
    )
 }

@@ -2,6 +2,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 import Header from "./header";
+import { Toaster } from "../ui/sonner";
 
 export default function MainLayout() {
    return (
@@ -12,6 +13,7 @@ export default function MainLayout() {
             <div className="p-4 md:p-6">
                <Outlet />
             </div>
+            <Toaster richColors />
          </SidebarInset>
       </SidebarProvider>
    );
