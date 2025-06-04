@@ -1,31 +1,31 @@
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Ghost } from "lucide-react";
 
 function NotFoundPage() {
-   return (
-      <div className="flex w-screen h-screen justify-center items-center p-8 bg-neutral-800">
-         <div className="flex flex-col gap-6 border border-neutral-600/50 p-6 md:p-8 rounded-xl w-lg bg-neutral-700/50">
-            <div className="flex flex-col gap-6">
-               <div className="flex items-center text-rose-400">
-                  <X size={22} />
-                  <p>404</p>
-               </div>
-               <div className="border-l border-l-neutral-700">
-                  <div className="px-4 py-2">
-                     <h1 className="font-light text-neutral-300">
-                        Página não encontrada.
-                     </h1>
-                  </div>
-               </div>
-            </div>
+  return (
+    <div className="relative w-screen h-screen bg-white text-slate-800 overflow-hidden">
+      <div
+        className="absolute inset-0 bg-[radial-gradient(#dbeafe_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"
+        aria-hidden="true"
+      />
 
-            <Link to={"/"}>
-               <Button variant={"secondary"}>Voltar para o início</Button>
-            </Link>
-         </div>
+      <div className="relative z-10 flex justify-center items-center h-full p-6">
+        <div className="flex flex-col gap-6 border border-blue-200 p-10 rounded-2xl bg-white/90 shadow-2xl max-w-lg text-center items-center backdrop-blur-md">
+          <Ghost className="w-16 h-16 text-blue-600 animate-bounce drop-shadow" />
+          <h1 className="text-5xl font-extrabold tracking-widest text-blue-700">404</h1>
+          <p className="text-lg font-light text-slate-600">Oops! Você caiu em um buraco negro digital</p>
+          <p className="text-xs text-slate-500">A página que você procura não foi encontrada neste universo.</p>
+
+          <Link to="/">
+            <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white shadow-md transition-colors">
+              Voltar para o início
+            </Button>
+          </Link>
+        </div>
       </div>
-   );
+    </div>
+  );
 }
 
 export default NotFoundPage;

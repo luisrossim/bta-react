@@ -16,10 +16,12 @@ import {
    SidebarMenuItem,
    useSidebar,
 } from "@/components/ui/sidebar";
-import { authService } from "@/services/auth-service";
+import useAuth from "@/hooks/use-auth";
 
 export function NavUser() {
    const { isMobile } = useSidebar();
+   const { getAuthFromLocalStorage } = useAuth();
+   const { logout } = useAuth();
 
    return (
       <SidebarMenu>
@@ -32,13 +34,15 @@ export function NavUser() {
                   >
                      <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarFallback className="rounded-lg">
-                           B
+                           {getAuthFromLocalStorage()?.login.slice(0, 1).toUpperCase()}
                         </AvatarFallback>
                      </Avatar>
                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-medium">bta</span>
+                        <span className="truncate font-medium">
+                           {getAuthFromLocalStorage()?.login}
+                        </span>
                         <span className="truncate text-xs">
-                           bta@exemplo.com
+                           {getAuthFromLocalStorage()?.role}
                         </span>
                      </div>
                      <Settings className="ml-auto size-4" />
@@ -51,7 +55,7 @@ export function NavUser() {
                   align="end"
                   sideOffset={4}
                >
-                  <DropdownMenuItem onClick={() => authService.logout()}>
+                  <DropdownMenuItem onClick={() => logout()}>
                      <LogOut /> Sair do sistema
                   </DropdownMenuItem>
                </DropdownMenuContent>

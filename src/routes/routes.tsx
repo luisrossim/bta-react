@@ -6,6 +6,7 @@ import LoginPage from "@/pages/login";
 import CustomerPage from "@/pages/customer";
 import ActivityPage from "@/pages/activity";
 import UserPage from "@/pages/user";
+import UserForm from "@/pages/user/user-form";
 
 const router = createBrowserRouter([
    {
@@ -24,12 +25,17 @@ const router = createBrowserRouter([
          { path: "", element: <ActivityPage /> },
          { path: "ordens", element: <ServiceOrderPage /> },
          { path: "clientes", element: <CustomerPage /> },
-         { path: "usuarios", element: <UserPage /> }
+         { path: "usuarios", element: <UserPage /> },
+         { path: "usuarios/novo", element: <UserForm /> }
       ],
    },
    {
-      path: "*",
+      path: "404",
       element: <NotFoundPage />,
+   },
+   {
+      path: "*",
+      loader: () => redirect("/404"),
    },
 ]);
 

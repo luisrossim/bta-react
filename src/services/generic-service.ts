@@ -9,7 +9,7 @@ export abstract class GenericService<T> {
         this.path = path
     }
 
-    async create(data: T): Promise<T> {
+    async create(data: Partial<T>): Promise<T> {
         const response = await this.axios.post<T>(this.path, data);
         return response.data;
     }

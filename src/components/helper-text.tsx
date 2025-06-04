@@ -4,7 +4,7 @@ interface HelperTextProps {
 }
 
 export const HelperText = ({ message, variant = 'default' }: HelperTextProps) => {
-   const textColor = variant == "invalid" ? "text-red-500" : "text-neutral-500"
+   const textColor = variant == "invalid" ? "text-red-500" : "text-slate-500"
 
    return (
       <p className={`text-xs ${textColor}`}>

@@ -14,7 +14,7 @@ export default function LoginPage() {
       if(isAuthenticated) {
          navigate("/sistema", { replace: true })
       }
-   })
+   }, [])
 
    return (
       <div className="grid min-h-svh lg:grid-cols-2">
