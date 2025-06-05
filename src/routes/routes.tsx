@@ -26,7 +26,8 @@ const router = createBrowserRouter([
          { path: "ordens", element: <ServiceOrderPage /> },
          { path: "clientes", element: <CustomerPage /> },
          { path: "usuarios", element: <UserPage /> },
-         { path: "usuarios/novo", element: <UserForm /> }
+         { path: "usuarios/form", element: <UserForm /> },
+         { path: "usuarios/form/:id", element: <UserForm /> }
       ],
    },
    {

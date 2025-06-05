@@ -8,12 +8,12 @@ export default function UserPage() {
     return (
         <div className="grid grid-cols-1 gap-8">
             <div className="flex flex-wrap justify-between gap-6 items-end">
-                <div className="grid grid-cols-1 gap-2">
+                <div>
                     <PageTitle title="Usuários e permissões" />
                     <PageSubtitle subtitle="Gerencie as informações e permissões dos usuários do sistema" />
                 </div>
 
-                <Link to={"/sistema/usuarios/novo"}>
+                <Link to={"/sistema/usuarios/form"}>
                     <Button><Plus /> Novo usuário</Button>
                 </Link>
             </div>

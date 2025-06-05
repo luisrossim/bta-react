@@ -1,101 +1,138 @@
-import { PageSubtitle, PageTitle } from "@/components/page-title";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { userFormSchema, type User, type UserForm } from "@/models/user";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createUserSchema, type CreateUser } from "@/models/user";
 import { userService } from "@/services/user-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { rolesMock } from "@/utils/mocks/roles-mock";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { ToastService } from "@/utils/services/toast-service";
+import { FormFieldWrapper } from "@/components/form-field-wrapper";
+import { PageSubtitle, PageTitle } from "@/components/page-title";
+import { Breadcrumb } from "@/components/breadcrumb";
 
 
 export default function UserForm(){
+   const { id } = useParams();
    const roles = rolesMock;
    const navigate = useNavigate();
-   const { register, handleSubmit, control, formState:{ errors } } = useForm<CreateUser>({
-      resolver: zodResolver(createUserSchema)
+   const { register, handleSubmit, control, reset, formState:{ errors } } = useForm<UserForm>({
+      resolver: zodResolver(userFormSchema)
    })
 
-   async function saveUser(data: CreateUser) {
-      console.log(data)
+   useEffect(() => {
+      const handleFetchUser = async () => {
+         if (id) await fetchUser();
+      };
 
-      userService.createWithRole(data)
-         .then(() => actionsForSuccess())
-         .catch((err) => toast.error(err?.response?.data?.message || err?.message))
+      handleFetchUser();
+
+   }, [id]);
+
+
+   const fetchUser = async () => {
+      try {
+         const user: User = await userService.getById(id!);
+         reset(user);
+
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message)
+      }
    }
 
-   function actionsForSuccess(){
-      toast.success("Usuário cadastrado com sucesso.");
+   const handleSaveUser = async (data: UserForm) => {
+      try {
+         if(id)
+            await userService.update(id, data);
+         else
+            await userService.create(data);
+         
+         actionsForSuccess()
+
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message)
+      }
+   }
+
+   const actionsForSuccess = () => {
+      const message = id ? "Usuário editado com sucesso." : "Usuário cadastrado com sucesso."
+      ToastService.showSuccess(message);
       navigate("/sistema/usuarios");
    }
+
+   const titleText = id 
+      ? "Editar informações do usuário" 
+      : "Cadastrar novo usuário";
+
+   const subTitleText = id 
+      ? "Altere as informações do usuário existente" 
+      : "Preencha as informações do usuário e defina uma senha de acesso.";
+
    
    return (
       <div>
-         <div className="grid grid-cols-1 gap-2 mb-8">
-            <PageTitle title="Cadastrar novo usuário" />
-            <PageSubtitle subtitle="Preencha as informações do usuário e defina uma senha de acesso." />
-         </div>
+         <Breadcrumb label="Usuários" redirectTo="/sistema/usuarios" />
+         <PageTitle title={titleText} />
+         <PageSubtitle subtitle={subTitleText} />
 
-         <form onSubmit={handleSubmit(saveUser)}>
+         <form onSubmit={handleSubmit(handleSaveUser)} className="mt-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-               <div className="grid gap-2 lg:col-span-2">
+               <FormFieldWrapper colSpan={2}>
                   <Label htmlFor="nome">Nome</Label>
                   <Input 
                      id="nome" 
                      className={`${errors.nome && "border-red-500"}`}
                      {...register("nome")} 
                   />
-               </div>
+               </FormFieldWrapper>
 
-               <div className="grid gap-2">
+               <FormFieldWrapper>
                   <Label htmlFor="email">E-mail</Label>
                   
                   <Input 
-                     id="email" 
+                     id="email"
+                     disabled={id ? true : false}
                      className={`${errors.email && "border-red-500"}`}
                      {...register("email")}
                   />
-               </div>
+               </FormFieldWrapper>
 
-               <div className="grid gap-2">
+               <FormFieldWrapper>
                   <Label htmlFor="password">Senha de acesso</Label>
                   <Input
                      id="password"
                      type="password"
+                     disabled={id ? true : false}
                      className={`${errors.password && "border-red-500"}`}
                      {...register("password")}
                   />
-               </div>
+               </FormFieldWrapper>
 
-               <div className="grid gap-2">
+               <FormFieldWrapper>
                   <Controller
-                     name="role.connect.id"
-                     defaultValue={2}
+                     name="role.id"
                      control={control}
+                     defaultValue={2}
                      render={({ field }) => (
                         <>
                            <Label>Cargo</Label>
-                           <Select onValueChange={field.onChange} value={field.value?.toString()}>
-                              <SelectTrigger className={`w-full ${errors.role?.connect?.id ? "border-red-500" : ""}`}>
-                                 <SelectValue placeholder="" />
+                           <Select
+                              onValueChange={field.onChange}
+                              value={field.value?.toString()}
+                           >
+                              <SelectTrigger className={`w-full ${errors.role?.id && "border-red-500"}`}>
+                                 <SelectValue placeholder="Selecione um cargo" />
                               </SelectTrigger>
                               <SelectContent>
                                  <SelectGroup>
                                     {roles.map((role) => (
-                                       <SelectItem key={role.id} value={String(role.id)}>
-                                          {role.descricao}
-                                       </SelectItem>
+                                    <SelectItem key={role.id} value={String(role.id)}>
+                                       {role.descricao}
+                                    </SelectItem>
                                     ))}
                                  </SelectGroup>
                               </SelectContent>
@@ -103,20 +140,20 @@ export default function UserForm(){
                         </>
                      )}
                   />
-               </div>
+               </FormFieldWrapper>
 
-               <div className="grid gap-2">
+               <FormFieldWrapper>
                   <Label htmlFor="telefone">Telefone</Label>
                   <Input
                      id="telefone"
                      className={`${errors.telefone && "border-red-500"}`}
                      {...register("telefone")}
                   />
-               </div>
+               </FormFieldWrapper>
             </div>
 
             <Button type="submit" className="my-6 float-end">
-               <Check /> Cadastrar
+               <Check /> {id ? "Editar" : "Cadastrar"}
             </Button>
          </form>
       </div>

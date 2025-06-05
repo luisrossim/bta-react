@@ -1,4 +1,4 @@
-import type { CreateUser, User } from "@/models/user";
+import type { User } from "@/models/user";
 import { GenericService } from "./generic-service";
 
 class UserService extends GenericService<User> {
@@ -6,13 +6,13 @@ class UserService extends GenericService<User> {
         super("v1/usuario");
     }
 
-    async createWithRole(data: CreateUser): Promise<User>{
-        const response = await this.axios.post<User>(this.path, data)
+    async getByRole(role: string): Promise<User> {
+        const response = await this.axios.get<User>(this.path, { params: { role } })
         return response.data;
     }
 
-    async getByRole(role: string): Promise<User> {
-        const response = await this.axios.get<User>(this.path, { params: { role } })
+    async deactivate(id: number) {
+        const response = await this.axios.put<void>(`${this.path}/${id}/desativar`)
         return response.data;
     }
 }

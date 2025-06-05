@@ -178,3 +178,7 @@
 h1 {
    font-family: Inter Tight, sans-serif !important;
 }
+
+.table-striped tr:nth-child(even) {
+   background-color: #f8fafc;
+}

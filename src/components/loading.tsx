@@ -3,10 +3,7 @@ import loadingCyanIcon from "@/assets/images/spinner-cyan.svg"
 
 export const LoadingWrapper = () => {
    return (
-      <div 
-         className="flex justify-center items-center w-full"
-         style={{ height: 'calc(100vh - 160px)' }}
-      >
+      <div className="flex justify-center items-center w-full">
          <LoadingIcon />
       </div>
    )

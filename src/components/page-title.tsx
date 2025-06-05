@@ -1,6 +1,6 @@
 export const PageTitle = ({ title }: { title: string }) => {
     return (
-        <h1 className="text-2xl md:text-3xl font-medium">
+        <h1 className="text-2xl md:text-3xl font-medium mb-2">
             {title}
         </h1>
     )

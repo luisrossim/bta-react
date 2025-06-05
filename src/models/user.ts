@@ -1,26 +1,19 @@
-import type { Role } from "./role";
+import { roleSchema } from "./role";
 import { z } from "zod";
 
-export interface User {
+export const userFormSchema = z.object({
+    nome: z.string().min(2, "O nome deve possuir pelo menos 2 caracteres"),
+    email: z.string().email(),
+    password: z.string().min(6, "A senha deve possuir pelo menos 6 caracteres").optional(),
+    telefone: z.string().min(1),
+    role: roleSchema
+})
+
+export type UserForm = z.infer<typeof userFormSchema>
+
+export interface User extends UserForm {
     id: number;
-    nome: string;
-    email: string;
-    telefone: string;
-    role: Role;
+    ativo: boolean;
     atualizadoEm: Date;
     criadoEm: Date;
 }
-
-export const createUserSchema = z.object({
-    nome: z.string().min(2, "O nome deve possuir pelo menos 2 caracteres"),
-    email: z.string().email(),
-    password: z.string().min(6, "A senha deve possuir pelo menos 6 caracteres"),
-    telefone: z.string().min(1),
-    role: z.object({
-        connect: z.object({
-            id: z.coerce.number()
-        })
-    })
-})
-
-export type CreateUser = z.infer<typeof createUserSchema>
