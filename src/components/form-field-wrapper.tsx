@@ -7,9 +7,9 @@ interface FormFieldWrapperProps {
 
 export const FormFieldWrapper = ({ colSpan = 1, children }: FormFieldWrapperProps) => {
    const colSpanClass: Record<number, string> = {
-      1: 'col-span-1',
-      2: 'col-span-2',
-      3: 'col-span-3'
+      1: 'lg:col-span-1',
+      2: 'lg:col-span-2',
+      3: 'lg:col-span-3'
    }
 
    return (

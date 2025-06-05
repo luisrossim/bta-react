@@ -1,27 +1,17 @@
 import { z } from "zod";
+import { createAddressSchema } from "./address";
 
-interface Customer {
-    id: number;
-    nome: string;
-    cpf: string;
-    telefone: string;
-    endereco: object;
-    isAtivo: boolean;
-    atualizadoEm: Date;
-    criadoEm: Date;
-}
-
-const createCustomerSchema = z.object({
-    nome: z.string(),
-    cpf: z.string(),
-    telefone: z.string()
+export const customerFormSchema = z.object({
+    nome: z.string().nonempty(),
+    telefone: z.string().nonempty(),
+    cpf: z.string().length(11),
+    endereco: createAddressSchema
 })
 
-type CreateCustomerSchema = z.infer<typeof createCustomerSchema>;
+export type CustomerForm = z.infer<typeof customerFormSchema>;
 
-
-export { 
-    type Customer,
-    type CreateCustomerSchema,
-    createCustomerSchema
+export interface Customer extends CustomerForm {
+    id: number
+    atualizadoEm: Date
+    criadoEm: Date
 }

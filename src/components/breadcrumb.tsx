@@ -8,7 +8,7 @@ interface BreadcrumbProps {
 
 export const Breadcrumb = ({ label, redirectTo }: BreadcrumbProps) => {
    return (
-      <div className="flex items-center gap-1 text-blue-500 mb-4">
+      <div className="flex items-center text-blue-500 mb-4">
          <ArrowLeft size={16} />
          <Link to={redirectTo} className="text-sm hover:underline hover:cursor-pointer p-1">
             {label}

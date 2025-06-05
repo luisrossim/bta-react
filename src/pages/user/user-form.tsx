@@ -9,16 +9,19 @@ import { rolesMock } from "@/utils/mocks/roles-mock";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastService } from "@/utils/services/toast-service";
 import { FormFieldWrapper } from "@/components/form-field-wrapper";
 import { PageSubtitle, PageTitle } from "@/components/page-title";
 import { Breadcrumb } from "@/components/breadcrumb";
+import { LoadingWrapper } from "@/components/loading";
+import { toast } from "sonner";
 
 
-export default function UserForm(){
+export default function UserFormPage(){
    const { id } = useParams();
    const roles = rolesMock;
+   const [loading, setLoading] = useState<boolean>(false);
    const navigate = useNavigate();
    const { register, handleSubmit, control, reset, formState:{ errors } } = useForm<UserForm>({
       resolver: zodResolver(userFormSchema)
@@ -35,34 +38,38 @@ export default function UserForm(){
 
 
    const fetchUser = async () => {
+      setLoading(true);
       try {
          const user: User = await userService.getById(id!);
          reset(user);
 
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
+         navigate("/sistema/usuarios")
+      } finally {
+         setLoading(false);
       }
    }
 
    const handleSaveUser = async (data: UserForm) => {
+      const toastId = toast.loading("Salvando usuário");
+      
       try {
-         if(id)
+         if(id) {
             await userService.update(id, data);
-         else
+            toast.success("Usuário editado com sucesso", { id: toastId });
+         } else {
             await userService.create(data);
+            toast.success("Usuário cadastrado com sucesso", { id: toastId });
+         }
          
-         actionsForSuccess()
+         navigate("/sistema/usuarios");
 
       } catch (err: any) {
-         ToastService.showError(err?.response?.data?.message || err?.message)
+         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
       }
    }
-
-   const actionsForSuccess = () => {
-      const message = id ? "Usuário editado com sucesso." : "Usuário cadastrado com sucesso."
-      ToastService.showSuccess(message);
-      navigate("/sistema/usuarios");
-   }
+   
 
    const titleText = id 
       ? "Editar informações do usuário" 
@@ -70,8 +77,11 @@ export default function UserForm(){
 
    const subTitleText = id 
       ? "Altere as informações do usuário existente" 
-      : "Preencha as informações do usuário e defina uma senha de acesso.";
+      : "Preencha as informações do usuário e defina uma senha de acesso";
 
+   
+   
+   if(loading) return <LoadingWrapper />
    
    return (
       <div>

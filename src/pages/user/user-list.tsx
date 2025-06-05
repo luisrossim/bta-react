@@ -16,14 +16,29 @@ export function UserList() {
    const [users, setUsers] = useState<User[]>([]);
    const [loading, setLoading] = useState<boolean>(false);
 
+     
    useEffect(() => {
-      setLoading(true);
-      
-      userService.getAll()
-         .then((res) => setUsers(res))
-         .catch((err) => ToastService.showError(err.response?.data.message || err.message))
-         .finally(() => setLoading(false))
+      const handleFetchUsers = async () => {
+         await fetchUsers()
+      }
+
+      handleFetchUsers();
    }, [])
+
+
+   const fetchUsers = async () => {
+      try {
+         setLoading(true)
+
+         const users: User[] = await userService.getAll();
+         setUsers(users);
+
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message);
+      } finally {
+         setLoading(false)
+      }
+    }
 
 
    async function handleDeactivateUser(id: number) {
@@ -37,6 +52,8 @@ export function UserList() {
 
 
    if(loading) return <LoadingWrapper />
+
+   if(!users || users.length == 0) return <p className="text-slate-500">Nenhum registro encontrado</p>
 
 
    return (
@@ -62,9 +79,9 @@ export function UserList() {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.telefone}</TableCell>
                   <TableCell>
-                     <BadgeStatus ativo={user.ativo} />
+                     <BadgeStatus isAtivo={user.isAtivo} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-slate-500">
                      {UtilsService.formatDate(user.criadoEm)}
                   </TableCell>
                   
@@ -83,9 +100,9 @@ export function UserList() {
    )
 }
 
-const BadgeStatus = ({ ativo }: { ativo: boolean}) => {
-   const classes = ativo ? "bg-green-50 text-green-700" : "bg-slate-50 text-slate-700"
-   const label = ativo ? "Ativo" : "Inativo"
+const BadgeStatus = ({ isAtivo }: { isAtivo: boolean}) => {
+   const classes = isAtivo ? "bg-green-50 text-green-700" : "bg-slate-50 text-slate-700"
+   const label = isAtivo ? "Ativo" : "Inativo"
 
    return (
       <p className={`px-2 py-1  rounded-full text-xs inline-block ${classes}`}>

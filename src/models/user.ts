@@ -13,7 +13,7 @@ export type UserForm = z.infer<typeof userFormSchema>
 
 export interface User extends UserForm {
     id: number;
-    ativo: boolean;
+    isAtivo: boolean;
     atualizadoEm: Date;
     criadoEm: Date;
 }
