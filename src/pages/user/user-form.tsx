@@ -28,12 +28,7 @@ export default function UserFormPage(){
    })
 
    useEffect(() => {
-      const handleFetchUser = async () => {
-         if (id) await fetchUser();
-      };
-
-      handleFetchUser();
-
+      if (id) fetchUser();
    }, [id]);
 
 

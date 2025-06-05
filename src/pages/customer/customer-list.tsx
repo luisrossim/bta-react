@@ -14,18 +14,14 @@ export function CustomerList(){
 
     
     useEffect(() => {
-        const handleFetchCustomers = async () => {
-            await fetchCustomers()
-        }
-
-        handleFetchCustomers();
+        fetchCustomers();
     }, [])
 
 
     const fetchCustomers = async () => {
-        try {
-            setLoading(true);
+        setLoading(true);
 
+        try {
             const customers: Customer[] = await customerService.getAll();
             setCustomers(customers);
 
@@ -40,7 +36,6 @@ export function CustomerList(){
     if(loading) return <LoadingWrapper />
 
     if(!customers || customers.length == 0) return <p className="text-slate-500">Nenhum registro encontrado</p>
-
 
     return (
         <Table className="table-striped">

@@ -8,7 +8,8 @@ import ActivityPage from "@/pages/activity";
 import UserPage from "@/pages/user";
 import UserFormPage from "@/pages/user/user-form";
 import CustomerFormPage from "@/pages/customer/customer-form";
-import { CustomerInfoPage } from "@/pages/customer/customer-info";
+import StagePage from "@/pages/stages";
+import CustomerInfoPage from "@/pages/customer/customer-info";
 
 const router = createBrowserRouter([
    {
@@ -34,7 +35,9 @@ const router = createBrowserRouter([
 
          { path: "usuarios", element: <UserPage /> },
          { path: "usuarios/form", element: <UserFormPage /> },
-         { path: "usuarios/form/:id", element: <UserFormPage /> }
+         { path: "usuarios/form/:id", element: <UserFormPage /> },
+
+         { path: "etapas", element: <StagePage /> }
       ],
    },
    {

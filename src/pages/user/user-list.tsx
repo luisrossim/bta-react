@@ -18,18 +18,13 @@ export function UserList() {
 
      
    useEffect(() => {
-      const handleFetchUsers = async () => {
-         await fetchUsers()
-      }
-
-      handleFetchUsers();
+      fetchUsers();
    }, [])
 
 
    const fetchUsers = async () => {
+      setLoading(true)
       try {
-         setLoading(true)
-
          const users: User[] = await userService.getAll();
          setUsers(users);
 
@@ -38,13 +33,14 @@ export function UserList() {
       } finally {
          setLoading(false)
       }
-    }
+   }
 
 
    async function handleDeactivateUser(id: number) {
       try {
          await userService.deactivate(id);
-         ToastService.showSuccess("Usuário desativado com sucesso")
+         ToastService.showSuccess("Usuário desativado com sucesso");
+         fetchUsers();
       } catch (err: any) {
          ToastService.showError(err.response?.data.message || err.message)
       }

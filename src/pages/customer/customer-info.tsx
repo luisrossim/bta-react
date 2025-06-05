@@ -11,7 +11,7 @@ import userIcon from "@/assets/images/user-info.svg"
 import { UtilsService } from "@/utils/services/utils-service";
 import { Edit2 } from "lucide-react";
 
-export function CustomerInfoPage() {
+export default function CustomerInfoPage() {
    const { id } = useParams();
    const navigate = useNavigate();
    const [customer, setCustomer] = useState<Customer>()
@@ -19,12 +19,7 @@ export function CustomerInfoPage() {
 
 
    useEffect(() => {
-      const handleFetchCustomer = async () => {
-         if (id) await fetchCustomer();
-      };
-
-      handleFetchCustomer();
-
+      if (id) fetchCustomer()
    }, [id]);
 
 

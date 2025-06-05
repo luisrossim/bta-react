@@ -31,12 +31,7 @@ export default function CustomerFormPage(){
    })
 
    useEffect(() => {
-      const handleFetchCustomer = async () => {
-         if (id) await fetchCustomer();
-      };
-
-      handleFetchCustomer();
-
+      if (id) fetchCustomer();
    }, [id]);
 
 
