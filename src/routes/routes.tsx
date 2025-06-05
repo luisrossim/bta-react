@@ -8,6 +8,7 @@ import ActivityPage from "@/pages/activity";
 import UserPage from "@/pages/user";
 import UserFormPage from "@/pages/user/user-form";
 import CustomerFormPage from "@/pages/customer/customer-form";
+import { CustomerInfoPage } from "@/pages/customer/customer-info";
 
 const router = createBrowserRouter([
    {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
          { path: "clientes", element: <CustomerPage /> },
          { path: "clientes/form", element: <CustomerFormPage /> },
          { path: "clientes/form/:id", element: <CustomerFormPage /> },
+         { path: "clientes/info/:id", element: <CustomerInfoPage /> },
 
          { path: "usuarios", element: <UserPage /> },
          { path: "usuarios/form", element: <UserFormPage /> },

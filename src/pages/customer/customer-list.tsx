@@ -56,26 +56,26 @@ export function CustomerList(){
             </TableHeader>
             <TableBody>
                 {customers.map((customer) => (
-                <TableRow key={customer.id}>
-                    <TableCell className="font-medium">{customer.nome}</TableCell>
-                    <TableCell>{customer.cpf}</TableCell>
-                    <TableCell>{customer.telefone}</TableCell>
-                    <TableCell className="text-slate-500">
-                        {UtilsService.formatDate(customer.atualizadoEm)}
-                    </TableCell>
-                    <TableCell className="text-slate-500">
-                        {UtilsService.formatDate(customer.criadoEm)}
-                    </TableCell>
-                    
-                    <TableCell className="flex gap-2 items-center justify-end">
-                        <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
-                            <Edit2 size={16} className="text-slate-600" />
-                        </Link>
-                        <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
-                            <AlignRight size={16} className="text-sky-600" />
-                        </Link>
-                    </TableCell>
-                </TableRow>
+                    <TableRow key={customer.id}>
+                        <TableCell className="font-medium">{customer.nome}</TableCell>
+                        <TableCell>{customer.cpf}</TableCell>
+                        <TableCell>{customer.telefone}</TableCell>
+                        <TableCell className="text-slate-500">
+                            {UtilsService.formatDate(customer.atualizadoEm)}
+                        </TableCell>
+                        <TableCell className="text-slate-500">
+                            {UtilsService.formatDate(customer.criadoEm)}
+                        </TableCell>
+                        
+                        <TableCell className="flex gap-2 items-center justify-end">
+                            <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
+                                <Edit2 size={16} className="text-slate-600" />
+                            </Link>
+                            <Link to={`/sistema/clientes/info/${customer.id}`} className="p-2"> 
+                                <AlignRight size={16} className="text-blue-600" />
+                            </Link>
+                        </TableCell>
+                    </TableRow>
                 ))}
             </TableBody>
         </Table>
