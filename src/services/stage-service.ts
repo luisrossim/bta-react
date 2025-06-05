@@ -11,6 +11,10 @@ class StageService extends GenericService<Stage> {
       return response.data;
    }
 
+   async desvincular(data: AssociateForm): Promise<void> {
+      await this.axios.post(`${this.path}/desvincular`, data)
+   }
+
    async getVinculados(): Promise<AssociatedUsers[]>{
       const response = await this.axios.get<AssociatedUsers[]>(`${this.path}/vinculados`)
       return response.data;

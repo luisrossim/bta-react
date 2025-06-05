@@ -7,7 +7,7 @@ import { ToastService } from "@/utils/services/toast-service";
 import { useEffect, useState, type ReactNode } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Link } from "lucide-react";
+import { CheckCircle, Link, Link2Off } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormFieldWrapper } from "@/components/form-field-wrapper";
@@ -50,6 +50,7 @@ export default function StageList() {
       }
    }
 
+
    async function associate(data: AssociateForm) {
       setDisableActions(true);
       const toastId = toast.loading("Vinculando usuário");
@@ -66,6 +67,25 @@ export default function StageList() {
          setDisableActions(false);
       }
    }
+
+
+   async function disassociate(stageId: number, userId: number) {
+      setDisableActions(true);
+      const toastId = toast.loading("Desvinculando usuário");
+      const data = { stageId, userId }
+
+      try {
+         await stageService.desvincular(data);
+         toast.success("Usuário desvinculado com sucesso!", { id: toastId });
+         fetchStagesAndAssociated();
+
+      } catch (err: any) {
+         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
+      } finally {
+         setDisableActions(false);
+      }
+   }
+
 
 
    function handleAssociatedView(stages: Stage[], associated: AssociatedUsers[]): ReactNode {
@@ -87,8 +107,15 @@ export default function StageList() {
                         <ul className="text-sm">
                            {vinculados.users.map(user => (
                               <li key={user.id} className="flex items-center gap-2">
+                                 <Button
+                                    disabled={disableActions}
+                                    onClick={() => disassociate(stage.id, user.id!)} 
+                                    variant="link" 
+                                    className="text-red-600 !p-1"
+                                 >
+                                    <Link2Off />
+                                 </Button>
                                  <span className="font-medium">{user.nome}</span> 
-                                 <span className="text-slate-500">({user.role?.descricao})</span>
                               </li>
                            ))}
                         </ul>
@@ -122,7 +149,7 @@ export default function StageList() {
                      <>
                         <Select
                            onValueChange={field.onChange}
-                           value={field.value?.toString()}
+                           value={field.value?.toString() || ""}
                         >
                            <SelectTrigger className={`w-full ${errors.stageId && "border-red-500"}`}>
                               <SelectValue placeholder="Selecione uma etapa" />
@@ -150,7 +177,7 @@ export default function StageList() {
                      <>
                         <Select
                            onValueChange={field.onChange}
-                           value={field.value?.toString()}
+                           value={field.value?.toString() || ""}
                         >
                            <SelectTrigger className={`w-full ${errors.userId && "border-red-500"}`}>
                               <SelectValue placeholder="Selecione um usuário" />

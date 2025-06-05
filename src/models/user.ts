@@ -4,7 +4,9 @@ import { z } from "zod";
 export const userFormSchema = z.object({
     nome: z.string().min(2, "O nome deve possuir pelo menos 2 caracteres"),
     email: z.string().email(),
-    password: z.string().min(6, "A senha deve possuir pelo menos 6 caracteres").optional(),
+    password: z.string().optional().refine(
+        (val) => !val || val.length >= 6
+    ),
     telefone: z.string().min(1),
     role: roleSchema
 })

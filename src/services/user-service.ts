@@ -11,8 +11,8 @@ class UserService extends GenericService<User> {
         return response.data;
     }
 
-    async deactivate(id: number) {
-        const response = await this.axios.put<void>(`${this.path}/${id}/desativar`)
+    async changeStatus(userId: number) {
+        const response = await this.axios.patch(`${this.path}/${userId}/status`)
         return response.data;
     }
 }

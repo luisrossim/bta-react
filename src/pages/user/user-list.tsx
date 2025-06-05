@@ -3,7 +3,7 @@ import { userService } from "@/services/user-service";
 import { useEffect, useState } from "react";
 import { LoadingWrapper } from "@/components/loading";
 import { UtilsService } from "@/utils/services/utils-service";
-import { Edit2, Trash } from "lucide-react";
+import { Ban, CheckCircle, Edit2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RoleBadge } from "@/components/role-badge";
 import { Button } from "@/components/ui/button";
@@ -36,10 +36,10 @@ export function UserList() {
    }
 
 
-   async function handleDeactivateUser(id: number) {
+   async function handleChangeUserStatus(userId: number) {
       try {
-         await userService.deactivate(id);
-         ToastService.showSuccess("Usuário desativado com sucesso");
+         await userService.changeStatus(userId);
+         ToastService.showSuccess("Status alterado com sucesso");
          fetchUsers();
       } catch (err: any) {
          ToastService.showError(err.response?.data.message || err.message)
@@ -85,8 +85,11 @@ export function UserList() {
                      <Link to={`/sistema/usuarios/form/${user.id}`} className="p-1"> 
                         <Edit2 size={16} className="text-slate-600" />
                      </Link>
-                     <Button onClick={() => handleDeactivateUser(user.id)} variant={"link"}>
-                        <Trash size={16} className="text-red-600" />
+                     <Button onClick={() => handleChangeUserStatus(user.id)} variant={"link"}>
+                        {user.isAtivo 
+                           ? <Ban size={16} className="text-red-600" /> 
+                           : <CheckCircle size={16} className="text-emerald-600" />
+                        }
                      </Button>
                   </TableCell>
                </TableRow>

@@ -51,7 +51,7 @@ export default function CustomerInfoPage() {
             <>
                <div className="grid grid-cols-1 gap-4 my-8 bg-slate-50 border">
                   <div className="flex justify-between items-center gap-2 bg-slate-100 px-6 py-4">
-                     <img src={userIcon} className="w-[32px]" />
+                     <img src={userIcon} className="w-[28px]" />
                      <Tooltip>
                         <TooltipTrigger asChild>
                            <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
@@ -76,9 +76,9 @@ export default function CustomerInfoPage() {
                      <LabelInfo label="Referência" info={customer.endereco.referencia} />
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 border-t gap-2 px-6 py-4">
-                     <LabelInfo label="Atualizado em" info={UtilsService.formatDate(customer.atualizadoEm)} />
+                  <div className="grid grid-cols-1 lg:grid-cols-2 border-t gap-2 px-6 py-4">
                      <LabelInfo label="Criado em" info={UtilsService.formatDate(customer.criadoEm)} />
+                     <LabelInfo label="Atualizado em" info={UtilsService.formatDate(customer.atualizadoEm)} />
                   </div>
                </div>
 

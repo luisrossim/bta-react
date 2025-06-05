@@ -44,7 +44,6 @@ export function CustomerList(){
                     <TableHead>Nome</TableHead>
                     <TableHead>CPF</TableHead>
                     <TableHead>Telefone</TableHead>
-                    <TableHead>Atualizado em</TableHead>
                     <TableHead>Criado em</TableHead>
                     <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
@@ -55,9 +54,6 @@ export function CustomerList(){
                         <TableCell className="font-medium">{customer.nome}</TableCell>
                         <TableCell>{customer.cpf}</TableCell>
                         <TableCell>{customer.telefone}</TableCell>
-                        <TableCell className="text-slate-500">
-                            {UtilsService.formatDate(customer.atualizadoEm)}
-                        </TableCell>
                         <TableCell className="text-slate-500">
                             {UtilsService.formatDate(customer.criadoEm)}
                         </TableCell>
