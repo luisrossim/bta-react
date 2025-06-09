@@ -4,12 +4,15 @@ import ServiceOrderPage from "@/pages/service-order";
 import MainLayout from "@/components/layout";
 import LoginPage from "@/pages/login";
 import CustomerPage from "@/pages/customer";
-import ActivityPage from "@/pages/activity";
 import UserPage from "@/pages/user";
 import UserFormPage from "@/pages/user/user-form";
 import CustomerFormPage from "@/pages/customer/customer-form";
 import StagePage from "@/pages/stages";
 import CustomerInfoPage from "@/pages/customer/customer-info";
+import DashboardPage from "@/pages/dashboard";
+import MaterialsPage from "@/pages/materials";
+import ServiceOrderFormPage from "@/pages/service-order/service-order-form";
+import ServiceOrderInfoPage from "@/pages/service-order/service-order-info";
 
 const router = createBrowserRouter([
    {
@@ -25,8 +28,11 @@ const router = createBrowserRouter([
       element: <MainLayout />
       ,
       children: [
-         { path: "", element: <ActivityPage /> },
+         { path: "", element: <DashboardPage /> },
+
          { path: "ordens", element: <ServiceOrderPage /> },
+         { path: "ordens/form", element: <ServiceOrderFormPage /> },
+         { path: "ordens/info/:id", element: <ServiceOrderInfoPage /> },
          
          { path: "clientes", element: <CustomerPage /> },
          { path: "clientes/form", element: <CustomerFormPage /> },
@@ -37,7 +43,8 @@ const router = createBrowserRouter([
          { path: "usuarios/form", element: <UserFormPage /> },
          { path: "usuarios/form/:id", element: <UserFormPage /> },
 
-         { path: "etapas", element: <StagePage /> }
+         { path: "etapas", element: <StagePage /> },
+         { path: "materiais", element: <MaterialsPage /> }
       ],
    },
    {

@@ -25,8 +25,8 @@ export function UserList() {
    const fetchUsers = async () => {
       setLoading(true)
       try {
-         const users: User[] = await userService.getAll();
-         setUsers(users);
+         const _users: User[] = await userService.getAll();
+         setUsers(_users);
 
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message);

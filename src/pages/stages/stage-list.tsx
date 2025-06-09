@@ -1,13 +1,13 @@
-import { LoadingWrapper } from "@/components/loading";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { associateFormSchema, type AssociatedUsers, type AssociateForm, type Stage } from "@/models/stage";
+import { LoadingWrapper } from "@/components/loading";
 import type { User } from "@/models/user";
 import { stageService } from "@/services/stage-service";
 import { userService } from "@/services/user-service";
 import { ToastService } from "@/utils/services/toast-service";
 import { useEffect, useState, type ReactNode } from "react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Link, Link2Off } from "lucide-react";
+import { Link, Link2Off } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormFieldWrapper } from "@/components/form-field-wrapper";
@@ -33,15 +33,15 @@ export default function StageList() {
       setLoading(true);
 
       try {
-         const [stages, associated, users] = await Promise.all([
+         const [_stages, _associated, _users] = await Promise.all([
             stageService.getAll(),
             stageService.getVinculados(),
             userService.getAll()
          ])
 
-         setStages(stages)
-         setAssociated(associated)
-         setUsers(users)
+         setStages(_stages)
+         setAssociated(_associated)
+         setUsers(_users)
 
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
@@ -90,37 +90,42 @@ export default function StageList() {
 
    function handleAssociatedView(stages: Stage[], associated: AssociatedUsers[]): ReactNode {
       return (
-         <div className="grid grid-cols-1 gap-4">
+         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
             {stages.map(stage => {
                const vinculados = associated.find(a => a.stageId === stage.id);
 
                return (
-                  <div key={stage.id} className="border bg-slate-50 p-4">
-                     <div className="flex items-center gap-2 mb-4">
-                        <div className="flex w-[28px] h-[28px] justify-center items-center p-1 rounded-full bg-blue-600">
-                           <span className="text-white text-sm">{stage.id}</span>
+                  <div key={stage.id} className="bg-slate-50 p-4">
+                     <div className="flex items-center gap-3 mb-3">
+                        <div className="flex w-[24px] h-[24px] justify-center items-center rounded-full bg-blue-600">
+                           <span className="text-white text-xs">{stage.id}</span>
                         </div>
-                        <p className="text-blue-600 font-medium">{stage.descricao}</p>
+                        <p className="text-blue-600 font-semibold">{stage.descricao}</p>
                      </div>
 
                      {vinculados && vinculados.users.length > 0 ? (
                         <ul className="text-sm">
                            {vinculados.users.map(user => (
-                              <li key={user.id} className="flex items-center gap-2">
+                              <li key={user.id} className="flex items-center gap-3">
                                  <Button
                                     disabled={disableActions}
                                     onClick={() => disassociate(stage.id, user.id!)} 
                                     variant="link" 
-                                    className="text-red-600 !p-1"
+                                    className="group p-0"
                                  >
-                                    <Link2Off />
+                                    <span className="hidden group-hover:block">
+                                       <Link2Off className="text-red-600" />
+                                    </span>
+                                    <span className="block group-hover:hidden">
+                                       <Link className="text-blue-600" />
+                                    </span>
                                  </Button>
                                  <span className="font-medium">{user.nome}</span> 
                               </li>
                            ))}
                         </ul>
                      ) : (
-                        <p className="text-slate-500 text-sm">Nenhum usuário vinculado</p>
+                        <p className="text-sm text-slate-500">Nenhum usuário vinculado</p>
                      )}
                   </div>
                );
@@ -134,19 +139,17 @@ export default function StageList() {
    if(loading) return <LoadingWrapper />
 
    return (
-      <section className="my-12">
-         <div className="flex items-center text-slate-500 gap-2 mb-3">
-            <Link size={14} />
-            <h2 className="font-medium text-sm">Vincular usuário</h2>
-         </div>
-         
-         <form onSubmit={handleSubmit(associate)} className="grid grid-cols-1 lg:grid-cols-3 items-center gap-2">
-            <FormFieldWrapper>
-               <Controller
-                  name="stageId"
-                  control={control}
-                  render={({ field }) => (
-                     <>
+      <section className="grid grid-cols-1 gap-16 my-4">         
+         <form onSubmit={handleSubmit(associate)}>
+            <h2 className="font-semibold text-sm text-slate-500 mb-4">
+               Vincular usuário
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 items-center gap-3">
+               <FormFieldWrapper>
+                  <Controller
+                     name="stageId"
+                     control={control}
+                     render={({ field }) => (
                         <Select
                            onValueChange={field.onChange}
                            value={field.value?.toString() || ""}
@@ -157,24 +160,22 @@ export default function StageList() {
                            <SelectContent>
                               <SelectGroup>
                                  {stages.map((stage) => (
-                                 <SelectItem key={stage.id} value={String(stage.id)}>
-                                    {stage.descricao}
-                                 </SelectItem>
+                                    <SelectItem key={stage.id} value={String(stage.id)}>
+                                       {stage.descricao}
+                                    </SelectItem>
                                  ))}
                               </SelectGroup>
                            </SelectContent>
                         </Select>
-                     </>
-                  )}
-               />
-            </FormFieldWrapper>
-            
-            <FormFieldWrapper>
-               <Controller
-                  name="userId"
-                  control={control}
-                  render={({ field }) => (
-                     <>
+                     )}
+                  />
+               </FormFieldWrapper>
+               
+               <FormFieldWrapper>
+                  <Controller
+                     name="userId"
+                     control={control}
+                     render={({ field }) => (
                         <Select
                            onValueChange={field.onChange}
                            value={field.value?.toString() || ""}
@@ -185,27 +186,27 @@ export default function StageList() {
                            <SelectContent>
                               <SelectGroup>
                                  {users.map((user) => (
-                                 <SelectItem key={user.id} value={String(user.id)}>
-                                    {user.nome}
-                                 </SelectItem>
+                                    <SelectItem key={user.id} value={String(user.id)}>
+                                       {user.nome}
+                                    </SelectItem>
                                  ))}
                               </SelectGroup>
                            </SelectContent>
                         </Select>
-                     </>
-                  )}
-               />
-            </FormFieldWrapper>
+                     )}
+                  />
+               </FormFieldWrapper>
 
-            <Button disabled={disableActions} type="submit">Vincular</Button>
+               <Button disabled={disableActions} size={"lg"} type="submit">
+                  Vincular
+               </Button>
+            </div>
          </form>
 
          <section>
-            <div className="flex items-center text-slate-500 gap-2 mt-14 mb-3">
-               <CheckCircle size={14} />
-               <h2 className="font-medium text-sm">Vinculações</h2>
-            </div>
-
+            <h2 className="font-semibold text-sm text-slate-500 mb-4">
+               Vinculações
+            </h2>
             {stages && associated && handleAssociatedView(stages, associated)}
          </section>
       </section>

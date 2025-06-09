@@ -9,6 +9,7 @@ export class UtilsService {
     }
 
     static formatDate = (data: Date): string => {
+        if(!data) return ""
         return format(data, "dd/MM/yyyy", { locale: ptBR })
     };
 }

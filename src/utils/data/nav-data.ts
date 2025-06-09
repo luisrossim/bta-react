@@ -1,14 +1,14 @@
 import {
-   Activity,
    ClipboardCheck,
+   Grid2X2,
    ListCheck,
    Package,
    UserLock,
    UsersRound,
 } from "lucide-react";
 
-export const navItems = [
-   { label: "Atividades recentes", url: "/sistema", icon: Activity },
+export const navData = [
+   { label: "Dashboard", url: "/sistema", icon: Grid2X2 },
    { label: "Ordens de serviço", url: "/sistema/ordens", icon: ClipboardCheck },
    { label: "Clientes", url: "/sistema/clientes", icon: UsersRound },
    { label: "Usuários e permissões", url: "/sistema/usuarios", icon: UserLock },

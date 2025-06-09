@@ -3,7 +3,7 @@ import { GenericService } from "./generic-service";
 
 class UserService extends GenericService<User> {
     constructor(){
-        super("v1/usuario");
+        super("v1/users");
     }
 
     async getByRole(role: string): Promise<User> {

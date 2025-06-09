@@ -1,7 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Breadcrumb } from "@/components/breadcrumb";
+import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
 import { LoadingWrapper } from "@/components/loading";
-import { PageSubtitle, PageTitle } from "@/components/page-title";
+import { PageSubtitle, PageTitle } from "@/components/page-header";
 import type { Customer } from "@/models/customer";
 import { customerService } from "@/services/customer-service";
 import { ToastService } from "@/utils/services/toast-service";
@@ -27,8 +27,8 @@ export default function CustomerInfoPage() {
       setLoading(true);
 
       try {
-         const customer: Customer = await customerService.getById(id!);
-         setCustomer(customer);
+         const _customer: Customer = await customerService.getById(id!);
+         setCustomer(_customer);
 
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
@@ -39,11 +39,19 @@ export default function CustomerInfoPage() {
    }
 
 
+   const previous: PreviousUrl[] = [
+      {
+         label: 'Clientes',
+         redirectTo: '/sistema/clientes'
+      }
+   ]
+
+
    if(loading) return <LoadingWrapper />
 
    return (
       <div>
-         <Breadcrumb label="Clientes" redirectTo="/sistema/clientes" />
+         <Breadcrumb current="Informações" previous={previous} />
          <PageTitle title="Informações do cliente" />
          <PageSubtitle subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas." />
 

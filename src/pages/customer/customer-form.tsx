@@ -9,8 +9,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ToastService } from "@/utils/services/toast-service";
 import { FormFieldWrapper } from "@/components/form-field-wrapper";
-import { PageSubtitle, PageTitle } from "@/components/page-title";
-import { Breadcrumb } from "@/components/breadcrumb";
+import { PageSubtitle, PageTitle } from "@/components/page-header";
+import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
 import { LoadingWrapper } from "@/components/loading";
 import { customerService } from "@/services/customer-service";
 import { toast } from "sonner";
@@ -29,6 +29,7 @@ export default function CustomerFormPage(){
          }
       }
    })
+
 
    useEffect(() => {
       if (id) fetchCustomer();
@@ -54,23 +55,26 @@ export default function CustomerFormPage(){
       const toastId = toast.loading("Salvando cliente");
       
       try {
-         if(id) {
+         if(id)
             await customerService.update(id, data);
-            setTimeout(() => {
-               toast.success("Cliente editado com sucesso", { id: toastId });
-            }, 2000)
-            
-         } else {
+         else 
             await customerService.create(data);
-            toast.success("Cliente cadastrado com sucesso", { id: toastId });
-         }
          
+         toast.success("Cliente salvo com sucesso", { id: toastId });
          navigate("/sistema/clientes");
 
       } catch (err: any) {
          toast.error(err?.response?.data?.message || err?.message, { id: toastId });
       }
    }
+
+
+   const previous: PreviousUrl[] = [
+      {
+         label: 'Clientes',
+         redirectTo: '/sistema/clientes'
+      }
+   ]
 
 
    const titleText = id 
@@ -87,7 +91,7 @@ export default function CustomerFormPage(){
 
    return (
       <div>
-         <Breadcrumb label="Clientes" redirectTo="/sistema/clientes" />
+         <Breadcrumb current="Cadastrar" previous={previous}/>
          <PageTitle title={titleText} />
          <PageSubtitle subtitle={subTitleText} />
 

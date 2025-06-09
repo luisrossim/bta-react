@@ -3,7 +3,7 @@ import type { Customer } from "@/models/customer";
 
 class CustomerService extends GenericService<Customer> {
     constructor(){
-        super("v1/cliente");
+        super("v1/customers");
     }
 
     async getByCPF(cpf: string): Promise<Customer> {

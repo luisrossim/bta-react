@@ -1,18 +1,27 @@
-import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
 
-interface BreadcrumbProps {
+export interface PreviousUrl {
    label: string
    redirectTo: string
 }
 
-export const Breadcrumb = ({ label, redirectTo }: BreadcrumbProps) => {
+interface BreadcrumbProps {
+   current: string
+   previous: PreviousUrl[]
+}
+
+export const Breadcrumb = ({ current, previous }: BreadcrumbProps) => {
    return (
-      <div className="flex items-center text-blue-500 mb-4">
-         <ArrowLeft size={16} />
-         <Link to={redirectTo} className="text-sm hover:underline hover:cursor-pointer p-1">
-            {label}
-         </Link>
+      <div className="flex items-center text-blue-500 mb-8 gap-2 text-xs">
+         {previous.map((p, index) => (
+            <div className="flex items-center gap-2 text-slate-500">
+               <Link key={index} to={p.redirectTo} className="hover:underline">
+                  {p.label}
+               </Link>
+               <span>/</span>
+            </div>
+         ))}
+         <p className="text-blue-600 font-medium">{current}</p>
       </div>
    )
 }

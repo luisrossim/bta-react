@@ -5,22 +5,22 @@ import { Label } from "@/components/ui/label";
 import { userService } from "@/services/user-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { rolesMock } from "@/utils/mocks/roles-mock";
+import { rolesData } from "@/utils/data/roles-data";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ToastService } from "@/utils/services/toast-service";
 import { FormFieldWrapper } from "@/components/form-field-wrapper";
-import { PageSubtitle, PageTitle } from "@/components/page-title";
-import { Breadcrumb } from "@/components/breadcrumb";
+import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
 import { LoadingWrapper } from "@/components/loading";
 import { toast } from "sonner";
+import { PageSubtitle, PageTitle } from "@/components/page-header";
 
 
 export default function UserFormPage(){
    const { id } = useParams();
-   const roles = rolesMock;
+   const roles = rolesData;
    const [loading, setLoading] = useState<boolean>(false);
    const navigate = useNavigate();
    const { register, handleSubmit, control, reset, formState:{ errors } } = useForm<UserForm>({
@@ -64,6 +64,14 @@ export default function UserFormPage(){
          toast.error(err?.response?.data?.message || err?.message, { id: toastId });
       }
    }
+
+
+   const previous: PreviousUrl[] = [
+      {
+         label: 'Usuários',
+         redirectTo: '/sistema/usuarios'
+      }
+   ]
    
 
    const titleText = id 
@@ -80,7 +88,7 @@ export default function UserFormPage(){
    
    return (
       <div>
-         <Breadcrumb label="Usuários" redirectTo="/sistema/usuarios" />
+         <Breadcrumb current="Cadastrar" previous={previous} />
          <PageTitle title={titleText} />
          <PageSubtitle subtitle={subTitleText} />
 
