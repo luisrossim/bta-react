@@ -15,7 +15,7 @@ export default function NavHeader() {
          </div>
          <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">BTA Irrigação</span>
-            <span className="truncate text-xs">Sistema</span>
+            <span className="truncate text-xs">OS</span>
          </div>
       </SidebarMenuButton>
    );

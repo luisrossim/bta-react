@@ -12,16 +12,16 @@ interface BreadcrumbProps {
 
 export const Breadcrumb = ({ current, previous }: BreadcrumbProps) => {
    return (
-      <div className="flex items-center text-blue-500 mb-8 gap-2 text-xs">
+      <div className="flex items-center text-primary mb-8 gap-2 text-sm">
          {previous.map((p, index) => (
-            <div className="flex items-center gap-2 text-slate-500">
+            <div key={index} className="flex items-center gap-2 text-neutral-500">
                <Link key={index} to={p.redirectTo} className="hover:underline">
                   {p.label}
                </Link>
                <span>/</span>
             </div>
          ))}
-         <p className="text-blue-600 font-medium">{current}</p>
+         <p className="text-primary font-medium">{current}</p>
       </div>
    )
 }

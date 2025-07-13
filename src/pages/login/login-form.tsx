@@ -53,7 +53,7 @@ export function LoginForm({ setError }: LoginFormProps) {
                <Label htmlFor="login">Email</Label>
                <Input
                   id="login"
-                  placeholder="bta@exemplo.com"
+                  placeholder="seunome@empresa.com.br"
                   className={`${errors.login && "border-red-500"}`}
                   {...register("login")}
                />

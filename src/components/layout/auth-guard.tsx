@@ -15,5 +15,5 @@ export default function AuthGuard({ children }: { children: JSX.Element }) {
       return <Navigate to="/login" state={{ from: location }} replace />;
    }
 
-   return <div className="p-4 md:p-8">{children}</div>;  
+   return <div className="p-4 md:p-10">{children}</div>;  
 }

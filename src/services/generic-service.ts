@@ -19,6 +19,11 @@ export abstract class GenericService<T> {
         return response.data;
     }
 
+    async getAllWithParams(params: Record<string, any>): Promise<T[]> {
+        const response = await this.axios.get<T[]>(this.path, { params });
+        return response.data;
+    }
+
     async getById(id: number | string): Promise<T>{
         const response = await this.axios.get<T>(`${this.path}/${id}`);
         return response.data;

@@ -85,9 +85,6 @@ export default function CustomerFormPage(){
       ? "Altere as informações do cliente existente" 
       : "Preencha as informações do cliente";
 
-   
-   if(loading) return <LoadingWrapper />
-
 
    return (
       <div>

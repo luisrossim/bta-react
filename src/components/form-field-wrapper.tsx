@@ -1,11 +1,13 @@
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 interface FormFieldWrapperProps {
    colSpan?: number
-   children: ReactNode 
+   children: ReactNode
+   className?: string
 }
 
-export const FormFieldWrapper = ({ colSpan = 1, children }: FormFieldWrapperProps) => {
+export const FormFieldWrapper = ({ colSpan = 1, className, children }: FormFieldWrapperProps) => {
    const colSpanClass: Record<number, string> = {
       1: 'lg:col-span-1',
       2: 'lg:col-span-2',
@@ -13,7 +15,7 @@ export const FormFieldWrapper = ({ colSpan = 1, children }: FormFieldWrapperProp
    }
 
    return (
-      <div className={`grid gap-2 ${colSpanClass[colSpan]}`}>
+      <div className={cn(`grid gap-2 ${colSpanClass[colSpan]}`, className)}>
          {children}
       </div>
    )

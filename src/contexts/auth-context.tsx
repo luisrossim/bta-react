@@ -43,27 +43,27 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
    const logout = () => {
       authService.logout().finally(() => {
-         localStorage.removeItem("bta-auth-userdata");
+         localStorage.removeItem("@bta-userdata");
          setIsAuthenticated(false);
          setIsLoading(false);
       });
    };
 
    const setAuthOnLocalStorage = (data: AuthUser) => {
-      localStorage.setItem("bta-auth-userdata", JSON.stringify(data));
+      localStorage.setItem("@bta-userdata", JSON.stringify(data));
       setIsAuthenticated(true);
       setIsLoading(false);
    };
 
    const getAuthFromLocalStorage = (): AuthUser | undefined => {
-      const res = localStorage.getItem("bta-auth-userdata");
+      const res = localStorage.getItem("@bta-userdata");
 
       if (!res) return undefined;
 
       try {
          return JSON.parse(res) as AuthUser;
       } catch {
-         localStorage.removeItem("bta-auth-userdata");
+         localStorage.removeItem("@bta-userdata");
          return undefined;
       }
    };

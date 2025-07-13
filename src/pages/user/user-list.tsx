@@ -49,7 +49,7 @@ export function UserList() {
 
    if(loading) return <LoadingWrapper />
 
-   if(!users || users.length == 0) return <p className="text-slate-500">Nenhum registro encontrado</p>
+   if(!users || users.length == 0) return <p className="text-neutral-500">Nenhum registro encontrado</p>
 
 
    return (
@@ -77,15 +77,15 @@ export function UserList() {
                   <TableCell>
                      <BadgeStatus isAtivo={user.isAtivo} />
                   </TableCell>
-                  <TableCell className="text-slate-500">
+                  <TableCell className="text-neutral-500">
                      {UtilsService.formatDate(user.criadoEm)}
                   </TableCell>
                   
                   <TableCell className="flex gap-2 items-center justify-end">
                      <Link to={`/sistema/usuarios/form/${user.id}`} className="p-1"> 
-                        <Edit2 size={16} className="text-slate-600" />
+                        <Edit2 size={16} className="text-neutral-600" />
                      </Link>
-                     <Button onClick={() => handleChangeUserStatus(user.id)} variant={"link"}>
+                     <Button onClick={() => handleChangeUserStatus(user.id)} variant={"link"} className="!p-1">
                         {user.isAtivo 
                            ? <Ban size={16} className="text-red-600" /> 
                            : <CheckCircle size={16} className="text-emerald-600" />
@@ -100,7 +100,7 @@ export function UserList() {
 }
 
 const BadgeStatus = ({ isAtivo }: { isAtivo: boolean}) => {
-   const classes = isAtivo ? "bg-green-50 text-green-700" : "bg-slate-50 text-slate-700"
+   const classes = isAtivo ? "bg-green-50 text-green-700" : "bg-neutral-50 text-neutral-700"
    const label = isAtivo ? "Ativo" : "Inativo"
 
    return (

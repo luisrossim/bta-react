@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { serviceOrderService } from "@/services/service-order-service";
+import { serviceOrderService } from "@/services/order-service";
 import { Label } from "@/components/ui/label";
 import { PageSubtitle, PageTitle } from "@/components/page-header";
 import { Check } from "lucide-react";
@@ -86,8 +86,8 @@ export default function ServiceOrderFormPage() {
    return (
       <div>
          <Breadcrumb current="Cadastrar" previous={previous} />
-         <PageTitle title="Cadastrar nova ordem" />
-         <PageSubtitle subtitle="Selecione o cliente e a etapa desejada." />
+         <PageTitle title="Nova ordem de serviço" />
+         <PageSubtitle subtitle="Selecione o cliente e a etapa desejada para iniciar um fluxo de ordem de serviço." />
 
          <form onSubmit={handleSubmit(save)} className="grid grid-cols-1 lg:grid-cols-3 items-end gap-6 my-10">
             <FormFieldWrapper>
@@ -147,120 +147,7 @@ export default function ServiceOrderFormPage() {
                   )}
                />
             </FormFieldWrapper>
-
-            {/* {selectedStage && selectedStage == 1 && (
-               <div className="flex flex-col gap-6 mt-6">
-                  <FormFieldWrapper>
-                     <Controller
-                        name="hasAutomacao"
-                        control={control}
-                        defaultValue={false}
-                        render={({ field }) => (
-                           <div className="flex items-center gap-3">
-                              <Switch
-                                 id="hasAuto"
-                                 checked={!!field.value}
-                                 onCheckedChange={field.onChange}
-                              />
-                              <Label htmlFor="hasAuto">Automação</Label>
-                           </div>
-                        )}
-                     />
-                  </FormFieldWrapper>
-
-                  <FormFieldWrapper>
-                     <Controller
-                        name="hasProjetoPlantio"
-                        control={control}
-                        defaultValue={false}
-                        render={({ field }) => (
-                           <div className="flex items-center gap-3">
-                              <Switch
-                                 id="hasProjeto"
-                                 checked={!!field.value}
-                                 onCheckedChange={field.onChange}
-                              />
-                              <Label htmlFor="hasProjeto">Projeto de Plantio</Label>
-                           </div>
-                        )}
-                     />
-                  </FormFieldWrapper>
-
-                  <FormFieldWrapper>
-                     <Controller
-                        name="hasOrcamentoBanco"
-                        control={control}
-                        defaultValue={false}
-                        render={({ field }) => (
-                           <div className="flex items-center gap-3">
-                              <Switch
-                                 id="hasOrcamento"
-                                 checked={!!field.value}
-                                 onCheckedChange={field.onChange}
-                              />
-                              <Label htmlFor="hasOrcamento">Orçamento em banco</Label>
-                           </div>
-                        )}
-                     />
-                  </FormFieldWrapper>
-
-                  <FormFieldWrapper>
-                     <Label htmlFor="quantidadeSetores">Quantidade de setores</Label>
-                     
-                     <Input
-                        id="quantidadeSetores"
-                        type="number"
-                        className={`${errors.quantidadeSetores && "border-red-500"}`}
-                        {...register("quantidadeSetores")}
-                     />
-                  </FormFieldWrapper>
-               </div>
-            )}
             
-            {selectedStage && selectedStage == 10 && (
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                  <FormFieldWrapper>
-                     <Label htmlFor="problem">Problema</Label>
-                     
-                     <Input
-                        id="problem"
-                        className={`${errors.problema && "border-red-500"}`}
-                        {...register("problema")}
-                     />
-                  </FormFieldWrapper>
-
-                  <FormFieldWrapper>
-                     <Controller
-                        name="tipoEnergiaId"
-                        control={control}
-                        defaultValue={1}
-                        render={({ field }) => (
-                           <>
-                              <Label>Tipo de energia</Label>
-                              <Select
-                                 onValueChange={field.onChange}
-                                 value={field.value?.toString() || ""}
-                              >
-                                 <SelectTrigger className={`w-full ${errors.tipoEnergiaId && "border-red-500"}`}>
-                                    <SelectValue placeholder="Tipo de energia" />
-                                 </SelectTrigger>
-                                 <SelectContent>
-                                    <SelectGroup>
-                                       {tipoEnergia && tipoEnergia.map((item) => (
-                                          <SelectItem key={item.id} value={String(item.id)}>
-                                             {item.descricao}
-                                          </SelectItem>
-                                       ))}
-                                    </SelectGroup>
-                                 </SelectContent>
-                              </Select>
-                           </>
-                        )}
-                     />
-                  </FormFieldWrapper>
-               </div>
-            )} */}
-
             <Button size={"lg"} disabled={disableActions} type="submit">
                <Check /> Cadastrar   
             </Button>

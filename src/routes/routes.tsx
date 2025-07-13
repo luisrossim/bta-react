@@ -1,6 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import NotFoundPage from "@/pages/notfound";
-import ServiceOrderPage from "@/pages/service-order";
+import ServiceOrderPage from "@/pages/order";
 import MainLayout from "@/components/layout";
 import LoginPage from "@/pages/login";
 import CustomerPage from "@/pages/customer";
@@ -9,10 +9,9 @@ import UserFormPage from "@/pages/user/user-form";
 import CustomerFormPage from "@/pages/customer/customer-form";
 import StagePage from "@/pages/stages";
 import CustomerInfoPage from "@/pages/customer/customer-info";
-import DashboardPage from "@/pages/dashboard";
 import MaterialsPage from "@/pages/materials";
-import ServiceOrderFormPage from "@/pages/service-order/service-order-form";
-import ServiceOrderInfoPage from "@/pages/service-order/service-order-info";
+import ServiceOrderFormPage from "@/pages/order/order-form";
+import ServiceOrderInfoPage from "@/pages/order/order-info";
 
 const router = createBrowserRouter([
    {
@@ -28,7 +27,7 @@ const router = createBrowserRouter([
       element: <MainLayout />
       ,
       children: [
-         { path: "", element: <DashboardPage /> },
+         { path: "", loader: () => redirect("ordens") },
 
          { path: "ordens", element: <ServiceOrderPage /> },
          { path: "ordens/form", element: <ServiceOrderFormPage /> },

@@ -7,9 +7,8 @@ import { customerService } from "@/services/customer-service";
 import { ToastService } from "@/utils/services/toast-service";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
-import userIcon from "@/assets/images/user-info.svg"
 import { UtilsService } from "@/utils/services/utils-service";
-import { Edit2 } from "lucide-react";
+import { Edit } from "lucide-react";
 
 export default function CustomerInfoPage() {
    const { id } = useParams();
@@ -46,9 +45,6 @@ export default function CustomerInfoPage() {
       }
    ]
 
-
-   if(loading) return <LoadingWrapper />
-
    return (
       <div>
          <Breadcrumb current="Informações" previous={previous} />
@@ -57,41 +53,54 @@ export default function CustomerInfoPage() {
 
          {customer && (
             <>
-               <div className="grid grid-cols-1 gap-4 my-8 bg-slate-50 border">
-                  <div className="flex justify-between items-center gap-2 bg-slate-100 px-6 py-4">
-                     <img src={userIcon} className="w-[28px]" />
-                     <Tooltip>
-                        <TooltipTrigger asChild>
-                           <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
-                              <Edit2 size={16} className="text-slate-600" />
-                           </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                           <p>Editar</p>
-                        </TooltipContent>
-                     </Tooltip>
-                  </div>
+              <div className="grid grid-cols-1 gap-4 my-10">
+                  <div>
+                     <div className="flex flex-wrap justify-between items-center gap-2 bg-primary">
+                        <h2 className="font-medium text-white px-2 py-1">Cliente</h2>
+                        <Tooltip>
+                           <TooltipTrigger asChild>
+                              <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
+                                 <Edit size={16} className="text-white" />
+                              </Link>
+                           </TooltipTrigger>
+                           <TooltipContent>
+                              <p>Editar</p>
+                           </TooltipContent>
+                        </Tooltip>
+                     </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 px-6 py-4">
-                     <LabelInfo label="Nome" info={customer.nome} />
-                     <LabelInfo label="Telefone" info={customer.telefone} />
-                     <LabelInfo label="CPF" info={customer.cpf} />
-                     <LabelInfo label="Cidade" info={customer.endereco.cidade} />
-                     <LabelInfo label="Estado" info={customer.endereco.estado} />
-                     <LabelInfo label="Hectare" info={customer.endereco.hectare} />
-                     <LabelInfo label="Loja x cliente (km)" info={customer.endereco.kmLojaCliente} />
-                     <LabelInfo label="Coordenadas" info={customer.endereco.coordenadasGeograficas} />
-                     <LabelInfo label="Referência" info={customer.endereco.referencia} />
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 border-t gap-2 px-6 py-4">
-                     <LabelInfo label="Criado em" info={UtilsService.formatDate(customer.criadoEm)} />
-                     <LabelInfo label="Atualizado em" info={UtilsService.formatDate(customer.atualizadoEm)} />
+                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 p-4 border bg-neutral-50">
+                        <LabelInfo label="Nome" info={customer.nome} />
+                        <LabelInfo label="Telefone" info={customer.telefone} />
+                        <LabelInfo label="CPF" info={customer.cpf} />
+                        <LabelInfo label="Cidade" info={customer.endereco.cidade} />
+                        <LabelInfo label="Estado" info={customer.endereco.estado} />
+                        <LabelInfo label="Hectare" info={customer.endereco.hectare} />
+                        <LabelInfo label="Loja x cliente (km)" info={customer.endereco.kmLojaCliente} />
+                        <LabelInfo label="Coordenadas" info={customer.endereco.coordenadasGeograficas} />
+                        <LabelInfo label="Referência" info={customer.endereco.referencia} />
+                        <span></span>
+                        <LabelInfo label="Criado em" info={UtilsService.formatDate(customer.criadoEm)} />
+                        <LabelInfo label="Atualizado em" info={UtilsService.formatDate(customer.atualizadoEm)} />
+                     </div>
                   </div>
                </div>
 
-               <div className="bg-slate-50 border px-6 py-4 mb-4">
-                  <h2 className="font-medium text-slate-500 text-sm">Ordens de serviço</h2>
+               <div className="mb-4">
+                  <h2 className="font-medium text-white px-2 py-1 bg-neutral-600">Ordens de serviço</h2>
+                  <div className="grid grid-cols-1 gap-2 px-2 py-2 border bg-neutral-50">
+                     {customer.ordemServico.map((order) => (
+                        <Link
+                           to={`/sistema/ordens/info/${order.id}`} 
+                           className="flex flex-wrap justify-between text-sm gap-2 px-2 py-1 text-neutral-600 hover:bg-neutral-100"
+                        >
+                           <p>{order.id}</p>
+                           <p className="font-medium">
+                              {UtilsService.formatDate(order.criadoEm)}
+                           </p>
+                        </Link>
+                     ))}
+                  </div>
                </div>
             </>
          )}
@@ -101,9 +110,9 @@ export default function CustomerInfoPage() {
 
 const LabelInfo = ({ label, info }: { label: string, info: any  }) => {
    return (
-      <div className="flex flex-wrap items-center gap-2 text-sm">
-         <p className="font-medium text-slate-500">{label}:</p>
-         <p className="text-blue-700">{info || '-'}</p>
+      <div className="flex flex-wrap items-center gap-2">
+         <p className="font-medium text-neutral-900">{label}:</p>
+         <p className="text-neutral-700">{info || '-'}</p>
       </div>
    )
 }
