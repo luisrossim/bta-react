@@ -74,7 +74,7 @@ export function UserList() {
                         trigger={
                            <Button
                               variant={"link"} 
-                              className="!p-1"
+                              size={"icon"}
                               disabled={disableActions}   
                            >
                               {user.isAtivo 

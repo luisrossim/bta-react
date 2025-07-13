@@ -25,12 +25,17 @@ export function useCustomerList(){
    }, [])
 
    useEffect(() => {
-      const filtered = allCustomers.filter((customer) =>
-         customer.nome.toLowerCase().startsWith(search.toLowerCase())
-      );
-      
-      setCustomers(filtered);
+      const filtered = allCustomers.filter((customer) => {
+         const term = search.toLowerCase();
 
+         return (
+            customer.nome.toLowerCase().startsWith(term) ||
+            customer.cpf.toLowerCase().startsWith(term)
+         );
+      });
+
+      setCustomers(filtered);
+      
    }, [search, allCustomers]);
 
 

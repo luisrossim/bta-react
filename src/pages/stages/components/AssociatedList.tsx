@@ -26,7 +26,7 @@ export function AssociatedList({
             const vinculados = associated.find(a => a.stageId === stage.id);
 
             return (
-               <div key={stage.id} className="rounded-[12px] shadow-md overflow-hidden">
+               <div key={stage.id} className="rounded-[8px] shadow-md overflow-hidden">
                   <StageHeader stage={stage} />
 
                   {vinculados && vinculados.users.length > 0 ? (

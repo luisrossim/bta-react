@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { serviceOrderService } from "@/services/order-service";
 import { PageSubtitle, PageTitle } from "@/components/page-header";
 import { Check } from "lucide-react";
-import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 
 export default function ServiceOrderFormPage() {
@@ -70,14 +69,6 @@ export default function ServiceOrderFormPage() {
       }
    }
 
-
-   const previous: PreviousUrl[] = [
-      {
-         label: 'Ordens de serviço',
-         redirectTo: '/sistema/ordens'
-      }
-   ]
-
    const customersOptions = useMemo(
       () =>
          customers.map((customer) => ({
@@ -101,7 +92,6 @@ export default function ServiceOrderFormPage() {
 
    return (
       <div>
-         <Breadcrumb current="Cadastrar" previous={previous} />
          <PageTitle title="Nova ordem de serviço" />
          <PageSubtitle subtitle="Selecione o cliente e a etapa desejada para iniciar um fluxo de ordem de serviço." />
 

@@ -1,4 +1,3 @@
-import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
 import { AlignRight, ArrowRight, Check, File, Link2, Link2Off, UserRoundCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/pages/order/hooks/useOrderInfo";
@@ -21,14 +20,6 @@ export default function ServiceOrderInfoPage() {
       concluir,
       avancar
    } = useOrderInfo()
-
-
-   const previous: PreviousUrl[] = [
-      {
-         label: 'Ordens de serviço',
-         redirectTo: '/sistema/ordens'
-      }
-   ]
 
    const userElement = (user: User, index: number): ReactNode => {
       return (
@@ -63,9 +54,7 @@ export default function ServiceOrderInfoPage() {
    if(!historicoAtual || !order?.cliente) return <EmptyData />
 
    return (
-      <>
-         <Breadcrumb current={`${id}`} previous={previous} />
-         
+      <>         
          <div className="flex flex-col lg:flex-row justify-between gap-6">
             <h1 className="font-semibold text-4xl">
                {historicoAtual.etapa.descricao}

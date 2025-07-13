@@ -16,7 +16,7 @@ export function CustomerFilter({ search, onSearch }: CustomerFilterProps) {
          <div className="flex relative w-full lg:w-1/2">
             <Input 
                type="text" 
-               placeholder="Digite o nome do cliente" 
+               placeholder="Digite o nome ou CPF do cliente" 
                value={search} 
                onChange={(e) => onSearch(e.target.value)} 
             />
