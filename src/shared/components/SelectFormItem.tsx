@@ -93,7 +93,7 @@ export function SelectFormItem<T extends FieldValues>({
                                     {option.label}
                                     <Check
                                        className={cn(
-                                       "ml-auto",
+                                          "ml-auto",
                                        option.value === field.value
                                           ? "opacity-100"
                                           : "opacity-0"

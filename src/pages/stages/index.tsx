@@ -1,4 +1,4 @@
-import { PageSubtitle, PageTitle } from "@/components/page-header";
+import { PageHeader } from "@/components/page-header";
 import { AssociatedForm } from "./components/AssociatedForm";
 import { AssociatedList } from "./components/AssociatedList";
 import { useStageAssociate } from "./hooks/useStageAssociate";
@@ -25,22 +25,18 @@ export default function StagePage() {
 
    return (
       <div className="space-y-14">
-         <div className="flex flex-wrap justify-between items-center gap-8">
-            <div>
-               <PageTitle 
-                  title="Etapas e vinculações" 
+         <PageHeader 
+            title="Etapas e vinculações"
+            subtitle="Vincule usuários específicos às etapas das ordens de serviço para que atuem conforme o fluxo definido."
+            action={
+               <AssociatedForm 
+                  onAssociate={handleAssociateUser}
+                  stageOptions={stageOptions}
+                  userOptions={userOptions}
+                  disableActions={disableActions}
                />
-               <PageSubtitle 
-                  subtitle="Vincule usuários específicos às etapas das ordens de serviço para que atuem conforme o fluxo definido." 
-               />
-            </div>
-            <AssociatedForm 
-               onAssociate={handleAssociateUser}
-               stageOptions={stageOptions}
-               userOptions={userOptions}
-               disableActions={disableActions}
-            />
-         </div>
+            }
+         />
 
          <AssociatedList
             stages={stages} 

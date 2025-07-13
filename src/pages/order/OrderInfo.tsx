@@ -1,8 +1,7 @@
 import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
-import { LoadingWrapper } from "@/components/loading";
 import { AlignRight, ArrowRight, Check, File, Link2, Link2Off, UserRoundCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useOrderInfo } from "@/pages/order/hooks/use-order-info";
+import { useOrderInfo } from "@/pages/order/hooks/useOrderInfo";
 import { EmptyData } from "@/components/empty-data";
 import type { ReactNode } from "react";
 import type { User } from "@/models/user";

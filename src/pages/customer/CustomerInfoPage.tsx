@@ -1,55 +1,42 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Breadcrumb, type PreviousUrl } from "@/components/breadcrumb";
-import { LoadingWrapper } from "@/components/loading";
-import { PageSubtitle, PageTitle } from "@/components/page-header";
+import { PageHeader } from "@/components/page-header";
 import type { Customer } from "@/models/customer";
-import { customerService } from "@/services/customer-service";
-import { ToastService } from "@/utils/services/toast-service";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { UtilsService } from "@/utils/services/utils-service";
-import { Edit } from "lucide-react";
+import { ChevronLeft, Edit } from "lucide-react";
+import { useCustomerForm } from "./hooks/useCustomerForm";
+import { Button } from "@/components/ui/button";
 
 export default function CustomerInfoPage() {
    const { id } = useParams();
+   const [customer, setCustomer] = useState<Customer>();
    const navigate = useNavigate();
-   const [customer, setCustomer] = useState<Customer>()
-   const [loading, setLoading] = useState<boolean>(false);
+   const { fetchCustomerById } = useCustomerForm();
 
-
-   useEffect(() => {
-      if (id) fetchCustomer()
-   }, [id]);
-
-
-   const fetchCustomer = async () => {
-      setLoading(true);
-
-      try {
-         const _customer: Customer = await customerService.getById(id!);
-         setCustomer(_customer);
-
-      } catch (err: any) {
-         ToastService.showError(err?.response?.data?.message || err?.message)
-         navigate("/sistema/clientes")
-      } finally {
-         setLoading(false);
-      }
+   const handleFetchCustomer = async (id: string) => {
+      const _customer = await fetchCustomerById(id);
+      setCustomer(_customer);
    }
 
-
-   const previous: PreviousUrl[] = [
-      {
-         label: 'Clientes',
-         redirectTo: '/sistema/clientes'
-      }
-   ]
+   useEffect(() => {
+      if (id) handleFetchCustomer(id)
+   }, [id]);
 
    return (
-      <div>
-         <Breadcrumb current="Informações" previous={previous} />
-         <PageTitle title="Informações do cliente" />
-         <PageSubtitle subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas." />
+      <div className="space-y-6">
+         <Button 
+            variant={"outline"} 
+            size={"icon"} 
+            onClick={() => navigate("/sistema/clientes")}
+         >
+            <ChevronLeft />
+         </Button>
+
+         <PageHeader 
+            title="Informações do cliente"
+            subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."
+         />
 
          {customer && (
             <>

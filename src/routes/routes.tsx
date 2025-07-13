@@ -5,13 +5,13 @@ import MainLayout from "@/components/layout";
 import LoginPage from "@/pages/login";
 import CustomerPage from "@/pages/customer";
 import UserPage from "@/pages/user";
-import UserFormPage from "@/pages/user/user-form";
-import CustomerFormPage from "@/pages/customer/customer-form";
+import UserFormPage from "@/pages/user/UserFormPage";
+import CustomerFormPage from "@/pages/customer/CustomerFormPage";
 import StagePage from "@/pages/stages";
-import CustomerInfoPage from "@/pages/customer/customer-info";
+import CustomerInfoPage from "@/pages/customer/CustomerInfoPage";
 import MaterialsPage from "@/pages/materials";
-import ServiceOrderFormPage from "@/pages/order/order-form";
-import ServiceOrderInfoPage from "@/pages/order/order-info";
+import ServiceOrderFormPage from "@/pages/order/OrderForm";
+import ServiceOrderInfoPage from "@/pages/order/OrderInfo";
 
 const router = createBrowserRouter([
    {

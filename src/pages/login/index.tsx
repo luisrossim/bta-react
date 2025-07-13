@@ -1,4 +1,4 @@
-import { LoginForm } from "@/pages/login/login-form";
+import { LoginForm } from "@/pages/login/components/LoginForm";
 import welcome from "@/assets/images/welcome.avif";
 import { ErrorMessage } from "@/components/error-message";
 import { useEffect, useState } from "react";
@@ -21,14 +21,18 @@ export default function LoginPage() {
          <div className="flex flex-col gap-4 p-8 md:p-10">
             <div className="flex justify-start gap-2">
                <a href="#" className="flex items-center gap-2 font-medium">
-                  <div className="bg-primary text-primary-foreground flex size-7 p-1 items-center justify-center rounded-md">
+                  <div className="bg-primary text-primary-foreground flex w-[40px] h-[40px] p-2 items-center justify-center rounded-md">
                      <img
                         src="favicon.svg"
                         className="brightness-0 invert saturate-0"
                         alt="bta-logo"
                      />
                   </div>
-                  <span className="text-sm font-semibold">BTA Irrigação</span>
+
+                  <div className="flex flex-col">
+                     <span className="text-sm font-semibold">BTA Irrigação</span>
+                     <span className="text-sm text-neutral-500">Ordens de serviço</span>
+                  </div>
                </a>
             </div>
             <div className="flex flex-1 items-center justify-center">

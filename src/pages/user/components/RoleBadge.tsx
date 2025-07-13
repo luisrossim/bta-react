@@ -8,14 +8,14 @@ interface RoleBadgeProps {
 export const RoleBadge = ({ rounded, role }: RoleBadgeProps) => {
    const roundedSize = rounded == true ? 'rounded-full' : 'rounded-sm';
    const backgroundMap: Record<'Admin' | 'Técnico' | 'Assistente', string> = {
-      'Admin': 'bg-rose-100 text-rose-800',
-      'Técnico': 'bg-sky-100 text-sky-800',
-      'Assistente': 'bg-yellow-100 text-yellow-800',
+      'Admin': 'bg-red-600 text-orange-100',
+      'Técnico': 'bg-sky-600 text-sky-100',
+      'Assistente': 'bg-emerald-600 text-green-100',
    }
 
    return (
-      <div className={`px-2 py-1 inline-block text-xs ${roundedSize} ${backgroundMap[role]}`}>
-         <p>{role}</p>
+      <div className={`px-2 py-1 inline-block text-xs font-medium ${roundedSize} ${backgroundMap[role]}`}>
+         {role}
       </div>
    )
 }

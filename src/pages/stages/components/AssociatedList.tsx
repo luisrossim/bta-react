@@ -21,20 +21,20 @@ export function AssociatedList({
    }
 
    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 my-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-8 my-4">
          {stages.map(stage => {
             const vinculados = associated.find(a => a.stageId === stage.id);
 
             return (
-               <div key={stage.id}>
+               <div key={stage.id} className="rounded-[12px] shadow-md overflow-hidden">
                   <StageHeader stage={stage} />
 
                   {vinculados && vinculados.users.length > 0 ? (
-                     <ul className="text-sm">
+                     <ul className="text-sm p-2">
                         {vinculados.users.map(user => (
                            <li 
                               key={user.id} 
-                              className="flex items-center justify-between border-b border-b-neutral-200 py-1 gap-4"
+                              className="flex items-center justify-between gap-4"
                            >
                               <div className="flex items-center gap-1">
                                  <DisassociateForm
@@ -55,7 +55,7 @@ export function AssociatedList({
                         ))}
                      </ul>
                   ) : (
-                     <p className="text-sm pl-2 text-neutral-500">
+                     <p className="text-sm p-5 text-neutral-500">
                         Nenhum usuário vinculado
                      </p>
                   )}

@@ -3,8 +3,8 @@ import type { Customer } from "./customer";
 import type { ServiceOrderHistory } from "./service-order-history";
 
 export const serviceOrderFormSchema = z.object({
-  clienteId: z.coerce.number().positive(),
-  etapaId: z.coerce.number().positive()
+  clienteId: z.number().positive(),
+  etapaId: z.number().positive()
 })
 
 export const measurementFormSchema = z.object({

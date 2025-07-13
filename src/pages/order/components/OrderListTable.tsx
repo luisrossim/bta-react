@@ -92,7 +92,7 @@ export function ServiceOrderListTable({ orders, loading, navigate }: ServiceOrde
                         </TableCell>
 
                         <TableCell className="text-neutral-500">
-                              {UtilsService.formatDate(historicoAtual.criadoEm)}
+                              {UtilsService.formatTimestamp(historicoAtual.criadoEm)}
                         </TableCell>
 
                         <TableCell className="flex justify-end">
