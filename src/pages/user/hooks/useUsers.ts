@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import type { User, UserForm } from "@/models/user";
+import type { CreateUser, UpdateUser, User } from "@/models/user";
 import { userService } from "@/services/user-service";
 import { ToastService } from "@/utils/services/toast-service";
 
@@ -43,7 +43,7 @@ export function useUsers() {
       }
    };
 
-   const saveUser = async (id: number | null, data: UserForm) => {
+   const saveUser = async (id: number | null, data: CreateUser | UpdateUser) => {
       setDisableActions(true);
       const toastId = toast.loading("Salvando usuário");
 

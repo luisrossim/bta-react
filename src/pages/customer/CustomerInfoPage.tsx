@@ -50,7 +50,10 @@ export default function CustomerInfoPage() {
 
          <div className="grid grid-cols-1 gap-14 my-10">
             <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-               <ListItem label="Nome" value={customer.nome} />
+               <ListItem 
+                  label="Nome" 
+                  value={customer.nome}
+               />
 
                <ListItem 
                   label="Telefone" 
@@ -78,8 +81,16 @@ export default function CustomerInfoPage() {
                   label="Endereço" 
                   value={`${customer.endereco.cidade} (${customer.endereco.estado})`} 
                />
-               <ListItem label="Hectare" value={customer.endereco.hectare} />
-               <ListItem label="Loja x cliente (km)" value={customer.endereco.kmLojaCliente} />
+
+               <ListItem 
+                  label="Hectare" 
+                  value={customer.endereco.hectare} 
+               />
+
+               <ListItem 
+                  label="Loja x cliente (km)" 
+                  value={customer.endereco.kmLojaCliente} 
+               />
 
                <ListItem 
                   label="Coordenadas geográficas" 
@@ -102,14 +113,25 @@ export default function CustomerInfoPage() {
                   }
                />
 
-               <ListItem label="Referência" value={customer.endereco.referencia} />
-               <ListItem label="Criado em" value={UtilsService.formatTimestamp(customer.criadoEm)} />
-               <ListItem label="Atualizado em" value={UtilsService.formatTimestamp(customer.atualizadoEm)} />
+               <ListItem 
+                  label="Referência" 
+                  value={customer.endereco.referencia} 
+               />
+
+               <ListItem 
+                  label="Criado em" 
+                  value={UtilsService.formatTimestamp(customer.criadoEm)} 
+               />
+
+               <ListItem 
+                  label="Atualizado em" 
+                  value={UtilsService.formatTimestamp(customer.atualizadoEm)}
+               />
             </div>
 
             <div>
                <h2 className="mb-2 text-neutral-500 font-medium text-sm">Ordens de serviço</h2>
-               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5">
                   {customer.ordemServico.length > 0 && customer.ordemServico.map((order) => (
                      <CustomerOrderCard key={order.id} order={order} />
                   ))}

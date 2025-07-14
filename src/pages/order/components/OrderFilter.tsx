@@ -12,11 +12,11 @@ import { LoadingWrapper } from "../../../components/loading";
 import { Filter } from "lucide-react";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 
-interface ServiceOrderFilterProps {
+interface OrderFilterProps {
    onSubmit: (data: OrderFilters) => void;
 }
 
-export function ServiceOrderFilter({ onSubmit }: ServiceOrderFilterProps) {
+export function OrderFilter({ onSubmit }: OrderFilterProps) {
    const [stages, setStages] = useState<Stage[]>([]);
    const [users, setUsers] = useState<User[]>([])
    const [loading, setLoading] = useState<boolean>(false);

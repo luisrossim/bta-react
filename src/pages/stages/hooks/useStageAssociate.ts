@@ -10,12 +10,9 @@ export function useStageAssociate() {
    const [stages, setStages] = useState<Stage[]>([]);
    const [associated, setAssociated] = useState<AssociatedUsers[]>([]);
    const [users, setUsers] = useState<User[]>([]);
-   const [loading, setLoading] = useState<boolean>(false);
    const [disableActions, setDisableActions] = useState<boolean>(false);
 
    const fetchStagesAndAssociated = async () => {
-      setLoading(true);
-
       try {
          const [_stages, _associated, _users] = await Promise.all([
             stageService.getAll(),
@@ -29,8 +26,6 @@ export function useStageAssociate() {
 
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
-      } finally {
-         setLoading(false);
       }
    }
 

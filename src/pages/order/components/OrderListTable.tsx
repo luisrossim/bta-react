@@ -12,13 +12,13 @@ import { LoadingWrapper } from "@/components/loading";
 import type { ReactNode } from "react";
 import type { User } from "@/models/user";
 
-interface ServiceOrderListTableProps {
+interface OrderListTableProps {
    orders: ServiceOrder[]
    loading: boolean
    navigate: (id: number) => void
 }
 
-export function ServiceOrderListTable({ orders, loading, navigate }: ServiceOrderListTableProps){
+export function OrderListTable({ orders, loading, navigate }: OrderListTableProps){
    const { calculateExecutionTime } = useExecutionTime();
    const isMobile = useIsMobile();
 
@@ -28,10 +28,9 @@ export function ServiceOrderListTable({ orders, loading, navigate }: ServiceOrde
 
    const userTooltip = (user: User, index: number): ReactNode => {
       return (
-         <Tooltip>
+         <Tooltip key={index}>
             <TooltipTrigger asChild>
                <span
-                  key={index}
                   className="inline-flex items-center hover:cursor-default justify-center bg-neutral-200 text-neutral-700 rounded-full w-6 h-6 mr-1 text-xs font-semibold"
                >
                   {user.nome?.charAt(0)?.toUpperCase() || "?"}

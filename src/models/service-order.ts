@@ -2,7 +2,7 @@ import z from "zod";
 import type { Customer } from "./customer";
 import type { ServiceOrderHistory } from "./service-order-history";
 
-export const serviceOrderFormSchema = z.object({
+export const createOrderSchema = z.object({
   clienteId: z.number().positive(),
   etapaId: z.number().positive()
 })
@@ -23,11 +23,11 @@ export const assistanceFormSchema = z.object({
   observacoes: z.string().optional().nullable()
 })
 
-export type ServiceOrderForm = z.infer<typeof serviceOrderFormSchema>
+export type CreateOrder = z.infer<typeof createOrderSchema>
 export type MeasurementForm = z.infer<typeof measurementFormSchema>
 export type AssistanceForm = z.infer<typeof assistanceFormSchema>
 
-export type ServiceOrder = Omit<ServiceOrderForm, "etapaId"> &
+export type ServiceOrder = Omit<CreateOrder, "etapaId"> &
   MeasurementForm &
   AssistanceForm & {
     id: number;

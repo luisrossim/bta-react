@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UtilsService } from "@/utils/services/utils-service";
-import { Ban, CheckCircle, Edit2 } from "lucide-react";
+import { Ban, CheckCircle, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RoleBadge } from "@/pages/user/components/RoleBadge";
 import type { Roles } from "@/models/role";
@@ -89,7 +89,7 @@ export function UserList() {
                         to={`/sistema/usuarios/form/${user.id}`} 
                         className="p-1"
                      > 
-                        <Edit2 size={16} className="text-neutral-600" />
+                        <Edit size={16} className="text-neutral-600" />
                      </Link>
                   </TableCell>
                </TableRow>

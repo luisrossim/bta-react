@@ -16,9 +16,8 @@ export interface ServiceOrderHistory {
    criadoEm: Date;
 }
 
-export const atribuirFormSchema = z.object({
-   historyId: z.string(),
-   userId: z.coerce.number()
+export const createAtribuicaoSchema = z.object({
+   userId: z.number()
 })
 
-export type AtribuirForm = z.infer<typeof atribuirFormSchema> 
+export type CreateAtribuicao = z.infer<typeof createAtribuicaoSchema> 

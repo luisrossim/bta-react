@@ -1,25 +1,24 @@
-import { AlignRight, ArrowRight, Check, File, Link2, Link2Off, UserRoundCheck } from "lucide-react";
+import { ArrowRight, Check, File, Link2, Link2Off } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/pages/order/hooks/useOrderInfo";
 import { EmptyData } from "@/components/empty-data";
 import type { ReactNode } from "react";
 import type { User } from "@/models/user";
-import type { AtribuirForm } from "@/models/service-order-history";
+import type { CreateAtribuicao } from "@/models/service-order-history";
 import { UtilsService } from "@/utils/services/utils-service";
+import { AssignUserForm } from "./components/AssignUserForm";
+import { PageHeader } from "@/components/page-header";
 
-export default function ServiceOrderInfoPage() {
+export default function OrderInfoPage() {
    const {
-      id,
       order,
       historicoAtual,
       historicoPassados,
-      loading,
-      form,
       atribuir,
       desatribuir,
       concluir,
       avancar
-   } = useOrderInfo()
+   } = useOrderInfo();
 
    const userElement = (user: User, index: number): ReactNode => {
       return (
@@ -43,7 +42,7 @@ export default function ServiceOrderInfoPage() {
 
 
    const removeUser = (userId: number) => {
-      const data: AtribuirForm = {
+      const data: CreateAtribuicao = {
          historyId: historicoAtual!.id,
          userId
       }
@@ -54,36 +53,37 @@ export default function ServiceOrderInfoPage() {
    if(!historicoAtual || !order?.cliente) return <EmptyData />
 
    return (
-      <>         
-         <div className="flex flex-col lg:flex-row justify-between gap-6">
-            <h1 className="font-semibold text-4xl">
-               {historicoAtual.etapa.descricao}
-            </h1>
+      <div className="space-y-14">
+         <PageHeader 
+            title={historicoAtual.etapa.descricao}
+            subtitle={order.cliente.nome}
+            action={
+               <div className="flex items-center gap-4">
+                  <AssignUserForm 
+                     stageUsers={historicoAtual.etapa.etapaUsuario}
+                     atribuir={atribuir}
+                  />
 
-            <div className="flex items-center gap-4">
-               <Button variant={"light"}>
-                  <UserRoundCheck />Atribuir
-               </Button>
+                  <Button variant={"success"} size={"lg"} onClick={concluir}>
+                     <Check />Concluir
+                  </Button>
 
-               <Button variant={"success"} onClick={concluir}>
-                  <Check />Concluir
-               </Button>
-
-               <Button onClick={avancar}>
-                  <ArrowRight />Avançar
-               </Button>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 my-12">
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm">Cliente</h2>
-               <div className="flex items-center gap-2">
-                  <p className="font-semibold">{order.cliente.nome}</p>
-                  <Button variant={"ghost"} size={"icon"}>
-                     <AlignRight />
+                  <Button onClick={avancar} size={"lg"}>
+                     <ArrowRight />Avançar
                   </Button>
                </div>
+            }
+         />
+
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <section>
+               <h2 className="font-medium text-neutral-500 text-sm mb-2">Técnicos atribuídos</h2>
+
+               {historicoAtual.atribuicoes.length > 0 
+                  ? historicoAtual.atribuicoes?.map(
+                     (atribuicao, index) => userElement(atribuicao.usuario, index)
+                  ) : <span className="text-sm text-neutral-600">Nenhum usuário atribuído</span> 
+               }
             </section>
 
             <section>
@@ -96,33 +96,21 @@ export default function ServiceOrderInfoPage() {
             </section>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 my-12">
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Técnicos atribuídos</h2>
+         <section>
+            <h2 className="font-medium text-neutral-500 text-sm mb-2">Informações</h2>
 
-               {historicoAtual.atribuicoes.length > 0 
-                  ? historicoAtual.atribuicoes?.map(
-                     (atribuicao, index) => userElement(atribuicao.usuario, index)
-                  ) : <span className="text-sm text-neutral-600">Nenhum usuário atribuído</span> 
+            <div className="mb-1">
+               <span>Iniciada em: </span> 
+               {UtilsService.formatTimestamp(historicoAtual.criadoEm)}
+            </div>
+            <div>
+               <span>Concluída em: </span>
+               {historicoAtual.concluidoEm 
+                  ? UtilsService.formatTimestamp(historicoAtual.concluidoEm)
+                  : "-"
                }
-            </section>
-
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Informações</h2>
-
-               <div className="mb-1">
-                  <span>Iniciada em: </span> 
-                  {UtilsService.formatDate(historicoAtual.criadoEm)}
-               </div>
-               <div>
-                  <span>Concluída em: </span>
-                  {historicoAtual.concluidoEm 
-                     ? UtilsService.formatDate(historicoAtual.concluidoEm)
-                     : "-"
-                  }
-               </div>
-            </section>
-         </div>
+            </div>
+         </section>
 
          <section>
             <div className="mb-12">
@@ -145,12 +133,12 @@ export default function ServiceOrderInfoPage() {
 
                         <div>
                            <div>
-                              <b>Iniciada em:</b> {UtilsService.formatDate(item.criadoEm)}
+                              <b>Iniciada em:</b> {UtilsService.formatTimestamp(item.criadoEm)}
                            </div>
                            <div>
                               <b>Concluída em: </b> 
                               {item.concluidoEm 
-                                 ? UtilsService.formatDate(item.concluidoEm)
+                                 ? UtilsService.formatTimestamp(item.concluidoEm)
                                  : "-"
                               }
                            </div>
@@ -160,6 +148,6 @@ export default function ServiceOrderInfoPage() {
                </div>
             </div>
          </section>
-      </>
+      </div>
    )
 }

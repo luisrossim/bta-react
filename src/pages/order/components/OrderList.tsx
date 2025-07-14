@@ -1,15 +1,15 @@
-import { ServiceOrderListTable } from "@/pages/order/components/OrderListTable";
-import { ServiceOrderFilter } from "@/pages/order/components/OrderFilter";
-import { useOrders } from "./hooks/useOrders";
+import { OrderListTable } from "@/pages/order/components/OrderListTable";
+import { OrderFilter } from "@/pages/order/components/OrderFilter";
+import { useOrders } from "../hooks/useOrders";
 import { useEffect } from "react";
 import type { OrderFilters } from "@/models/filters";
 
-export default function ServiceOrderList() {
+export default function OrderList() {
    const { 
-      orders, 
-      loading, 
-      loadServiceOrders, 
-      navigateToServiceOrder 
+      orders,
+      loading,
+      loadServiceOrders,
+      navigateToServiceOrder
    } = useOrders();
 
    
@@ -27,15 +27,16 @@ export default function ServiceOrderList() {
    };
 
    return (
-      <>
-         <ServiceOrderFilter 
+      <div className="grid grid-cols-1 gap-8">
+         <OrderFilter 
             onSubmit={onFilterSubmit} 
          />
-         <ServiceOrderListTable
+
+         <OrderListTable
             orders={orders} 
             loading={loading}
             navigate={navigateToServiceOrder}
          />
-      </>
+      </div>
    )
 }

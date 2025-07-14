@@ -10,8 +10,7 @@ import CustomerFormPage from "@/pages/customer/CustomerFormPage";
 import StagePage from "@/pages/stages";
 import CustomerInfoPage from "@/pages/customer/CustomerInfoPage";
 import MaterialsPage from "@/pages/materials";
-import ServiceOrderFormPage from "@/pages/order/OrderForm";
-import ServiceOrderInfoPage from "@/pages/order/OrderInfo";
+import ServiceOrderInfoPage from "@/pages/order/OrderInfoPage";
 
 const router = createBrowserRouter([
    {
@@ -24,13 +23,11 @@ const router = createBrowserRouter([
    },
    {
       path: "/sistema",
-      element: <MainLayout />
-      ,
+      element: <MainLayout />,
       children: [
          { path: "", loader: () => redirect("ordens") },
 
          { path: "ordens", element: <ServiceOrderPage /> },
-         { path: "ordens/form", element: <ServiceOrderFormPage /> },
          { path: "ordens/info/:id", element: <ServiceOrderInfoPage /> },
          
          { path: "clientes", element: <CustomerPage /> },
