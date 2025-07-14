@@ -1,12 +1,15 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PageHeader } from "@/components/page-header";
 import type { Customer } from "@/models/customer";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { UtilsService } from "@/utils/services/utils-service";
-import { ChevronLeft, Edit } from "lucide-react";
+import { ChevronLeft, Edit, MapPin } from "lucide-react";
 import { useCustomerForm } from "./hooks/useCustomerForm";
 import { Button } from "@/components/ui/button";
+import { EmptyData } from "@/components/empty-data";
+import { ListItem } from "@/shared/components/ListItem";
+import { PatternFormat } from "react-number-format";
+import { CustomerOrderCard } from "./components/CustomerOrderCard";
 
 export default function CustomerInfoPage() {
    const { id } = useParams();
@@ -23,6 +26,8 @@ export default function CustomerInfoPage() {
       if (id) handleFetchCustomer(id)
    }, [id]);
 
+   if(!customer) return <EmptyData />
+
    return (
       <div className="space-y-6">
          <Button 
@@ -36,70 +41,81 @@ export default function CustomerInfoPage() {
          <PageHeader 
             title="Informações do cliente"
             subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."
+            action={
+               <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
+                  <Edit /> Editar
+               </Button>
+            }
          />
 
-         {customer && (
-            <>
-              <div className="grid grid-cols-1 gap-4 my-10">
-                  <div>
-                     <div className="flex flex-wrap justify-between items-center gap-2 bg-primary">
-                        <h2 className="font-medium text-white px-2 py-1">Cliente</h2>
-                        <Tooltip>
-                           <TooltipTrigger asChild>
-                              <Link to={`/sistema/clientes/form/${customer.id}`} className="p-2"> 
-                                 <Edit size={16} className="text-white" />
-                              </Link>
-                           </TooltipTrigger>
-                           <TooltipContent>
-                              <p>Editar</p>
-                           </TooltipContent>
-                        </Tooltip>
-                     </div>
+         <div className="grid grid-cols-1 gap-14 my-10">
+            <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+               <ListItem label="Nome" value={customer.nome} />
 
-                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 p-4 border bg-neutral-50">
-                        <LabelInfo label="Nome" info={customer.nome} />
-                        <LabelInfo label="Telefone" info={customer.telefone} />
-                        <LabelInfo label="CPF" info={customer.cpf} />
-                        <LabelInfo label="Cidade" info={customer.endereco.cidade} />
-                        <LabelInfo label="Estado" info={customer.endereco.estado} />
-                        <LabelInfo label="Hectare" info={customer.endereco.hectare} />
-                        <LabelInfo label="Loja x cliente (km)" info={customer.endereco.kmLojaCliente} />
-                        <LabelInfo label="Coordenadas" info={customer.endereco.coordenadasGeograficas} />
-                        <LabelInfo label="Referência" info={customer.endereco.referencia} />
-                        <span></span>
-                        <LabelInfo label="Criado em" info={UtilsService.formatDate(customer.criadoEm)} />
-                        <LabelInfo label="Atualizado em" info={UtilsService.formatDate(customer.atualizadoEm)} />
-                     </div>
-                  </div>
-               </div>
+               <ListItem 
+                  label="Telefone" 
+                  value={
+                     <PatternFormat 
+                        format="(##) #####-####" 
+                        displayType="text" 
+                        value={customer.telefone} 
+                     />
+                  } 
+               />
 
-               <div className="mb-4">
-                  <h2 className="font-medium text-white px-2 py-1 bg-neutral-600">Ordens de serviço</h2>
-                  <div className="grid grid-cols-1 gap-2 px-2 py-2 border bg-neutral-50">
-                     {customer.ordemServico.map((order) => (
-                        <Link
-                           to={`/sistema/ordens/info/${order.id}`} 
-                           className="flex flex-wrap justify-between text-sm gap-2 px-2 py-1 text-neutral-600 hover:bg-neutral-100"
+               <ListItem 
+                  label="CPF" 
+                  value={
+                     <PatternFormat 
+                        format="###.###.###-##" 
+                        displayType="text" 
+                        value={customer.cpf} 
+                     />
+                  } 
+               />
+
+               <ListItem 
+                  label="Endereço" 
+                  value={`${customer.endereco.cidade} (${customer.endereco.estado})`} 
+               />
+               <ListItem label="Hectare" value={customer.endereco.hectare} />
+               <ListItem label="Loja x cliente (km)" value={customer.endereco.kmLojaCliente} />
+
+               <ListItem 
+                  label="Coordenadas geográficas" 
+                  value={
+                     customer.endereco.coordenadasGeograficas && (
+                        <a 
+                           href={customer.endereco.coordenadasGeograficas} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
                         >
-                           <p>{order.id}</p>
-                           <p className="font-medium">
-                              {UtilsService.formatDate(order.criadoEm)}
-                           </p>
-                        </Link>
-                     ))}
-                  </div>
-               </div>
-            </>
-         )}
-      </div>
-   )
-}
+                           <Button 
+                              size="sm" 
+                              variant="secondary" 
+                              className="text-primary"
+                           >
+                              <MapPin /> Visualizar
+                           </Button>
+                        </a>
+                     )
+                  }
+               />
 
-const LabelInfo = ({ label, info }: { label: string, info: any  }) => {
-   return (
-      <div className="flex flex-wrap items-center gap-2">
-         <p className="font-medium text-neutral-900">{label}:</p>
-         <p className="text-neutral-700">{info || '-'}</p>
+               <ListItem label="Referência" value={customer.endereco.referencia} />
+               <ListItem label="Criado em" value={UtilsService.formatTimestamp(customer.criadoEm)} />
+               <ListItem label="Atualizado em" value={UtilsService.formatTimestamp(customer.atualizadoEm)} />
+            </div>
+
+            <div>
+               <h2 className="mb-2 text-neutral-500 font-medium text-sm">Ordens de serviço</h2>
+               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+                  {customer.ordemServico.length > 0 && customer.ordemServico.map((order) => (
+                     <CustomerOrderCard key={order.id} order={order} />
+                  ))}
+               </div>
+            </div>
+         </div>
       </div>
    )
 }
