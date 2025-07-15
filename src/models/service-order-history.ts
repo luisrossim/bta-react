@@ -2,7 +2,12 @@ import z from "zod";
 import type { Stage } from "./stage";
 import type { User } from "./user";
 
-interface Atribuicao {
+export interface AtribuicaoRequest {
+   historyId: string
+   userId: number
+}
+
+export interface Atribuicao {
    usuario: User
 }
 

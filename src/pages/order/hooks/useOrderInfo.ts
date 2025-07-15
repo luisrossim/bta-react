@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { ServiceOrder } from '@/models/service-order'
-import { type CreateAtribuicao, type ServiceOrderHistory } from '@/models/service-order-history'
+import { type AtribuicaoRequest, type ServiceOrderHistory } from '@/models/service-order-history'
 import { serviceOrderService } from '@/services/order-service'
 import { ToastService } from '@/utils/services/toast-service'
 import { serviceOrderHistoryService } from '@/services/order-history-service'
@@ -28,8 +28,8 @@ export function useOrderInfo() {
       }
    }
 
-   const atribuir = async ({ userId }: CreateAtribuicao) => {
-      const data = {
+   const atribuir = async (userId: number) => {
+      const data: AtribuicaoRequest = {
          historyId: historicoAtual!.id,
          userId
       }
@@ -43,7 +43,12 @@ export function useOrderInfo() {
       }
    }
 
-   const desatribuir = async (data: CreateAtribuicao) => {
+   const desatribuir = async (userId: number) => {
+      const data: AtribuicaoRequest = {
+         historyId: historicoAtual!.id,
+         userId
+      }
+
       try {
          await serviceOrderHistoryService.desatribuir(data)
          ToastService.showSuccess("Usuário desatribuído com sucesso.")

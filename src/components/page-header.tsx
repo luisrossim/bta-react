@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 
 export const PageTitle = ({ title }: { title: string }) => {
-   return <h1 className="text-3xl font-semibold">{title}</h1>
+   return <h1 className="text-3xl font-semibold mb-1">{title}</h1>
 }
 
 export const PageSubtitle = ({ subtitle }: { subtitle: string }) => {
@@ -17,7 +17,7 @@ interface PageHeaderProps {
 export const PageHeader = ({ title, subtitle, action }: PageHeaderProps) => {
    return (
       <div className="flex flex-wrap justify-between items-center gap-8">
-         <div className="space-y-1">
+         <div>
             <PageTitle title={title} />
             <PageSubtitle subtitle={subtitle} />
          </div>

@@ -1,16 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { ServiceOrder } from "@/models/service-order";
 import { Badge } from "@/components/ui/badge";
 import { UtilsService } from "@/utils/services/utils-service";
 import { AlignRight } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { useExecutionTime } from "@/hooks/use-execution-time";
 import { EmptyData } from "@/components/empty-data";
 import { LoadingWrapper } from "@/components/loading";
-import type { ReactNode } from "react";
-import type { User } from "@/models/user";
+import { calculateExecutionTime } from "../utils/calculateExecutionTime";
+import { UserAssignedTooltip } from "./UserAssignedTooltip";
 
 interface OrderListTableProps {
    orders: ServiceOrder[]
@@ -19,29 +17,11 @@ interface OrderListTableProps {
 }
 
 export function OrderListTable({ orders, loading, navigate }: OrderListTableProps){
-   const { calculateExecutionTime } = useExecutionTime();
    const isMobile = useIsMobile();
 
    if (loading) return <LoadingWrapper />
 
    if (!orders || orders.length == 0) return <EmptyData />
-
-   const userTooltip = (user: User, index: number): ReactNode => {
-      return (
-         <Tooltip key={index}>
-            <TooltipTrigger asChild>
-               <span
-                  className="inline-flex items-center hover:cursor-default justify-center bg-neutral-200 text-neutral-700 rounded-full w-6 h-6 mr-1 text-xs font-semibold"
-               >
-                  {user.nome?.charAt(0)?.toUpperCase() || "?"}
-               </span>
-            </TooltipTrigger>
-            <TooltipContent>
-               <p>{user.nome}</p>
-            </TooltipContent>
-         </Tooltip>
-      )
-   }
 
    return (
       <Table className="table-striped">
@@ -74,9 +54,9 @@ export function OrderListTable({ orders, loading, navigate }: OrderListTableProp
                         </TableCell>
 
                         <TableCell>
-                           {historicoAtual.atribuicoes?.map(
-                              (atribuicao, index) => userTooltip(atribuicao.usuario, index)
-                           )}
+                           {historicoAtual.atribuicoes?.map((atribuicao, index) => (
+                              <UserAssignedTooltip key={index} userAssigned={atribuicao.usuario} />
+                           ))}
                         </TableCell>
 
                         <TableCell>

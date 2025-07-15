@@ -10,10 +10,10 @@ import type { StageUser } from "@/models/stage";
 
 interface AssignUserFormProps {
    stageUsers: StageUser[]
-   atribuir: (data: CreateAtribuicao) => void
+   onAtribuir: (userId: number) => void
 }
 
-export function AssignUserForm({ stageUsers, atribuir }: AssignUserFormProps) {
+export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) {
    const [openModal, setOpenModal] = useState(false);
    
    const form = useForm<CreateAtribuicao>({
@@ -28,9 +28,9 @@ export function AssignUserForm({ stageUsers, atribuir }: AssignUserFormProps) {
       }
    };
 
-   const onSubmit = (data: CreateAtribuicao) => {
+   const onSubmit = ({ userId }: CreateAtribuicao) => {
       setOpenModal(false);
-      atribuir(data);
+      onAtribuir(userId);
    }
 
    const stageUsersOptions = useMemo(
@@ -49,7 +49,7 @@ export function AssignUserForm({ stageUsers, atribuir }: AssignUserFormProps) {
             onOpenChange={handleOpenChange}
          >
             <DialogTrigger asChild>
-               <Button variant={"light"} size={"lg"}>
+               <Button variant={"secondary"} size={"lg"}>
                   <UserRoundCheck />Atribuir
                </Button>
             </DialogTrigger>
@@ -80,7 +80,7 @@ export function AssignUserForm({ stageUsers, atribuir }: AssignUserFormProps) {
                         </Button>
                      </DialogClose>
                      <Button type="submit">
-                        Confirmar
+                        Atribuir
                      </Button>
                   </DialogFooter>
                </form>

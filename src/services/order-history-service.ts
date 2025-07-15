@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import { axiosInstance } from "./axios";
-import type { AtribuirForm } from "@/models/service-order-history";
+import type { AtribuicaoRequest } from "@/models/service-order-history";
 
 class ServiceOrderHistoryService {
    protected readonly axios: AxiosInstance = axiosInstance;
@@ -8,11 +8,11 @@ class ServiceOrderHistoryService {
 
    constructor(){}
 
-   async atribuir(data: AtribuirForm): Promise<void> {
+   async atribuir(data: AtribuicaoRequest): Promise<void> {
       await this.axios.post(`${this.path}/assign-user`, data)
    }
 
-   async desatribuir(data: AtribuirForm): Promise<void> {
+   async desatribuir(data: AtribuicaoRequest): Promise<void> {
       await this.axios.post(`${this.path}/remove-user`, data)
    }
 
