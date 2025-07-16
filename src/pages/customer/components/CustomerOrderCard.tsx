@@ -15,31 +15,26 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
    return (
       <Link
          to={`/sistema/ordens/info/${order.id}`}
-         className="group flex items-start gap-4 p-5 rounded-[12px] bg-neutral-50 hover:bg-neutral-100 transition-colors shadow-md"
+         className="group flex items-start gap-4 p-5 rounded bg-primary/3 hover:bg-neutral-100 transition-colors"
       >
-         <div className="bg-primary/10 text-primary rounded-xl p-3">
-            <ClipboardList className="h-6 w-6" />
+         <div className="bg-primary text-white rounded-xl p-2">
+            <ClipboardList className="h-5 w-5" />
          </div>
 
-         <div className="flex flex-col justify-between gap-1 w-full">
-            <div className="flex items-center justify-between">
-               <p className="text-sm font-semibold text-primary">
-                  Ordem de serviço
-               </p>
-               {isConcluida ? (
-                  <Badge variant="success">Concluída</Badge>
-               ) : (
-                  <Badge variant="warning">Em andamento</Badge>
-               )}
-            </div>
-
-            <p className="text-sm font-medium">
+         <div className="flex flex-col justify-between gap-1 text-sm w-full">
+            <p className="font-medium">
                {historicoAtual.etapa.descricao}
             </p>
 
-            <p className="text-sm text-neutral-500 mt-1">
-               Criada em {UtilsService.formatDate(order.criadoEm)}
+            <p className="text-neutral-500 mb-2">
+               Criada em {UtilsService.formatTimestamp(order.criadoEm)}
             </p>
+            
+            {isConcluida ? (
+               <Badge variant="success">Concluída</Badge>
+            ) : (
+               <Badge variant="warning">Em andamento</Badge>
+            )}
          </div>
       </Link>
    );

@@ -12,7 +12,7 @@ export function ListItem({ label, value, className }: ListItemProps) {
          <h2 className="font-medium text-neutral-500 text-sm">
             {label}
          </h2>
-         <p className="font-medium">{value || "-"}</p>
+         <p className="font-medium text-sm">{value || ""}</p>
       </div>
    )
 }

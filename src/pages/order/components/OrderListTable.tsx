@@ -3,12 +3,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import type { ServiceOrder } from "@/models/service-order";
 import { Badge } from "@/components/ui/badge";
 import { UtilsService } from "@/utils/services/utils-service";
-import { AlignRight } from "lucide-react";
-import { Button } from "../../../components/ui/button";
 import { EmptyData } from "@/components/empty-data";
 import { LoadingWrapper } from "@/components/loading";
 import { calculateExecutionTime } from "../utils/calculateExecutionTime";
 import { UserAssignedTooltip } from "./UserAssignedTooltip";
+import { DropdownActions } from "@/shared/components/DropdownActions";
 
 interface OrderListTableProps {
    orders: ServiceOrder[]
@@ -75,9 +74,14 @@ export function OrderListTable({ orders, loading, navigate }: OrderListTableProp
                         </TableCell>
 
                         <TableCell className="flex justify-end">
-                           <Button size={"sm"} variant={"link"} onClick={() => navigate(order.id)}> 
-                              <AlignRight size={16} className="text-primary" />
-                           </Button>
+                           <DropdownActions 
+                              actions={[
+                                 {
+                                    label: 'Visualizar',
+                                    onClick: () => navigate(order.id)
+                                 }
+                              ]}
+                           />
                         </TableCell>
                      </TableRow>
                   )

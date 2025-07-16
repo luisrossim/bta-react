@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/accordion"
 import { UserAssignedTooltip } from "./components/UserAssignedTooltip";
 import { UploadFile } from "./components/UploadFile";
+import { ListItem } from "@/shared/components/ListItem";
+import { StageHeader } from "../stages/components/StageHeader";
 
 export default function OrderInfoPage() {
    const {
@@ -57,9 +59,12 @@ export default function OrderInfoPage() {
       <div className="space-y-14">
          <div className="flex flex-wrap justify-between items-center gap-10">
             <div className="space-y-1">
-               <PageTitle title={historicoAtual.etapa.descricao} />
+               <PageTitle 
+                  title={historicoAtual.etapa.descricao} 
+               />
 
-               <PageSubtitle subtitle={`Tempo de execução: ${calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}`} />
+               <PageSubtitle 
+                  subtitle={`Tempo de execução: ${calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}`} />
 
                {historicoAtual.concluidoEm 
                   ? <Badge variant={"success"}>Concluída</Badge> 
@@ -99,47 +104,62 @@ export default function OrderInfoPage() {
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Informações do cliente</h2>
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <ListItem 
+               label="Cliente"
+               value={(
+                  <>
+                     <div className="space-y-1">
+                        <p>{order.cliente.nome}</p>
 
-               <div className="flex flex-col gap-1 font-medium">
-                  <p>{order.cliente.nome}</p>
+                        <PatternFormat 
+                           format="(##) #####-####" 
+                           displayType="text" 
+                           value={order.cliente.telefone} 
+                        />
+                     </div>
+                  </>
+               )}
+            />
 
-                  <PatternFormat 
-                     format="(##) #####-####" 
-                     displayType="text" 
-                     value={order.cliente.telefone} 
-                  />
-               </div>
-            </section>
+            <ListItem
+               label="Técnicos atribuídos"
+               value={(
+                  <>
+                     {historicoAtual.atribuicoes.length > 0 
+                        ? historicoAtual.atribuicoes?.map(
+                           (atribuicao, index) => userElement(atribuicao.usuario, index)
+                        ) : <p className="text-neutral-400">Nenhum</p> 
+                     }
+                  </>
+               )}
+            />
 
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Técnicos atribuídos</h2>
-
-               {historicoAtual.atribuicoes.length > 0 
-                  ? historicoAtual.atribuicoes?.map(
-                     (atribuicao, index) => userElement(atribuicao.usuario, index)
-                  ) : <span className="text-sm text-neutral-600">Nenhum usuário atribuído</span> 
-               }
-            </section>
-
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm">Anexos</h2>
-               <UploadFile />
-            </section>
-            
-            <section>
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Informações</h2>
-
-               <div className="flex flex-col gap-1 font-medium">
-                  <p>Iniciada em {UtilsService.formatTimestamp(historicoAtual.criadoEm)}</p> 
-
-                  {historicoAtual.concluidoEm && (
-                     <p>Concluída em {UtilsService.formatTimestamp(historicoAtual.concluidoEm)}</p>
+            <div className="lg:row-span-2">
+               <ListItem 
+                  label="Anexos"
+                  value={(
+                     <>
+                        <UploadFile orderId={order.id} />
+                        {order.anexos?.map((anexo, index) => (
+                           <a key={index} href="">
+                              item {++index}
+                           </a>
+                        ))}
+                     </>
                   )}
-               </div>
-            </section>
+               />
+            </div>
+
+            <ListItem 
+               label="Iniciada em"
+               value={UtilsService.formatTimestamp(historicoAtual.criadoEm)}
+            />
+
+            <ListItem 
+               label="Concluída em"
+               value={UtilsService.formatTimestamp(historicoAtual.concluidoEm)}
+            />
          </div>
 
          <section>
@@ -147,29 +167,38 @@ export default function OrderInfoPage() {
                <h2 className="font-medium text-neutral-500 text-sm mb-2">Histórico geral</h2>
 
                {historicoPassados.map((item, index) => (
-                  <Accordion key={index} type="single" collapsible>
+                  <Accordion 
+                     key={index} 
+                     type="single" 
+                     collapsible 
+                     className="mb-2"
+                  >
                      <AccordionItem value={item.etapa.descricao}>
-                        <AccordionTrigger className="border-b rounded-none cursor-pointer hover:no-underline py-2">
-                           <div className="flex gap-3 items-center text-primary font-medium">
-                              <p className="flex items-center justify-center bg-primary text-white w-[28px] h-[28px] rounded-full">
-                                 {item.etapa.id}
-                              </p>
-                              <p className="text-base">
-                                 {item.etapa.descricao}
-                              </p>
-                           </div>
+                        <AccordionTrigger className="rounded-none cursor-pointer hover:no-underline bg-primary/5 p-4">
+                           <StageHeader stage={item.etapa} />
                         </AccordionTrigger>
-                        <AccordionContent className="space-y-2  px-10 py-2">
-                           <p>Iniciada em {UtilsService.formatTimestamp(item.criadoEm)}</p>
-                           <p>Concluída em {UtilsService.formatTimestamp(item.concluidoEm)}</p>
-                           <p className="mb-3">Observações: {item.observacoes}</p>
-                           {item.atribuicoes?.map((atribuicao, index) => (
-                              <UserAssignedTooltip 
-                                 key={index} 
-                                 userAssigned={atribuicao.usuario}
-                                 fullName={true}
-                              />
-                           ))}
+                        
+                        <AccordionContent className="border-t grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 bg-primary/2">
+                           <ListItem label="Iniciada em" value={UtilsService.formatTimestamp(item.criadoEm)} />
+                           <ListItem label="Concluída em" value={UtilsService.formatTimestamp(item.concluidoEm)} />
+                           <ListItem label="Observações" value={item.observacoes} />
+
+                           <ListItem 
+                              label="Atribuídos" 
+                              value={(
+                                 <>
+                                    {item.atribuicoes?.map((atribuicao, index) => (
+                                       <div>
+                                          <UserAssignedTooltip 
+                                             key={index} 
+                                             userAssigned={atribuicao.usuario}
+                                             fullName={true}
+                                          />
+                                       </div>
+                                    ))}
+                                 </>
+                              )} 
+                           />
                         </AccordionContent>
                      </AccordionItem>
                   </Accordion>

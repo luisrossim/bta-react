@@ -13,7 +13,7 @@ export function UserAssignedTooltip({ userAssigned, fullName = false }: UserAssi
    if (IsMobile && fullName) {
       return (
          <span
-            className="inline-flex items-center hover:cursor-default justify-center bg-neutral-200 text-neutral-700 rounded-full mr-1 text-xs px-2 py-1 font-semibold"
+            className="inline-flex items-center hover:cursor-default justify-center bg-primary text-white rounded-full mr-1 text-xs px-2 py-1 font-semibold"
          >
             {userAssigned.nome}
          </span>
@@ -24,7 +24,7 @@ export function UserAssignedTooltip({ userAssigned, fullName = false }: UserAssi
       <Tooltip>
          <TooltipTrigger asChild>
             <span
-               className="inline-flex items-center hover:cursor-default justify-center bg-neutral-200 text-neutral-700 rounded-full w-6 h-6 mr-1 text-xs font-semibold"
+               className="inline-flex items-center hover:cursor-default justify-center bg-primary text-white rounded-full w-6 h-6 mr-1 text-xs font-semibold"
             >
                {userAssigned.nome.charAt(0)?.toUpperCase()}
             </span>

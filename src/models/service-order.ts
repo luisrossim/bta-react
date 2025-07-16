@@ -30,7 +30,7 @@ export type AssistanceForm = z.infer<typeof assistanceFormSchema>
 export type ServiceOrder = Omit<CreateOrder, "etapaId"> &
   MeasurementForm &
   AssistanceForm & {
-    id: number;
+    id: string;
     cliente: Customer,
     anexos?: any[],
     historicoOs: ServiceOrderHistory[],

@@ -1,19 +1,19 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UtilsService } from "@/utils/services/utils-service";
-import { Ban, CheckCircle, Edit } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RoleBadge } from "@/pages/user/components/RoleBadge";
 import type { Roles } from "@/models/role";
 import { EmptyData } from "@/components/empty-data";
 import { useUsers } from "../hooks/useUsers";
-import { UserStatusIcon } from "./UserStatusIcon";
-import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
-import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { PatternFormat } from "react-number-format";
+import { UserStatusToggle } from "./UserStatusToggle";
+import { DropdownActions } from "@/shared/components/DropdownActions";
 
 
 export function UserList() {
+   const navigate = useNavigate();
+   
    const {
       users,
       changeUserStatus,
@@ -35,9 +35,8 @@ export function UserList() {
                <TableHead>Cargo</TableHead>
                <TableHead>Email</TableHead>
                <TableHead>Telefone</TableHead>
-               <TableHead>Status</TableHead>
                <TableHead>Criado em</TableHead>
-               <TableHead className="text-right">Ações</TableHead>
+               <TableHead></TableHead>
             </TableRow>
          </TableHeader>
          <TableBody>
@@ -58,39 +57,25 @@ export function UserList() {
                         value={user.telefone} 
                      />
                   </TableCell>
-                  <TableCell>
-                     <UserStatusIcon isAtivo={user.isAtivo} />
-                  </TableCell>
                   <TableCell className="text-neutral-500">
                      {UtilsService.formatDate(user.criadoEm)}
                   </TableCell>
                   
-                  <TableCell className="flex gap-2 items-center justify-end">
-                     <ConfirmDialog
-                        onConfirm={() => changeUserStatus(user.id)}
-                        disabled={disableActions}
-                        title={user.isAtivo ? "Desativar usuário?" : "Ativar usuário?"}
-                        description={`Deseja alterar o status de acesso do usuário "${user.nome}"?`}
-                        trigger={
-                           <Button
-                              variant={"link"} 
-                              size={"icon"}
-                              disabled={disableActions}   
-                           >
-                              {user.isAtivo 
-                                 ? <Ban size={16} className="text-red-600" /> 
-                                 : <CheckCircle size={16} className="text-emerald-600" />
-                              }
-                           </Button>
-                        }
+                  <TableCell className="flex gap-3 items-center justify-end">
+                     <UserStatusToggle
+                        user={user}
+                        onToggle={changeUserStatus}
+                        disableActions={disableActions} 
                      />
 
-                     <Link 
-                        to={`/sistema/usuarios/form/${user.id}`} 
-                        className="p-1"
-                     > 
-                        <Edit size={16} className="text-neutral-600" />
-                     </Link>
+                     <DropdownActions 
+                        actions={[
+                           {
+                              label: "Editar",
+                              onClick: () => navigate(`/sistema/usuarios/form/${user.id}`)
+                           }
+                        ]}
+                     />
                   </TableCell>
                </TableRow>
             ))}

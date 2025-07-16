@@ -3,7 +3,7 @@ import type { Customer } from "@/models/customer";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { UtilsService } from "@/utils/services/utils-service";
-import { ChevronLeft, Edit, MapPin } from "lucide-react";
+import { ChevronLeft, Edit2, MapPinned } from "lucide-react";
 import { useCustomerForm } from "./hooks/useCustomerForm";
 import { Button } from "@/components/ui/button";
 import { EmptyData } from "@/components/empty-data";
@@ -43,7 +43,7 @@ export default function CustomerInfoPage() {
             subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."
             action={
                <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
-                  <Edit /> Editar
+                  <Edit2 /> Editar
                </Button>
             }
          />
@@ -106,7 +106,7 @@ export default function CustomerInfoPage() {
                               variant="secondary" 
                               className="text-primary"
                            >
-                              <MapPin /> Visualizar
+                              <MapPinned /> Visualizar
                            </Button>
                         </a>
                      )
@@ -117,16 +117,6 @@ export default function CustomerInfoPage() {
                   label="Referência" 
                   value={customer.endereco.referencia} 
                />
-
-               <ListItem 
-                  label="Criado em" 
-                  value={UtilsService.formatTimestamp(customer.criadoEm)} 
-               />
-
-               <ListItem 
-                  label="Atualizado em" 
-                  value={UtilsService.formatTimestamp(customer.atualizadoEm)}
-               />
             </div>
 
             <div>
@@ -136,6 +126,12 @@ export default function CustomerInfoPage() {
                      <CustomerOrderCard key={order.id} order={order} />
                   ))}
                </div>
+            </div>
+
+            <div className="text-sm space-y-1">
+               <h2 className="text-neutral-500 font-medium">Informações do registro</h2>
+               <p>Criado em {UtilsService.formatTimestamp(customer.criadoEm)}</p>
+               <p>Atualizado em {UtilsService.formatTimestamp(customer.atualizadoEm)}</p>
             </div>
          </div>
       </div>
