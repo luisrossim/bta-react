@@ -1,8 +1,8 @@
 import type { Customer } from "@/models/customer"
-import type { CreateOrder } from "@/models/service-order"
+import type { CreateOrder } from "@/models/order"
 import type { Stage } from "@/models/stage"
 import { customerService } from "@/services/customer-service"
-import { serviceOrderService } from "@/services/order-service"
+import { orderService } from "@/services/order-service"
 import { stageService } from "@/services/stage-service"
 import { ToastService } from "@/utils/services/toast-service"
 import { useEffect, useMemo, useState } from "react"
@@ -36,7 +36,7 @@ export function useOrderForm() {
       const toastId = toast.loading("Criando ordem de serviço");
       
       try {
-         const order = await serviceOrderService.create(data);
+         const order = await orderService.create(data);
          toast.success("Ordem de serviço criada com sucesso", { id: toastId });
          navigate(`/sistema/ordens/info/${order.id}`)
 

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { ServiceOrder } from '@/models/service-order'
-import { type AtribuicaoRequest, type ServiceOrderHistory } from '@/models/service-order-history'
-import { serviceOrderService } from '@/services/order-service'
+import type { Order } from '@/models/order'
+import { type AtribuicaoRequest, type OrderHistory } from '@/models/order-history'
+import { orderService } from '@/services/order-service'
 import { ToastService } from '@/utils/services/toast-service'
-import { serviceOrderHistoryService } from '@/services/order-history-service'
+import { orderHistoryService } from '@/services/order-history-service'
 
 export function useOrderInfo() {
    const { id } = useParams()
-   const [order, setOrder] = useState<ServiceOrder | null>(null)
-   const [historicoAtual, setHistoricoAtual] = useState<ServiceOrderHistory | null>(null)
-   const [historicoPassados, setHistoricoPassados] = useState<ServiceOrderHistory[]>([])
+   const [order, setOrder] = useState<Order | null>(null)
+   const [historicoAtual, setHistoricoAtual] = useState<OrderHistory | null>(null)
+   const [historicoPassados, setHistoricoPassados] = useState<OrderHistory[]>([])
 
    useEffect(() => {
       if (id) loadServiceOrderInfo()
@@ -18,7 +18,7 @@ export function useOrderInfo() {
 
    const loadServiceOrderInfo = async () => {
       try {
-         const _order = await serviceOrderService.getById(id!)
+         const _order = await orderService.getById(id!)
          const [atual, ...passados] = _order.historicoOs
          setOrder(_order)
          setHistoricoAtual(atual)
@@ -35,7 +35,7 @@ export function useOrderInfo() {
       }
 
       try {
-         await serviceOrderHistoryService.atribuir(data);
+         await orderHistoryService.atribuir(data);
          ToastService.showSuccess("Usuário atribuído com sucesso.")
          loadServiceOrderInfo();
       } catch (err: any) {
@@ -50,7 +50,7 @@ export function useOrderInfo() {
       }
 
       try {
-         await serviceOrderHistoryService.desatribuir(data)
+         await orderHistoryService.desatribuir(data)
          ToastService.showSuccess("Usuário desatribuído com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
@@ -62,7 +62,7 @@ export function useOrderInfo() {
       if (!historicoAtual) return;
 
       try {
-         await serviceOrderHistoryService.concluir(historicoAtual.id)
+         await orderHistoryService.concluir(historicoAtual.id)
          ToastService.showSuccess("Etapa concluída com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
@@ -74,7 +74,7 @@ export function useOrderInfo() {
       if (!historicoAtual) return;
 
       try {
-         await serviceOrderHistoryService.avancar(historicoAtual.id)
+         await orderHistoryService.avancar(historicoAtual.id)
          ToastService.showSuccess("Etapa atualizada com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
@@ -90,6 +90,6 @@ export function useOrderInfo() {
       atribuir,
       desatribuir,
       concluir,
-      avancar,
+      avancar
    }
 }

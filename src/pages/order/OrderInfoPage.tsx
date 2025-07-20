@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Link, Link2Off } from "lucide-react";
+import { ArrowRight, Check, File, Link, Link2Off } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/pages/order/hooks/useOrderInfo";
 import { EmptyData } from "@/components/empty-data";
@@ -21,6 +21,7 @@ import { UserAssignedTooltip } from "./components/UserAssignedTooltip";
 import { UploadFile } from "./components/UploadFile";
 import { ListItem } from "@/shared/components/ListItem";
 import { StageHeader } from "../stages/components/StageHeader";
+import { useUploadOrderFile } from "./hooks/useUploadOrderFile";
 
 export default function OrderInfoPage() {
    const {
@@ -30,8 +31,20 @@ export default function OrderInfoPage() {
       atribuir,
       desatribuir,
       concluir,
-      avancar
+      avancar,
    } = useOrderInfo();
+
+   const { viewAttachment } = useUploadOrderFile();
+
+   const handleViewAttachment = async (anexoId: string) => {
+      const attachment = await viewAttachment(anexoId);
+
+      console.log(attachment)
+
+      if(attachment) {
+         window.open(attachment.url_temporaria, '_blank');
+      }
+   }
 
    const userElement = (user: User, index: number): ReactNode => {
       return (
@@ -108,17 +121,15 @@ export default function OrderInfoPage() {
             <ListItem 
                label="Cliente"
                value={(
-                  <>
-                     <div className="space-y-1">
-                        <p>{order.cliente.nome}</p>
+                  <div className="flex flex-col gap-1">
+                     {order.cliente.nome}
 
-                        <PatternFormat 
-                           format="(##) #####-####" 
-                           displayType="text" 
-                           value={order.cliente.telefone} 
-                        />
-                     </div>
-                  </>
+                     <PatternFormat 
+                        format="(##) #####-####" 
+                        displayType="text" 
+                        value={order.cliente.telefone} 
+                     />
+                  </div>
                )}
             />
 
@@ -141,10 +152,17 @@ export default function OrderInfoPage() {
                   value={(
                      <>
                         <UploadFile orderId={order.id} />
-                        {order.anexos?.map((anexo, index) => (
-                           <a key={index} href="">
-                              item {++index}
-                           </a>
+
+                        {order.anexos?.map((attachment, index) => (
+                           <Button 
+                              key={index} 
+                              onClick={() => handleViewAttachment(attachment.id)}
+                              variant={"link"}
+                              size={"sm"}
+                           >
+                              <File />
+                              <span className="text-xs">{attachment.descricao}</span>
+                           </Button>
                         ))}
                      </>
                   )}

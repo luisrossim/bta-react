@@ -11,7 +11,7 @@ export interface Atribuicao {
    usuario: User
 }
 
-export interface ServiceOrderHistory {
+export interface OrderHistory {
    id: string;
    etapa: Stage
    atribuicoes: Atribuicao[]

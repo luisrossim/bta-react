@@ -1,12 +1,12 @@
 import type { OrderFilters } from "@/models/filters";
-import type { ServiceOrder } from "@/models/service-order";
-import { serviceOrderService } from "@/services/order-service";
+import type { Order } from "@/models/order";
+import { orderService } from "@/services/order-service";
 import { ToastService } from "@/utils/services/toast-service";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function useOrders() {
-   const [orders, setOrders] = useState<ServiceOrder[]>([])
+   const [orders, setOrders] = useState<Order[]>([])
    const [loading, setLoading] = useState<boolean>(false)
    const navigate = useNavigate();
    
@@ -15,8 +15,8 @@ export function useOrders() {
       
       try {
          const _orders = filters 
-            ? await serviceOrderService.getAllWithParams(filters)
-            : await serviceOrderService.getAll()
+            ? await orderService.getAllWithParams(filters)
+            : await orderService.getAll()
 
          setOrders(_orders);
 
@@ -27,7 +27,7 @@ export function useOrders() {
       }
    }
 
-   const navigateToServiceOrder = (id: number) => {
+   const navigateToServiceOrder = (id: string) => {
       navigate(`/sistema/ordens/info/${id}`)
    }
 

@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/hooks/use-mobile";
-import type { ServiceOrder } from "@/models/service-order";
+import type { Order } from "@/models/order";
 import { Badge } from "@/components/ui/badge";
 import { UtilsService } from "@/utils/services/utils-service";
 import { EmptyData } from "@/components/empty-data";
@@ -10,9 +10,9 @@ import { UserAssignedTooltip } from "./UserAssignedTooltip";
 import { DropdownActions } from "@/shared/components/DropdownActions";
 
 interface OrderListTableProps {
-   orders: ServiceOrder[]
+   orders: Order[]
    loading: boolean
-   navigate: (id: number) => void
+   navigate: (id: string) => void
 }
 
 export function OrderListTable({ orders, loading, navigate }: OrderListTableProps){

@@ -1,8 +1,8 @@
 import type { AxiosInstance } from "axios";
 import { axiosInstance } from "./axios";
-import type { AtribuicaoRequest } from "@/models/service-order-history";
+import type { AtribuicaoRequest } from "@/models/order-history";
 
-class ServiceOrderHistoryService {
+class OrderHistoryService {
    protected readonly axios: AxiosInstance = axiosInstance;
    private path = "/v1/orders/history"
 
@@ -25,4 +25,4 @@ class ServiceOrderHistoryService {
    }
 }
 
-export const serviceOrderHistoryService = new ServiceOrderHistoryService;
+export const orderHistoryService = new OrderHistoryService;

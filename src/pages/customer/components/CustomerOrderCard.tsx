@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import type { ServiceOrder } from "@/models/service-order";
+import type { Order } from "@/models/order";
 import { UtilsService } from "@/utils/services/utils-service";
 import { ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface CustomerOrderCardProps {
-  order: ServiceOrder;
+  order: Order;
 }
 
 export function CustomerOrderCard({ order }: CustomerOrderCardProps) {

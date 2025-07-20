@@ -1,4 +1,4 @@
-import { serviceOrderService } from "@/services/order-service";
+import { orderService } from "@/services/order-service";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -11,8 +11,25 @@ export function useUploadOrderFile(){
       const toastId = toast.loading("Salvando arquivo...");
 
       try {
-         await serviceOrderService.uploadAttachment(orderId, file);
+         await orderService.uploadAttachment(orderId, file);
          toast.success("Arquivo salvo com sucesso!", { id: toastId });
+
+      } catch (err: any) {
+         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
+      } finally {
+         setDisableActions(false);
+      }
+   }
+
+   const viewAttachment = async (attachmentId: string) => {
+      setDisableActions(true);
+
+      const toastId = toast.loading("Buscando arquivo...");
+
+      try {
+         const attachment = await orderService.viewAttachment(attachmentId);
+         toast.success("Arquivo encontrado com sucesso!", { id: toastId });
+         return attachment;
 
       } catch (err: any) {
          toast.error(err?.response?.data?.message || err?.message, { id: toastId });
@@ -23,6 +40,7 @@ export function useUploadOrderFile(){
 
    return {
       uploadFile,
+      viewAttachment,
       disableActions
    }
 }

@@ -1,7 +1,8 @@
-import type { ServiceOrder } from "@/models/service-order";
+import type { Order } from "@/models/order";
 import { GenericService } from "./generic-service";
+import type { AttachmentWithSignedUrl } from "./attachment";
 
-class ServiceOrderService extends GenericService<ServiceOrder> {
+class OrderService extends GenericService<Order> {
    constructor(){
       super("v1/orders");
    }
@@ -9,6 +10,11 @@ class ServiceOrderService extends GenericService<ServiceOrder> {
    async uploadAttachment(orderId: string, file: any): Promise<void> {
       await this.axios.post(`${this.path}/${orderId}/attachment`, file)
    }
+
+   async viewAttachment(anexoId: string): Promise<AttachmentWithSignedUrl> {
+      const response = await this.axios.get(`${this.path}/attachment/${anexoId}`);
+      return response.data
+   }
 }
 
-export const serviceOrderService = new ServiceOrderService;
+export const orderService = new OrderService;

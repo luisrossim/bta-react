@@ -10,9 +10,9 @@ export function ListItem({ label, value, className }: ListItemProps) {
    return (
       <div className={cn("flex flex-col gap-1", className)}>
          <h2 className="font-medium text-neutral-500 text-sm">
-            {label}
+            <p>{label}</p>
          </h2>
-         <p className="font-medium text-sm">{value || ""}</p>
+         {value && <div className="font-medium text-sm">{value}</div>}
       </div>
    )
 }

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createAddressSchema } from "./address";
-import type { ServiceOrder } from "./service-order";
+import type { Order } from "./order";
 
 export const createCustomerSchema = z.object({
     nome: z.string().nonempty(),
@@ -13,7 +13,7 @@ export type CreateCustomer = z.infer<typeof createCustomerSchema>;
 
 export interface Customer extends CreateCustomer {
     id: number
-    ordemServico: ServiceOrder[]
+    ordemServico: Order[]
     atualizadoEm: Date
     criadoEm: Date
 }
