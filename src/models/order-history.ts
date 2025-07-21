@@ -16,10 +16,19 @@ export interface OrderHistory {
    etapa: Stage
    atribuicoes: Atribuicao[]
    observacoes?: string;
+   concluidoPor: User;
    concluidoEm?: Date;
    atualizadoEm?: Date;
    criadoEm: Date;
 }
+
+
+export const commentsHistorySchema = z.object({
+  observacoes: z.string()
+})
+
+export type CommentsHistoryDTO = z.infer<typeof commentsHistorySchema>
+
 
 export const createAtribuicaoSchema = z.object({
    userId: z.number()

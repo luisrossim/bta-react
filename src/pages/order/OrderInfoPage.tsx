@@ -21,7 +21,7 @@ import { UserAssignedTooltip } from "./components/UserAssignedTooltip";
 import { UploadFile } from "./components/UploadFile";
 import { ListItem } from "@/shared/components/ListItem";
 import { StageHeader } from "../stages/components/StageHeader";
-import { useUploadOrderFile } from "./hooks/useUploadOrderFile";
+import { HistoryCommentsForm } from "./components/HistoryCommentsForm";
 
 export default function OrderInfoPage() {
    const {
@@ -32,14 +32,14 @@ export default function OrderInfoPage() {
       desatribuir,
       concluir,
       avancar,
+      comments,
+      viewAttachment,
+      uploadFile,
+      disableActions
    } = useOrderInfo();
-
-   const { viewAttachment } = useUploadOrderFile();
 
    const handleViewAttachment = async (anexoId: string) => {
       const attachment = await viewAttachment(anexoId);
-
-      console.log(attachment)
 
       if(attachment) {
          window.open(attachment.url_temporaria, '_blank');
@@ -85,9 +85,13 @@ export default function OrderInfoPage() {
                }
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
                {!historicoAtual.concluidoEm ? (
                   <>
+                     <HistoryCommentsForm
+                        onSubmit={comments}
+                     />
+
                      <AssignUserForm 
                         stageUsers={historicoAtual.etapa.etapaUsuario}
                         onAtribuir={atribuir}
@@ -97,7 +101,7 @@ export default function OrderInfoPage() {
                         onConfirm={concluir}
                         title="Concluir etapa?"
                         trigger={
-                           <Button size={"lg"}>
+                           <Button>
                               <Check />Concluir
                            </Button>
                         }
@@ -117,7 +121,7 @@ export default function OrderInfoPage() {
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
             <ListItem 
                label="Cliente"
                value={(
@@ -137,37 +141,12 @@ export default function OrderInfoPage() {
                label="Técnicos atribuídos"
                value={(
                   <>
-                     {historicoAtual.atribuicoes.length > 0 
-                        ? historicoAtual.atribuicoes?.map(
-                           (atribuicao, index) => userElement(atribuicao.usuario, index)
-                        ) : <p className="text-neutral-400">Nenhum</p> 
-                     }
+                     {historicoAtual.atribuicoes.length > 0 && historicoAtual.atribuicoes?.map(
+                        (atribuicao, index) => userElement(atribuicao.usuario, index)
+                     )}
                   </>
                )}
             />
-
-            <div className="lg:row-span-2">
-               <ListItem 
-                  label="Anexos"
-                  value={(
-                     <>
-                        <UploadFile orderId={order.id} />
-
-                        {order.anexos?.map((attachment, index) => (
-                           <Button 
-                              key={index} 
-                              onClick={() => handleViewAttachment(attachment.id)}
-                              variant={"link"}
-                              size={"sm"}
-                           >
-                              <File />
-                              <span className="text-xs">{attachment.descricao}</span>
-                           </Button>
-                        ))}
-                     </>
-                  )}
-               />
-            </div>
 
             <ListItem 
                label="Iniciada em"
@@ -178,11 +157,54 @@ export default function OrderInfoPage() {
                label="Concluída em"
                value={UtilsService.formatTimestamp(historicoAtual.concluidoEm)}
             />
+
+            <ListItem 
+               label="Concluída Por"
+               value={historicoAtual.concluidoPor?.nome}
+            />
+
+            <ListItem 
+               label="Observações"
+               value={historicoAtual.observacoes}
+            />
+
+            <ListItem 
+               label="Anexos"
+               className="col-span-1"
+               value={(
+                  <div className="grid grid-cols-1 gap-4">
+                     <UploadFile 
+                        orderId={order.id} 
+                        uploadFn={uploadFile}   
+                        disableActions={disableActions}
+                     />
+
+                     <div className="grid grid-cols-1 gap-2">
+                        {order.anexos?.map((attachment, index) => (
+                           <Button
+                              key={index}
+                              onClick={() => handleViewAttachment(attachment.id)}
+                              variant={"link"}
+                              className="flex justify-start text-start"
+                              size={"sm"}
+                           >
+                              <File /> 
+                              <span className="truncate max-w-full">{attachment.descricao}</span>
+                           </Button>
+                        ))}
+                     </div>
+                  </div>
+               )}
+            />
          </div>
 
          <section>
             <div className="mb-12">
                <h2 className="font-medium text-neutral-500 text-sm mb-2">Histórico geral</h2>
+
+               {!historicoPassados || historicoPassados.length === 0 && (
+                  <EmptyData />
+               )} 
 
                {historicoPassados.map((item, index) => (
                   <Accordion 
@@ -196,25 +218,35 @@ export default function OrderInfoPage() {
                            <StageHeader stage={item.etapa} />
                         </AccordionTrigger>
                         
-                        <AccordionContent className="border-t grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 bg-primary/2">
+                        <AccordionContent className="border-t grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 bg-primary/2">
+                           <ListItem className="lg:col-span-3 xl:col-span-4" label="Observações" value={item.observacoes} />
+
                            <ListItem label="Iniciada em" value={UtilsService.formatTimestamp(item.criadoEm)} />
                            <ListItem label="Concluída em" value={UtilsService.formatTimestamp(item.concluidoEm)} />
-                           <ListItem label="Observações" value={item.observacoes} />
+
+                           <ListItem 
+                              label="Concluída por"
+                              value={(
+                                 <UserAssignedTooltip 
+                                    key={index} 
+                                    userAssigned={item.concluidoPor}
+                                    fullName={true}
+                                 />
+                              )} 
+                           />
 
                            <ListItem 
                               label="Atribuídos" 
                               value={(
-                                 <>
+                                 <div className="flex flex-wrap gap-1">
                                     {item.atribuicoes?.map((atribuicao, index) => (
-                                       <div>
-                                          <UserAssignedTooltip 
-                                             key={index} 
-                                             userAssigned={atribuicao.usuario}
-                                             fullName={true}
-                                          />
-                                       </div>
+                                       <UserAssignedTooltip 
+                                          key={index} 
+                                          userAssigned={atribuicao.usuario}
+                                          fullName={true}
+                                       />
                                     ))}
-                                 </>
+                                 </div>
                               )} 
                            />
                         </AccordionContent>

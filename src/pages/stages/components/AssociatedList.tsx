@@ -37,6 +37,7 @@ export function AssociatedList({
                      <AccordionTrigger className="rounded-none cursor-pointer hover:no-underline bg-primary/5 p-4">
                         <StageHeader stage={stage} />
                      </AccordionTrigger>
+                     
                      <AccordionContent className="p-2 bg-primary/2">
                         {vinculados && vinculados.users.length > 0 ? (
                            <ul className="text-sm">

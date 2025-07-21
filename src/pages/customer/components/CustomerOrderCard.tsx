@@ -15,14 +15,14 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
    return (
       <Link
          to={`/sistema/ordens/info/${order.id}`}
-         className="group flex items-start gap-4 p-5 rounded bg-primary/3 hover:bg-neutral-100 transition-colors"
+         className="group flex items-start gap-4 p-5 rounded bg-primary/3 hover:bg-neutral-200 transition-colors"
       >
          <div className="bg-primary text-white rounded-xl p-2">
             <ClipboardList className="h-5 w-5" />
          </div>
 
          <div className="flex flex-col justify-between gap-1 text-sm w-full">
-            <p className="font-medium">
+            <p className="font-semibold">
                {historicoAtual.etapa.descricao}
             </p>
 

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { Order } from '@/models/order'
-import { type AtribuicaoRequest, type OrderHistory } from '@/models/order-history'
+import { type AtribuicaoRequest, type CommentsHistoryDTO, type OrderHistory } from '@/models/order-history'
 import { orderService } from '@/services/order-service'
 import { ToastService } from '@/utils/services/toast-service'
 import { orderHistoryService } from '@/services/order-history-service'
+import { toast } from 'sonner'
 
 export function useOrderInfo() {
    const { id } = useParams()
    const [order, setOrder] = useState<Order | null>(null)
    const [historicoAtual, setHistoricoAtual] = useState<OrderHistory | null>(null)
    const [historicoPassados, setHistoricoPassados] = useState<OrderHistory[]>([])
+   const [disableActions, setDisableActions] = useState<boolean>(false); 
 
    useEffect(() => {
       if (id) loadServiceOrderInfo()
@@ -66,6 +68,7 @@ export function useOrderInfo() {
          ToastService.showSuccess("Etapa concluída com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
+         console.log(err)
          ToastService.showError(err?.response?.data?.message || err?.message)
       }
    }
@@ -82,6 +85,52 @@ export function useOrderInfo() {
       }
    }
 
+   const comments = async (data: CommentsHistoryDTO) => {
+      if (!historicoAtual) return;
+
+      try {
+         await orderHistoryService.comments(historicoAtual.id, data)
+         ToastService.showSuccess("Etapa atualizada com sucesso.")
+         loadServiceOrderInfo()
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message)
+      }
+   }
+
+   const uploadFile = async (orderId: string, file: any) => {
+      setDisableActions(true);
+
+      const toastId = toast.loading("Salvando arquivo...");
+
+      try {
+         await orderService.uploadAttachment(orderId, file);
+         toast.success("Arquivo salvo com sucesso!", { id: toastId });
+         loadServiceOrderInfo();
+
+      } catch (err: any) {
+         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
+      } finally {
+         setDisableActions(false);
+      }
+   }
+
+   const viewAttachment = async (attachmentId: string) => {
+      setDisableActions(true);
+
+      const toastId = toast.loading("Buscando arquivo...");
+
+      try {
+         const attachment = await orderService.viewAttachment(attachmentId);
+         toast.success("Arquivo encontrado com sucesso!", { id: toastId });
+         return attachment;
+
+      } catch (err: any) {
+         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
+      } finally {
+         setDisableActions(false);
+      }
+   }
+
    return {
       id,
       order,
@@ -90,6 +139,10 @@ export function useOrderInfo() {
       atribuir,
       desatribuir,
       concluir,
-      avancar
+      avancar,
+      comments,
+      uploadFile,
+      viewAttachment,
+      disableActions
    }
 }

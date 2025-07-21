@@ -16,7 +16,7 @@ export abstract class GenericService<T> {
 
     async getAll(): Promise<T[]>{
         const response = await this.axios.get<T[]>(this.path);
-        return response.data;
+        return response.status === 204 ? [] : response.data;
     }
 
     async getAllWithParams(params: Record<string, any>): Promise<T[]> {

@@ -9,7 +9,6 @@ import UserFormPage from "@/pages/user/UserFormPage";
 import CustomerFormPage from "@/pages/customer/CustomerFormPage";
 import StagePage from "@/pages/stages";
 import CustomerInfoPage from "@/pages/customer/CustomerInfoPage";
-import MaterialsPage from "@/pages/materials";
 import ServiceOrderInfoPage from "@/pages/order/OrderInfoPage";
 
 const router = createBrowserRouter([
@@ -39,8 +38,7 @@ const router = createBrowserRouter([
          { path: "usuarios/form", element: <UserFormPage /> },
          { path: "usuarios/form/:id", element: <UserFormPage /> },
 
-         { path: "etapas", element: <StagePage /> },
-         { path: "materiais", element: <MaterialsPage /> }
+         { path: "etapas", element: <StagePage /> }
       ],
    },
    {
