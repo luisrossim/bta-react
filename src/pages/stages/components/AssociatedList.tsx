@@ -34,19 +34,19 @@ export function AssociatedList({
             return (
                <Accordion key={index} type="single" collapsible defaultValue={stage.descricao}>
                   <AccordionItem value={stage.descricao}>
-                     <AccordionTrigger className="rounded-none cursor-pointer hover:no-underline bg-primary/5 p-4">
+                     <AccordionTrigger className="rounded-none cursor-pointer hover:no-underline bg-primary/75 py-2 px-3">
                         <StageHeader stage={stage} />
                      </AccordionTrigger>
                      
-                     <AccordionContent className="p-2 bg-primary/2">
+                     <AccordionContent className="p-2 border">
                         {vinculados && vinculados.users.length > 0 ? (
-                           <ul className="text-sm">
+                           <ul className="grid grid-cols-1 text-sm gap-2">
                               {vinculados.users.map(user => (
                                  <li 
                                     key={user.id} 
                                     className="flex items-center justify-between gap-4"
                                  >
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-2">
                                        <DisassociateForm
                                           stage={stage} 
                                           user={user}

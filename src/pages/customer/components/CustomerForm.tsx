@@ -69,11 +69,13 @@ export default function CustomerForm({ id }: CustomerFormProps){
                <InputFormItem 
                   label="Cidade"
                   name="endereco.cidade"
+                  disabled
                />
 
                <InputFormItem 
                   label="Estado"
                   name="endereco.estado"
+                  disabled
                />
 
                <InputFormItem 

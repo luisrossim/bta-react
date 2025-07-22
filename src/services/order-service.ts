@@ -1,4 +1,4 @@
-import type { Order } from "@/models/order";
+import type { Assistance, Measurement, Order } from "@/models/order";
 import { GenericService } from "./generic-service";
 import type { AttachmentWithSignedUrl } from "./attachment";
 
@@ -13,7 +13,15 @@ class OrderService extends GenericService<Order> {
 
    async viewAttachment(anexoId: string): Promise<AttachmentWithSignedUrl> {
       const response = await this.axios.get(`${this.path}/attachment/${anexoId}`);
-      return response.data
+      return response.data;
+   }
+
+   async saveMeasurement(orderId: string, values: Measurement) {
+      await this.axios.patch(`${this.path}/${orderId}/measurement`, values);
+   }
+
+   async saveAssistance(orderId: string, values: Assistance) {
+      await this.axios.patch(`${this.path}/${orderId}/assistance`, values);
    }
 }
 

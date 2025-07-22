@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { Order } from '@/models/order'
-import { type AtribuicaoRequest, type CommentsHistoryDTO, type OrderHistory } from '@/models/order-history'
+import type { Assistance, Measurement, Order } from '@/models/order'
+import { type AtribuicaoRequest, type CommentsHistory, type OrderHistory } from '@/models/order-history'
 import { orderService } from '@/services/order-service'
 import { ToastService } from '@/utils/services/toast-service'
 import { orderHistoryService } from '@/services/order-history-service'
@@ -21,10 +21,10 @@ export function useOrderInfo() {
    const loadServiceOrderInfo = async () => {
       try {
          const _order = await orderService.getById(id!)
-         const [atual, ...passados] = _order.historicoOs
-         setOrder(_order)
-         setHistoricoAtual(atual)
-         setHistoricoPassados(passados)
+         const [atual, ...passados] = _order.historicoOs;
+         setOrder(_order);
+         setHistoricoAtual(atual);
+         setHistoricoPassados(passados);
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
       }
@@ -85,13 +85,38 @@ export function useOrderInfo() {
       }
    }
 
-   const comments = async (data: CommentsHistoryDTO) => {
+   const comments = async (values: CommentsHistory) => {
       if (!historicoAtual) return;
 
       try {
-         await orderHistoryService.comments(historicoAtual.id, data)
+         await orderHistoryService.comments(historicoAtual.id, values)
          ToastService.showSuccess("Etapa atualizada com sucesso.")
          loadServiceOrderInfo()
+         
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message)
+      }
+   }
+
+   const saveMeasurementForm = async (values: Measurement) => {
+      if(!order?.id) return;
+
+      try {
+         await orderService.saveMeasurement(order.id, values);
+         ToastService.showSuccess("Formulário de medição salvo com sucesso.");
+         loadServiceOrderInfo();
+      } catch (err: any) {
+         ToastService.showError(err?.response?.data?.message || err?.message)
+      }
+   }
+
+   const saveAssistanceForm = async (values: Assistance) => {
+      if(!order?.id) return;
+
+      try {
+         await orderService.saveAssistance(order.id, values);
+         ToastService.showSuccess("Formulário de assistência salvo com sucesso.");
+         loadServiceOrderInfo();
       } catch (err: any) {
          ToastService.showError(err?.response?.data?.message || err?.message)
       }
@@ -143,6 +168,8 @@ export function useOrderInfo() {
       comments,
       uploadFile,
       viewAttachment,
+      saveMeasurementForm,
+      saveAssistanceForm,
       disableActions
    }
 }

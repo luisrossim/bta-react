@@ -28,7 +28,7 @@ export function DisassociateForm({
       title="Desvincular usuário?"
       description={`Deseja remover o vínculo de "${user.nome}" da etapa "${stage.descricao}"?`}
       trigger={
-        <Button variant="secondary" className="group m-[0.4rem] w-1 h-6">
+        <Button variant="secondary" size={"icon"} className="group">
           <div className="hidden group-hover:block">
             <Link2Off className="text-red-600" />
           </div>

@@ -11,17 +11,12 @@ import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PatternFormat } from "react-number-format";
 import { calculateExecutionTime } from "./utils/calculateExecutionTime";
 import { Badge } from "@/components/ui/badge";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { UserAssignedTooltip } from "./components/UserAssignedTooltip";
 import { UploadFile } from "./components/UploadFile";
 import { ListItem } from "@/shared/components/ListItem";
-import { StageHeader } from "../stages/components/StageHeader";
-import { HistoryCommentsForm } from "./components/HistoryCommentsForm";
+import { OrderHistoryAccordion } from "./components/OrderHistoryAccordion";
+import { AssistanceForm } from "./components/AssistanceForm";
+import { MeasurementForm } from "./components/MeasurementForm";
+import { CommentsHistoryForm } from "./components/CommentsHistoryForm";
 
 export default function OrderInfoPage() {
    const {
@@ -35,8 +30,12 @@ export default function OrderInfoPage() {
       comments,
       viewAttachment,
       uploadFile,
+      saveMeasurementForm,
+      saveAssistanceForm,
       disableActions
    } = useOrderInfo();
+
+   const etapaDescricao = historicoAtual?.etapa.descricao;
 
    const handleViewAttachment = async (anexoId: string) => {
       const attachment = await viewAttachment(anexoId);
@@ -88,9 +87,13 @@ export default function OrderInfoPage() {
             <div className="flex items-center gap-4 flex-wrap">
                {!historicoAtual.concluidoEm ? (
                   <>
-                     <HistoryCommentsForm
-                        onSubmit={comments}
-                     />
+                     {etapaDescricao == "Medição" && (
+                        <MeasurementForm order={order} onSubmit={saveMeasurementForm} />
+                     )}
+
+                     {etapaDescricao == "Assistência" && (
+                        <AssistanceForm order={order} onSubmit={saveAssistanceForm} />
+                     )}
 
                      <AssignUserForm 
                         stageUsers={historicoAtual.etapa.etapaUsuario}
@@ -164,11 +167,6 @@ export default function OrderInfoPage() {
             />
 
             <ListItem 
-               label="Observações"
-               value={historicoAtual.observacoes}
-            />
-
-            <ListItem 
                label="Anexos"
                className="col-span-1"
                value={(
@@ -198,61 +196,20 @@ export default function OrderInfoPage() {
             />
          </div>
 
+         <CommentsHistoryForm
+            key={historicoAtual.id} 
+            observacoes={historicoAtual.observacoes}
+            onSubmit={comments} 
+         />
+
          <section>
             <div className="mb-12">
                <h2 className="font-medium text-neutral-500 text-sm mb-2">Histórico geral</h2>
-
-               {!historicoPassados || historicoPassados.length === 0 && (
-                  <EmptyData />
-               )} 
-
-               {historicoPassados.map((item, index) => (
-                  <Accordion 
-                     key={index} 
-                     type="single" 
-                     collapsible 
-                     className="mb-2"
-                  >
-                     <AccordionItem value={item.etapa.descricao}>
-                        <AccordionTrigger className="rounded-none cursor-pointer hover:no-underline bg-primary/5 p-4">
-                           <StageHeader stage={item.etapa} />
-                        </AccordionTrigger>
-                        
-                        <AccordionContent className="border-t grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 bg-primary/2">
-                           <ListItem className="lg:col-span-3 xl:col-span-4" label="Observações" value={item.observacoes} />
-
-                           <ListItem label="Iniciada em" value={UtilsService.formatTimestamp(item.criadoEm)} />
-                           <ListItem label="Concluída em" value={UtilsService.formatTimestamp(item.concluidoEm)} />
-
-                           <ListItem 
-                              label="Concluída por"
-                              value={(
-                                 <UserAssignedTooltip 
-                                    key={index} 
-                                    userAssigned={item.concluidoPor}
-                                    fullName={true}
-                                 />
-                              )} 
-                           />
-
-                           <ListItem 
-                              label="Atribuídos" 
-                              value={(
-                                 <div className="flex flex-wrap gap-1">
-                                    {item.atribuicoes?.map((atribuicao, index) => (
-                                       <UserAssignedTooltip 
-                                          key={index} 
-                                          userAssigned={atribuicao.usuario}
-                                          fullName={true}
-                                       />
-                                    ))}
-                                 </div>
-                              )} 
-                           />
-                        </AccordionContent>
-                     </AccordionItem>
-                  </Accordion>
-               ))}
+               
+               <OrderHistoryAccordion 
+                  order={order}
+                  orderHistory={historicoPassados} 
+               />
             </div>
          </section>
       </div>

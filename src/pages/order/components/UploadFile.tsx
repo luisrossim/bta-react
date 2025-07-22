@@ -61,7 +61,7 @@ export function UploadFile({ orderId, uploadFn, disableActions }: UploadFileProp
       <Dialog open={openModal} onOpenChange={handleOpenChange}>
          <DialogTrigger asChild>
             <div>
-               <Button size="sm" variant="secondary" className="my-1">
+               <Button size="sm" variant="dark" className="my-1">
                   <Upload /> Anexar arquivo
                </Button>
             </div>

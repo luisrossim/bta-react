@@ -15,7 +15,7 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
    return (
       <Link
          to={`/sistema/ordens/info/${order.id}`}
-         className="group flex items-start gap-4 p-5 rounded bg-primary/3 hover:bg-neutral-200 transition-colors"
+         className="group flex items-start gap-4 p-5 rounded border bg-neutral-50 hover:bg-neutral-100 transition-colors"
       >
          <div className="bg-primary text-white rounded-xl p-2">
             <ClipboardList className="h-5 w-5" />

@@ -49,7 +49,7 @@ export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) 
             onOpenChange={handleOpenChange}
          >
             <DialogTrigger asChild>
-               <Button variant={"secondary"} size={"lg"}>
+               <Button variant={"dark"} size={"lg"}>
                   <UserRoundCheck />Atribuir
                </Button>
             </DialogTrigger>

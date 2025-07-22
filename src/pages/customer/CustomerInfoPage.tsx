@@ -3,7 +3,7 @@ import type { Customer } from "@/models/customer";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { UtilsService } from "@/utils/services/utils-service";
-import { ChevronLeft, Edit2, MapPinned } from "lucide-react";
+import { Edit2, MapPinned } from "lucide-react";
 import { useCustomerForm } from "./hooks/useCustomerForm";
 import { Button } from "@/components/ui/button";
 import { EmptyData } from "@/components/empty-data";
@@ -30,14 +30,6 @@ export default function CustomerInfoPage() {
 
    return (
       <div className="space-y-6">
-         <Button 
-            variant={"outline"} 
-            size={"icon"} 
-            onClick={() => navigate("/sistema/clientes")}
-         >
-            <ChevronLeft />
-         </Button>
-
          <PageHeader 
             title="Informações do cliente"
             subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."

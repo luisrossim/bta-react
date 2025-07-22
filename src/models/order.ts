@@ -8,14 +8,14 @@ export const createOrderSchema = z.object({
   etapaId: z.number().positive()
 })
 
-export const measurementFormSchema = z.object({
+export const measurementSchema = z.object({
   hasAutomacao: z.boolean(),
   hasOrcamentoBanco: z.boolean(),
   hasProjetoPlantio: z.boolean(),
   quantidadeSetores: z.coerce.number()
 })
 
-export const assistanceFormSchema = z.object({
+export const assistanceSchema = z.object({
   problema: z.string(),
   tipoEnergiaId: z.coerce.number().optional().nullable(),
   motobombaId: z.coerce.number().optional().nullable(),
@@ -25,12 +25,12 @@ export const assistanceFormSchema = z.object({
 })
 
 export type CreateOrder = z.infer<typeof createOrderSchema>
-export type MeasurementForm = z.infer<typeof measurementFormSchema>
-export type AssistanceForm = z.infer<typeof assistanceFormSchema>
+export type Measurement = z.infer<typeof measurementSchema>
+export type Assistance = z.infer<typeof assistanceSchema>
 
 export type Order = Omit<CreateOrder, "etapaId"> &
-  MeasurementForm &
-  AssistanceForm & {
+  Measurement &
+  Assistance & {
     id: string;
     cliente: Customer,
     anexos?: Attachment[],

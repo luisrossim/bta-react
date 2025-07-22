@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form"
 import { useFormContext, type FieldValues, type Path } from "react-hook-form"
 import { InputMasked } from "./InputMasked"
+import { cn } from "@/lib/utils"
 
 interface InputFormItemProps<T extends FieldValues> {
   name: Path<T>
@@ -17,6 +18,7 @@ interface InputFormItemProps<T extends FieldValues> {
   maskPlaceholder?: string
   placeholder?: string
   disabled?: boolean
+  className?: string
 }
 
 export function InputFormItem<T extends FieldValues>({
@@ -26,7 +28,8 @@ export function InputFormItem<T extends FieldValues>({
   maskFormat,
   maskPlaceholder,
   placeholder,
-  disabled = false
+  disabled = false,
+  className
 }: InputFormItemProps<T>) {
   const { control } = useFormContext()
 
@@ -56,7 +59,7 @@ export function InputFormItem<T extends FieldValues>({
                 type={type}
                 placeholder={placeholder}
                 disabled={disabled}
-                className="w-full"
+                className={cn("w-full", className)}
               />
             )}
           </FormControl>

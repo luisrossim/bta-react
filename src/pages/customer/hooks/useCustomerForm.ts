@@ -28,7 +28,7 @@ export function useCustomerForm() {
             await customerService.create(data);
          
          toast.success("Cliente salvo com sucesso", { id: toastId });
-         navigate("/sistema/clientes");
+         navigate(-1);
 
       } catch (err: any) {
          toast.error(err?.response?.data?.message || err?.message, { id: toastId });

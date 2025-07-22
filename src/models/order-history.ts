@@ -27,7 +27,7 @@ export const commentsHistorySchema = z.object({
   observacoes: z.string()
 })
 
-export type CommentsHistoryDTO = z.infer<typeof commentsHistorySchema>
+export type CommentsHistory = z.infer<typeof commentsHistorySchema>
 
 
 export const createAtribuicaoSchema = z.object({
