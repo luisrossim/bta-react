@@ -1,5 +1,9 @@
+import { ToastService } from "@/utils/services/toast-service"
 import { useForm, Controller } from "react-hook-form"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Upload } from "lucide-react"
+import { useState } from "react"
 import {
   Dialog,
   DialogClose,
@@ -10,29 +14,23 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
-import { Upload } from "lucide-react"
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { ToastService } from "@/utils/services/toast-service"
 
-type UploadFormValues = {
-  image: FileList
+type UploadFile = {
+  file: FileList
 }
 
-interface UploadFileProps {
-  orderId: string
-  uploadFn: (orderId: string, file: any) => Promise<void>
-  disableActions: boolean
+interface AttachmentFormProps {
+   onUpload: (file: FormData) => Promise<void>
+   disableActions: boolean
 }
 
-export function UploadFile({ orderId, uploadFn, disableActions }: UploadFileProps) {
+export function AttachmentForm({ onUpload, disableActions }: AttachmentFormProps) {
+   const form = useForm<UploadFile>();
    const [openModal, setOpenModal] = useState(false);
    const maxSizeInBytes = 5 * 1024 * 1024;
 
-   const { handleSubmit, control, reset } = useForm<UploadFormValues>();
-
-   const onSubmit = async (data: UploadFormValues) => {
-      const file = data.image?.[0]
+   const onSubmit = async (values: UploadFile) => {
+      const file = values.file?.[0]
 
       if(!file) {
          return ToastService.showError("Arquivo inválido ou desconhecido.")
@@ -43,32 +41,37 @@ export function UploadFile({ orderId, uploadFn, disableActions }: UploadFileProp
       }
 
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("file", file);
       
-      uploadFn(orderId, formData);
-
+      onUpload(formData);
       setOpenModal(false);
    }
 
    const handleOpenChange = (isOpen: boolean) => {
-      setOpenModal(isOpen)
+      setOpenModal(isOpen);
+
       if (isOpen) {
-         reset()
+         form.reset();
       }
    }
 
    return (
       <Dialog open={openModal} onOpenChange={handleOpenChange}>
          <DialogTrigger asChild>
-            <div>
-               <Button size="sm" variant="dark" className="my-1">
-                  <Upload /> Anexar arquivo
-               </Button>
-            </div>
+            <button
+               className="group flex flex-col gap-4 cursor-pointer items-center justify-center p-4 md:p-6 rounded-[12px] border border-neutral-300 border-dashed bg-muted transition-colors min-h-[160px]"
+            >
+               <div className="flex items-center justify-center">
+                  <Upload className="text-muted-foreground" />
+               </div>
+               <span className="text-xs font-medium text-center w-full">
+                  Anexar novo arquivo
+               </span>
+            </button>
          </DialogTrigger>
 
          <DialogContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                <DialogHeader>
                   <DialogTitle>Anexar arquivo</DialogTitle>
                   <DialogDescription>
@@ -77,9 +80,9 @@ export function UploadFile({ orderId, uploadFn, disableActions }: UploadFileProp
                </DialogHeader>
 
                <Controller
-                  name="image"
-                  control={control}
-                  rules={{ required: "Selecione pelo menos um arquivo." }}
+                  name="file"
+                  control={form.control}
+                  rules={{ required: "Selecione um arquivo." }}
                   render={({ field: { onChange, ref } }) => (
                      <div className="flex flex-col gap-2 py-4">
                         <Input

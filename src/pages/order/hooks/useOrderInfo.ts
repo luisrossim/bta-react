@@ -98,8 +98,8 @@ export function useOrderInfo() {
       }
    }
 
-   const saveMeasurementForm = async (values: Measurement) => {
-      if(!order?.id) return;
+   const saveMeasurement = async (values: Measurement) => {
+      if(!order) return;
 
       try {
          await orderService.saveMeasurement(order.id, values);
@@ -110,8 +110,8 @@ export function useOrderInfo() {
       }
    }
 
-   const saveAssistanceForm = async (values: Assistance) => {
-      if(!order?.id) return;
+   const saveAssistance = async (values: Assistance) => {
+      if(!order) return;
 
       try {
          await orderService.saveAssistance(order.id, values);
@@ -122,13 +122,15 @@ export function useOrderInfo() {
       }
    }
 
-   const uploadFile = async (orderId: string, file: any) => {
+   const uploadFile = async (file: FormData) => {
+      if(!order) return;
+      
       setDisableActions(true);
 
       const toastId = toast.loading("Salvando arquivo...");
 
       try {
-         await orderService.uploadAttachment(orderId, file);
+         await orderService.uploadAttachment(order.id, file);
          toast.success("Arquivo salvo com sucesso!", { id: toastId });
          loadServiceOrderInfo();
 
@@ -168,8 +170,8 @@ export function useOrderInfo() {
       comments,
       uploadFile,
       viewAttachment,
-      saveMeasurementForm,
-      saveAssistanceForm,
+      saveMeasurement,
+      saveAssistance,
       disableActions
    }
 }

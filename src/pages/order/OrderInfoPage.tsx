@@ -1,4 +1,4 @@
-import { ArrowRight, Check, File, Link, Link2Off } from "lucide-react";
+import { ArrowRight, CheckCircle, Link, Link2Off } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/pages/order/hooks/useOrderInfo";
 import { EmptyData } from "@/components/empty-data";
@@ -6,17 +6,17 @@ import type { ReactNode } from "react";
 import type { User } from "@/models/user";
 import { UtilsService } from "@/utils/services/utils-service";
 import { AssignUserForm } from "./components/AssignUserForm";
-import { PageSubtitle, PageTitle } from "@/components/page-header";
+import { PageTitle } from "@/components/page-header";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PatternFormat } from "react-number-format";
 import { calculateExecutionTime } from "./utils/calculateExecutionTime";
 import { Badge } from "@/components/ui/badge";
-import { UploadFile } from "./components/UploadFile";
 import { ListItem } from "@/shared/components/ListItem";
-import { OrderHistoryAccordion } from "./components/OrderHistoryAccordion";
-import { AssistanceForm } from "./components/AssistanceForm";
-import { MeasurementForm } from "./components/MeasurementForm";
-import { CommentsHistoryForm } from "./components/CommentsHistoryForm";
+import { CommentsForm } from "./components/CommentsForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Attachment } from "./components/Attachment";
+import { HistoryAccordion } from "./components/HistoryAccordion";
+import { StagesFormHandler } from "./components/StagesFormHandler";
 
 export default function OrderInfoPage() {
    const {
@@ -30,15 +30,13 @@ export default function OrderInfoPage() {
       comments,
       viewAttachment,
       uploadFile,
-      saveMeasurementForm,
-      saveAssistanceForm,
+      saveMeasurement,
+      saveAssistance,
       disableActions
    } = useOrderInfo();
 
-   const etapaDescricao = historicoAtual?.etapa.descricao;
-
-   const handleViewAttachment = async (anexoId: string) => {
-      const attachment = await viewAttachment(anexoId);
+   const handleViewAttachment = async (attachmentId: string) => {
+      const attachment = await viewAttachment(attachmentId);
 
       if(attachment) {
          window.open(attachment.url_temporaria, '_blank');
@@ -75,29 +73,21 @@ export default function OrderInfoPage() {
                   title={historicoAtual.etapa.descricao} 
                />
 
-               <PageSubtitle 
-                  subtitle={`Tempo de execução: ${calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}`} />
-
-               {historicoAtual.concluidoEm 
-                  ? <Badge variant={"success"}>Concluída</Badge> 
-                  : <Badge variant={"warning"}>Em andamento</Badge>
-               }
+               <div>
+                  <p className="text-sm text-muted-foreground">
+                     Tempo de execução: {calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
+                  </p>
+               </div>
             </div>
 
             <div className="flex items-center gap-4 flex-wrap">
                {!historicoAtual.concluidoEm ? (
                   <>
-                     {etapaDescricao == "Medição" && (
-                        <MeasurementForm order={order} onSubmit={saveMeasurementForm} />
-                     )}
-
-                     {etapaDescricao == "Assistência" && (
-                        <AssistanceForm order={order} onSubmit={saveAssistanceForm} />
-                     )}
-
-                     <AssignUserForm 
-                        stageUsers={historicoAtual.etapa.etapaUsuario}
-                        onAtribuir={atribuir}
+                     <StagesFormHandler 
+                        order={order} 
+                        stage={historicoAtual.etapa.descricao}
+                        onSubmitMeasurement={saveMeasurement}
+                        onSubmitAssistance={saveAssistance}
                      />
                      
                      <ConfirmDialog
@@ -105,7 +95,7 @@ export default function OrderInfoPage() {
                         title="Concluir etapa?"
                         trigger={
                            <Button>
-                              <Check />Concluir
+                              <CheckCircle />Concluir
                            </Button>
                         }
                      />
@@ -125,6 +115,18 @@ export default function OrderInfoPage() {
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+            <ListItem 
+               label="Situação"
+               value={(
+                  <div>
+                     {historicoAtual.concluidoEm 
+                        ? <Badge variant={"success"}>Concluída</Badge> 
+                        : <Badge variant={"warning"}>Em andamento</Badge>
+                     }
+                  </div>
+               )}
+            />
+
             <ListItem 
                label="Cliente"
                value={(
@@ -147,6 +149,11 @@ export default function OrderInfoPage() {
                      {historicoAtual.atribuicoes.length > 0 && historicoAtual.atribuicoes?.map(
                         (atribuicao, index) => userElement(atribuicao.usuario, index)
                      )}
+
+                     <AssignUserForm 
+                        stageUsers={historicoAtual.etapa.etapaUsuario}
+                        onAtribuir={atribuir} 
+                     />
                   </>
                )}
             />
@@ -162,56 +169,42 @@ export default function OrderInfoPage() {
             />
 
             <ListItem 
-               label="Concluída Por"
+               label="Concluída por"
                value={historicoAtual.concluidoPor?.nome}
-            />
-
-            <ListItem 
-               label="Anexos"
-               className="col-span-1"
-               value={(
-                  <div className="grid grid-cols-1 gap-4">
-                     <UploadFile 
-                        orderId={order.id} 
-                        uploadFn={uploadFile}   
-                        disableActions={disableActions}
-                     />
-
-                     <div className="grid grid-cols-1 gap-2">
-                        {order.anexos?.map((attachment, index) => (
-                           <Button
-                              key={index}
-                              onClick={() => handleViewAttachment(attachment.id)}
-                              variant={"link"}
-                              className="flex justify-start text-start"
-                              size={"sm"}
-                           >
-                              <File /> 
-                              <span className="truncate max-w-full">{attachment.descricao}</span>
-                           </Button>
-                        ))}
-                     </div>
-                  </div>
-               )}
             />
          </div>
 
-         <CommentsHistoryForm
-            key={historicoAtual.id} 
-            observacoes={historicoAtual.observacoes}
-            onSubmit={comments} 
-         />
+         <Tabs defaultValue="anexos">
+            <TabsList>
+               <TabsTrigger value="anexos">Anexos</TabsTrigger>
+               <TabsTrigger value="history">Histórico</TabsTrigger>
+               <TabsTrigger value="comments">Observações</TabsTrigger>
+            </TabsList>
 
-         <section>
-            <div className="mb-12">
-               <h2 className="font-medium text-neutral-500 text-sm mb-2">Histórico geral</h2>
-               
-               <OrderHistoryAccordion 
+            <TabsContent value="anexos">
+               <Attachment
+                  attachments={order.anexos ?? []}
+                  onUpload={uploadFile}
+                  onRequestView={handleViewAttachment}
+                  disableActions={disableActions}
+               />
+            </TabsContent>
+            
+            <TabsContent value="history">
+               <HistoryAccordion
                   order={order}
                   orderHistory={historicoPassados} 
                />
-            </div>
-         </section>
+            </TabsContent>
+
+            <TabsContent value="comments">
+               <CommentsForm
+                  key={historicoAtual.id} 
+                  observacoes={historicoAtual.observacoes}
+                  onSubmit={comments} 
+               />
+            </TabsContent>
+         </Tabs>
       </div>
    )
 }

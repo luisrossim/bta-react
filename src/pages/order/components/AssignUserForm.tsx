@@ -2,7 +2,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Button } from "@/components/ui/button"
 import { createAtribuicaoSchema, type CreateAtribuicao } from "@/models/order-history"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserRoundCheck } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
@@ -49,9 +49,9 @@ export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) 
             onOpenChange={handleOpenChange}
          >
             <DialogTrigger asChild>
-               <Button variant={"dark"} size={"lg"}>
-                  <UserRoundCheck />Atribuir
-               </Button>
+               <button type="button" className="cursor-pointer">
+                  <Plus className="text-primary" />
+               </button>
             </DialogTrigger>
 
             <DialogContent>

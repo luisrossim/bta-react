@@ -2,16 +2,20 @@ import { Button } from "@/components/ui/button";
 import { commentsHistorySchema, type CommentsHistory } from "@/models/order-history";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect } from "react";
+import { Check } from "lucide-react";
 
-interface CommentsHistoryFormProps {
+interface CommentsFormProps {
    observacoes?: string;
    onSubmit: (values: CommentsHistory) => void;
 }
 
-export function CommentsHistoryForm({ observacoes, onSubmit }: CommentsHistoryFormProps) {
+export function CommentsForm({ 
+   observacoes,
+   onSubmit 
+}: CommentsFormProps) {
    const form = useForm<CommentsHistory>({
       resolver: zodResolver(commentsHistorySchema),
       defaultValues: { observacoes }
@@ -29,11 +33,10 @@ export function CommentsHistoryForm({ observacoes, onSubmit }: CommentsHistoryFo
                name="observacoes"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Observações</FormLabel>
                      <FormControl>
                         <Textarea
-                           placeholder="Digite observações sobre a etapa"
-                           className="min-h-[100px]"
+                           placeholder="Nada informado"
+                           className="min-h-[100px] rounded-[12px]"
                            {...field}
                         />
                      </FormControl>
@@ -50,7 +53,7 @@ export function CommentsHistoryForm({ observacoes, onSubmit }: CommentsHistoryFo
                   variant={"dark"} 
                   disabled={!form.formState.isDirty}
                >
-                  Salvar observações
+                  <Check />Salvar
                </Button>
             </div>
          </form>
