@@ -23,7 +23,7 @@ export function SelectFormItem<T extends FieldValues>({
    name,
    label,
    options,
-   placeholder
+   placeholder = "Selecionar"
 }: SelectFormItemProps<T>) {
    const { control } = useFormContext();
    const [search, setSearch] = useState("");
@@ -39,7 +39,7 @@ export function SelectFormItem<T extends FieldValues>({
          name={name}
          render={({ field }) => (
             <FormItem className="flex flex-col">
-               <FormLabel className="self-start text-neutral-600">
+               <FormLabel className="self-start text-slate-600">
                   {label}
                </FormLabel>
 

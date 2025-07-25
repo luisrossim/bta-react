@@ -1,19 +1,14 @@
 import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "@/hooks/use-auth";
-import type { JSX } from "react";
-import { LoadingWrapper } from "../loading";
+import { useAuthContext } from "@/features/auth/contexts/AuthContext";
+import type { ReactNode } from "react";
 
-export default function AuthGuard({ children }: { children: JSX.Element }) {
-   const { isAuthenticated, isLoading } = useAuth();
-   const location = useLocation();
+export default function AuthGuard({ children }: { children: ReactNode}) {
+  const { isAuthenticated } = useAuthContext();
+  const location = useLocation();
 
-   if (isLoading) {
-      return <LoadingWrapper />
-   }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-   if (!isAuthenticated) {
-      return <Navigate to="/login" state={{ from: location }} replace />;
-   }
-
-   return <div className="p-4 md:p-10">{children}</div>;  
+  return <div className="m-4 p-8 bg-white rounded-sm border">{children}</div>;
 }

@@ -31,7 +31,7 @@ export function InputFormItem<T extends FieldValues>({
   disabled = false,
   className
 }: InputFormItemProps<T>) {
-  const { control } = useFormContext()
+  const { control } = useFormContext();
 
   return (
     <FormField
@@ -39,7 +39,7 @@ export function InputFormItem<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel className="self-start text-neutral-600">
+          <FormLabel className="self-start text-slate-600">
             {label}
           </FormLabel>
 

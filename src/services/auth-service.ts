@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import { axiosInstance } from "./axios";
-import type { AuthRequest, AuthUser } from "@/models/auth";
+import type { AuthRequest, AuthUser } from "@/features/login/types/auth";
 
 class AuthService {
    private readonly path = "/v1/auth"

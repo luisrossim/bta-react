@@ -1,15 +1,15 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
-import NotFoundPage from "@/pages/notfound";
-import ServiceOrderPage from "@/pages/order";
+import NotFoundPage from "@/features/notfound";
+import ServiceOrderPage from "@/features/order";
 import MainLayout from "@/components/layout";
-import LoginPage from "@/pages/login";
-import CustomerPage from "@/pages/customer";
-import UserPage from "@/pages/user";
-import UserFormPage from "@/pages/user/UserFormPage";
-import CustomerFormPage from "@/pages/customer/CustomerFormPage";
-import StagePage from "@/pages/stages";
-import CustomerInfoPage from "@/pages/customer/CustomerInfoPage";
-import ServiceOrderInfoPage from "@/pages/order/OrderInfoPage";
+import CustomerPage from "@/features/customer";
+import UserPage from "@/features/user";
+import UserFormPage from "@/features/user/UserFormPage";
+import CustomerFormPage from "@/features/customer/CustomerFormPage";
+import StagePage from "@/features/stages";
+import CustomerInfoPage from "@/features/customer/CustomerInfoPage";
+import ServiceOrderInfoPage from "@/features/order/OrderInfoPage";
+import Login from "@/features/auth/pages/Login";
 
 const router = createBrowserRouter([
    {
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
    },
    {
       path: "/login",
-      element: <LoginPage />,
+      element: <Login />,
    },
    {
       path: "/sistema",
