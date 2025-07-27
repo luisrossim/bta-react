@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClipboardCheck, UserRound } from "lucide-react";
-import { measurementSchema, type Measurement, type Order } from "@/models/order";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { InputFormItem } from "@/shared/components/InputFormItem";
@@ -17,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
+import { measurementSchema, type Measurement, type Order } from "@/features/order/types/Order";
 
 interface MeasurementFormProps {
    order: Order

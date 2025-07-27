@@ -1,7 +1,7 @@
-import type { Assistance, Measurement, Order } from "@/models/order"
 import { MeasurementForm } from "./components/MeasurementForm";
 import { AssistanceForm } from "./components/AssistanceForm";
 import type { ReactNode } from "react";
+import type { Assistance, Measurement, Order } from "../../types/Order";
 
 interface StagesFormHandlerProps {
    order: Order;

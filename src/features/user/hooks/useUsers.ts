@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import type { CreateUser, UpdateUser, User } from "@/features/user/types/User";
-import { userService } from "@/services/user-service";
+import { userService } from "../services/userService";
 
 export function useUsers() {
    const [users, setUsers] = useState<User[]>([]);

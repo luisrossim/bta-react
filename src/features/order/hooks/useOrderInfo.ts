@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { Assistance, Measurement, Order } from '@/models/order'
 import { type AtribuicaoRequest, type CommentsHistory, type OrderHistory } from '@/features/order/types/OrderHistory'
 import { orderService } from '@/features/order/services/orderService'
 import { orderHistoryService } from '@/features/order/services/orderHistoryService'
 import { toast } from 'sonner'
+import type { Assistance, Measurement, Order } from '../types/Order'
 
 export function useOrderInfo() {
    const { id } = useParams()

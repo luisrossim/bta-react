@@ -1,4 +1,4 @@
-import type { Attachment } from "@/models/attachment"
+import type { Attachment } from "@/features/order/types/Attachment"
 import { formatTimestamp } from "@/shared/utils/formatDate"
 import { File, FileImage, FileVideo, FileAudio } from "lucide-react"
 

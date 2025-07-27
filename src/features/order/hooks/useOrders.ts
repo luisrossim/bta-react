@@ -1,8 +1,8 @@
 import type { OrderFilters } from "@/features/order/types/OrderFilters";
-import type { Order } from "@/models/order";
 import { orderService } from "@/features/order/services/orderService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Order } from "../types/Order";
 
 export function useOrders() {
    const [orders, setOrders] = useState<Order[]>([])

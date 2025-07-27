@@ -1,6 +1,6 @@
-import ServiceOrderList from "./components/OrderList"
 import { PageHeader } from "@/shared/components/PageHeader";
-import OrderForm from "./components/OrderForm";
+import OrderList from "../components/OrderList";
+import OrderForm from "../components/OrderForm";
 
 export default function ListOrders() {
     return (
@@ -11,7 +11,7 @@ export default function ListOrders() {
                 action={ <OrderForm /> }
             />
 
-            <ServiceOrderList />
+            <OrderList />
         </div>
     );
 }

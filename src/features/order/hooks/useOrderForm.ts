@@ -1,5 +1,4 @@
 import type { Customer } from "@/features/customer/types/Customer"
-import type { CreateOrder } from "@/models/order"
 import type { Stage } from "@/features/stages/types/Stage"
 import { customerService } from "@/features/customer/services/customerService"
 import { orderService } from "@/features/order/services/orderService"
@@ -7,6 +6,7 @@ import { stageService } from "@/features/stages/services/stageService"
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import type { CreateOrder } from "../types/Order"
 
 export function useOrderForm() {
    const [customers, setCustomers] = useState<Customer[]>([])

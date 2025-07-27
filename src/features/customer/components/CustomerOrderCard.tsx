@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import type { Order } from "@/models/order";
+import type { Order } from "@/features/order/types/Order";
 import { formatTimestamp } from "@/shared/utils/formatDate";
 import { ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";

@@ -2,20 +2,20 @@ import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/features/order/hooks/useOrderInfo";
 import { EmptyData } from "@/shared/components/EmptyData";
-import { AssignUserForm } from "./components/AssignUserForm";
 import { PageTitle } from "@/shared/components/PageHeader";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PatternFormat } from "react-number-format";
-import { calculateExecutionTime } from "./utils/calculateExecutionTime";
 import { Badge } from "@/components/ui/badge";
 import { ListItem } from "@/shared/components/ListItem";
-import { CommentsForm } from "./components/CommentsForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Attachment } from "./components/Attachment";
-import { HistoryAccordion } from "./components/HistoryAccordion";
-import { StagesFormHandler } from "./components/StagesFormHandler";
-import { DisassociateForm } from "../stages/components/DisassociateForm";
 import { formatTimestamp } from "@/shared/utils/formatDate";
+import { useCalculateExecutionTime } from "../hooks/useCalculateExecutionTime";
+import { DisassociateForm } from "@/features/stages/components/DisassociateForm";
+import { AssignUserForm } from "../components/AssignUserForm";
+import { Attachment } from "../components/Attachment";
+import { CommentsForm } from "../components/CommentsForm";
+import { StagesFormHandler } from "../components/StagesFormHandler";
+import { OrderHistoryAccordion } from "../components/OrderHistoryAccordion";
 
 export default function ViewOrder() {
    const {
@@ -33,6 +33,8 @@ export default function ViewOrder() {
       saveAssistance,
       disableActions
    } = useOrderInfo();
+
+   const { calculateExecutionTime } = useCalculateExecutionTime();
 
    const handleViewAttachment = async (attachmentId: string) => {
       const attachment = await viewAttachment(attachmentId);
@@ -190,7 +192,7 @@ export default function ViewOrder() {
             </TabsContent>
             
             <TabsContent value="history">
-               <HistoryAccordion
+               <OrderHistoryAccordion
                   order={order}
                   orderHistory={historicoPassados} 
                />

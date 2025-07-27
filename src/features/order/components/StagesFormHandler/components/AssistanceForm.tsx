@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClipboardCheck, UserRound } from "lucide-react";
-import { assistanceSchema, type Assistance, type Order } from "@/models/order";
 import { InputFormItem } from "@/shared/components/InputFormItem";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import {
@@ -16,6 +15,7 @@ import {
    SheetTrigger
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
+import { assistanceSchema, type Assistance, type Order } from "@/features/order/types/Order";
 
 const tipoEnergia = [
    { value: 1, label: "Monofásico" },
