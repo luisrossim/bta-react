@@ -1,6 +1,6 @@
+import type { Order } from "@/features/order/types/Order";
+import { createAddressSchema } from "@/features/user/types/address";
 import { z } from "zod";
-import { createAddressSchema } from "../../../models/address";
-import type { Order } from "../../../models/order";
 
 export const createCustomerSchema = z.object({
     nome: z.string().nonempty(),

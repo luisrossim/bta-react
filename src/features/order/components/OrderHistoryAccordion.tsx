@@ -1,5 +1,5 @@
 import { EmptyData } from "@/shared/components/EmptyData";
-import type { OrderHistory } from "@/models/order-history";
+import type { OrderHistory } from "@/features/order/types/OrderHistory";
 import {
   Accordion,
   AccordionContent,
@@ -8,17 +8,17 @@ import {
 } from "@/components/ui/accordion";
 import { StageHeader } from "@/features/stages/components/StageHeader";
 import { ListItem } from "@/shared/components/ListItem";
-import type { Order } from "@/models/order";
-import { UserAssignedTooltip } from "../UserAssignedTooltip";
 import { formatBoolean } from "@/shared/utils/formatBoolean";
 import { formatTimestamp } from "@/shared/utils/formatDate";
+import type { Order } from "../types/Order";
+import { UserAssignedTooltip } from "./UserAssignedTooltip";
 
 interface HistoryAccordionProps {
    order: Order
    orderHistory: OrderHistory[]
 }
 
-export function HistoryAccordion({ order, orderHistory }: HistoryAccordionProps) {
+export function OrderHistoryAccordion({ order, orderHistory }: HistoryAccordionProps) {
    if (!orderHistory || orderHistory.length === 0) {
       return <EmptyData />
    } 

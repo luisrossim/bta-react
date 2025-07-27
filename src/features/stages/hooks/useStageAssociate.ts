@@ -1,6 +1,6 @@
-import type { AssociatedUsers, AssociateForm, Stage } from "@/models/stage";
-import type { User } from "@/models/user";
-import { stageService } from "@/services/stage-service";
+import type { AssociatedUsers, AssociateForm, Stage } from "@/features/stages/types/Stage";
+import type { User } from "@/features/user/types/User";
+import { stageService } from "@/features/stages/services/stageService";
 import { userService } from "@/services/user-service";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";

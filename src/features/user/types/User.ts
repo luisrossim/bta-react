@@ -1,5 +1,5 @@
-import { roleSchema } from "./role";
 import { z } from "zod";
+import { roleSchema } from "./Role";
 
 export const updateUserSchema = z.object({
     nome: z.string().min(2, "O nome deve possuir pelo menos 2 caracteres"),

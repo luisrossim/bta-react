@@ -1,6 +1,6 @@
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
-import type { User } from "@/models/user"
+import type { User } from "@/features/user/types/User"
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog"
 
 interface UserStatusToggleProps {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import type { CreateUser, UpdateUser, User } from "@/models/user";
+import type { CreateUser, UpdateUser, User } from "@/features/user/types/User";
 import { userService } from "@/services/user-service";
 
 export function useUsers() {

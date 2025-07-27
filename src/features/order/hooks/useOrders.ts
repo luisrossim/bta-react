@@ -1,6 +1,6 @@
-import type { OrderFilters } from "@/models/filters";
+import type { OrderFilters } from "@/features/order/types/OrderFilters";
 import type { Order } from "@/models/order";
-import { orderService } from "@/services/order-service";
+import { orderService } from "@/features/order/services/orderService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

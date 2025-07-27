@@ -17,7 +17,7 @@ import { StagesFormHandler } from "./components/StagesFormHandler";
 import { DisassociateForm } from "../stages/components/DisassociateForm";
 import { formatTimestamp } from "@/shared/utils/formatDate";
 
-export default function OrderInfoPage() {
+export default function ViewOrder() {
    const {
       order,
       historicoAtual,

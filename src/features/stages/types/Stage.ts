@@ -1,5 +1,5 @@
+import type { User } from "@/features/user/types/User"
 import z from "zod"
-import type { User } from "./user"
 
 const stageSchema = z.object({
    id: z.number(),

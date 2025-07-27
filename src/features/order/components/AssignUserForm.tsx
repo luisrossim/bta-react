@@ -1,12 +1,12 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button"
-import { createAtribuicaoSchema, type CreateAtribuicao } from "@/models/order-history"
+import { createAtribuicaoSchema, type CreateAtribuicao } from "@/features/order/types/OrderHistory"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
-import type { StageUser } from "@/models/stage";
+import type { StageUser } from "@/features/stages/types/Stage";
 
 interface AssignUserFormProps {
    stageUsers: StageUser[]

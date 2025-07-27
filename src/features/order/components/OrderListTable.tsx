@@ -1,12 +1,12 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
-import type { Order } from "@/models/order";
 import { Badge } from "@/components/ui/badge";
 import { EmptyData } from "@/shared/components/EmptyData";
-import { calculateExecutionTime } from "../utils/calculateExecutionTime";
 import { UserAssignedTooltip } from "./UserAssignedTooltip";
 import { DropdownActions } from "@/shared/components/DropdownActions";
 import { formatTimestamp } from "@/shared/utils/formatDate";
+import type { Order } from "../types/Order";
+import { useCalculateExecutionTime } from "../hooks/useCalculateExecutionTime";
 
 interface OrderListTableProps {
    orders: Order[]
@@ -16,6 +16,7 @@ interface OrderListTableProps {
 
 export function OrderListTable({ orders, navigate }: OrderListTableProps){
    const isMobile = useIsMobile();
+   const { calculateExecutionTime } = useCalculateExecutionTime();
 
    if (!orders || orders.length == 0) return <EmptyData />
 

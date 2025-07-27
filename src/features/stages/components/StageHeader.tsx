@@ -1,4 +1,4 @@
-import type { Stage } from "@/models/stage"
+import type { Stage } from "@/features/stages/types/Stage"
 
 interface StageHeaderProps {
    stage: Stage

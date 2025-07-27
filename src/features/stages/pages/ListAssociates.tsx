@@ -1,10 +1,10 @@
 import { PageHeader } from "@/shared/components/PageHeader";
-import { AssociatedForm } from "./components/AssociatedForm";
-import { AssociatedList } from "./components/AssociatedList";
-import { useStageAssociate } from "./hooks/useStageAssociate";
-import type { AssociateForm } from "@/models/stage";
+import type { AssociateForm } from "@/features/stages/types/Stage";
+import { useStageAssociate } from "../hooks/useStageAssociate";
+import { AssociatedForm } from "../components/AssociatedForm";
+import { AssociatedList } from "../components/AssociatedList";
 
-export default function StagePage() {
+export default function ListAssociates() {
    const {
       stages,
       associated,

@@ -2,7 +2,7 @@ import ServiceOrderList from "./components/OrderList"
 import { PageHeader } from "@/shared/components/PageHeader";
 import OrderForm from "./components/OrderForm";
 
-export default function ServiceOrderPage() {
+export default function ListOrders() {
     return (
         <div className="space-y-14">
             <PageHeader 

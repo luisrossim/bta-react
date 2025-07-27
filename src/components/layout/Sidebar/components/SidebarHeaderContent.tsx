@@ -15,7 +15,7 @@ export function SidebarHeaderContent() {
          </div>
          <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">BTA Irrigação</span>
-            <span className="truncate text-xs">OS</span>
+            <span className="truncate text-xs">Gestor</span>
          </div>
       </SidebarMenuButton>
    );

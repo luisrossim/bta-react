@@ -1,4 +1,4 @@
-import { associateFormSchema, type AssociateForm } from "@/models/stage";
+import { associateFormSchema, type AssociateForm } from "@/features/stages/types/Stage";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom";
 import { RoleBadge } from "@/features/user/components/RoleBadge";
-import type { Roles } from "@/models/role";
+import type { Roles } from "@/features/user/types/Role";
 import { EmptyData } from "@/shared/components/EmptyData";
 import { useUsers } from "../hooks/useUsers";
 import { useEffect } from "react";

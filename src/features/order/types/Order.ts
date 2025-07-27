@@ -1,21 +1,21 @@
 import z from "zod";
-import type { Customer } from "../features/customer/types/Customer";
-import type { OrderHistory } from "./order-history";
-import type { Attachment } from "@/models/attachment";
+import type { Customer } from "@/features/customer/types/Customer";
+import type { OrderHistory } from "@/features/order/types/OrderHistory";
+import type { Attachment } from "./Attachment";
 
-export const createOrderSchema = z.object({
+const createOrderSchema = z.object({
   clienteId: z.number().positive(),
   etapaId: z.number().positive()
 })
 
-export const measurementSchema = z.object({
+const measurementSchema = z.object({
   hasAutomacao: z.boolean(),
   hasOrcamentoBanco: z.boolean(),
   hasProjetoPlantio: z.boolean(),
   quantidadeSetores: z.coerce.number()
 })
 
-export const assistanceSchema = z.object({
+const assistanceSchema = z.object({
   problema: z.string(),
   tipoEnergiaId: z.coerce.number().optional().nullable(),
   motobombaId: z.coerce.number().optional().nullable(),
@@ -24,11 +24,11 @@ export const assistanceSchema = z.object({
   observacoes: z.string().optional().nullable()
 })
 
-export type CreateOrder = z.infer<typeof createOrderSchema>
-export type Measurement = z.infer<typeof measurementSchema>
-export type Assistance = z.infer<typeof assistanceSchema>
+type CreateOrder = z.infer<typeof createOrderSchema>
+type Measurement = z.infer<typeof measurementSchema>
+type Assistance = z.infer<typeof assistanceSchema>
 
-export type Order = Omit<CreateOrder, "etapaId"> &
+type Order = Omit<CreateOrder, "etapaId"> &
   Measurement &
   Assistance & {
     id: string;
@@ -39,3 +39,13 @@ export type Order = Omit<CreateOrder, "etapaId"> &
     tipoEnergia?: any
     criadoEm: Date;
   };
+
+export {
+  type Order,
+  type CreateOrder,
+  type Measurement,
+  type Assistance,
+  createOrderSchema,
+  measurementSchema,
+  assistanceSchema
+}

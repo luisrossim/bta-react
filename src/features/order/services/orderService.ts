@@ -1,6 +1,6 @@
-import type { Assistance, Measurement, Order } from "@/models/order";
-import { CrudService } from "../shared/services/crudService";
-import type { AttachmentWithSignedUrl } from "../models/attachment";
+import { CrudService } from "../../../shared/services/crudService";
+import type { AttachmentWithSignedUrl } from "../types/Attachment";
+import type { Assistance, Measurement, Order } from "../types/Order";
 
 class OrderService extends CrudService<Order> {
    constructor(){

@@ -1,16 +1,16 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
-import NotFoundPage from "@/features/notfound";
-import ServiceOrderPage from "@/features/order";
+import NotFoundPage from "@/shared/components/NotFound";
 import MainLayout from "@/components/layout/MainLayout";
-import UserPage from "@/features/user";
-import UserFormPage from "@/features/user/UserFormPage";
-import StagePage from "@/features/stages";
-import ServiceOrderInfoPage from "@/features/order/OrderInfoPage";
 import Login from "@/features/auth/pages/Login";
 import AuthGuard from "@/components/layout/AuthGuard";
 import ListCustomers from "@/features/customer/pages/ListCustomers";
 import ViewCustomer from "@/features/customer/pages/ViewCustomer";
 import CreateCustomer from "@/features/customer/pages/CreateCustomer";
+import ViewOrder from "@/features/order/pages/ViewOrder";
+import ListOrders from "@/features/order/pages/ListOrders";
+import ListAssociates from "@/features/stages/pages/ListAssociates";
+import CreateUser from "@/features/user/pages/CreateUser";
+import ListUsers from "@/features/user/pages/ListUsers";
 
 const router = createBrowserRouter([
    {
@@ -31,18 +31,18 @@ const router = createBrowserRouter([
       children: [
          { path: "", loader: () => redirect("ordens") },
 
-         { path: "ordens", element: <ServiceOrderPage /> },
-         { path: "ordens/info/:id", element: <ServiceOrderInfoPage /> },
+         { path: "ordens", element: <ListOrders /> },
+         { path: "ordens/info/:id", element: <ViewOrder /> },
          
          { path: "clientes", element: <ListCustomers /> },
          { path: "clientes/form", element: <CreateCustomer /> },
          { path: "clientes/info/:id", element: <ViewCustomer /> },
 
-         { path: "usuarios", element: <UserPage /> },
-         { path: "usuarios/form", element: <UserFormPage /> },
-         { path: "usuarios/form/:id", element: <UserFormPage /> },
+         { path: "usuarios", element: <ListUsers /> },
+         { path: "usuarios/form", element: <CreateUser /> },
+         { path: "usuarios/form/:id", element: <CreateUser /> },
 
-         { path: "etapas", element: <StagePage /> }
+         { path: "etapas", element: <ListAssociates /> }
       ],
    },
    {

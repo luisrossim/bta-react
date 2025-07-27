@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
-import type { User } from "@/models/user";
+import type { User } from "@/features/user/types/User";
 
 interface UserAssignedTooltipProps {
    user: User;

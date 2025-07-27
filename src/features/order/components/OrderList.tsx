@@ -2,7 +2,7 @@ import { OrderListTable } from "@/features/order/components/OrderListTable";
 import { OrderFilter } from "@/features/order/components/OrderFilter";
 import { useOrders } from "../hooks/useOrders";
 import { useEffect } from "react";
-import type { OrderFilters } from "@/models/filters";
+import type { OrderFilters } from "@/features/order/types/OrderFilters";
 
 export default function OrderList() {
    const { 

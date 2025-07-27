@@ -1,4 +1,4 @@
-import { createUserSchema, updateUserSchema, type CreateUser, type UpdateUser } from "@/models/user";
+import { createUserSchema, updateUserSchema, type CreateUser, type UpdateUser } from "@/features/user/types/User";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { InputFormItem } from "@/shared/components/InputFormItem";
 import { zodResolver } from "@hookform/resolvers/zod";

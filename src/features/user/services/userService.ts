@@ -1,5 +1,5 @@
-import type { User } from "@/models/user";
-import { CrudService } from "../shared/services/crudService";
+import type { User } from "@/features/user/types/User";
+import { CrudService } from "@/shared/services/crudService";
 
 class UserService extends CrudService<User> {
     constructor(){

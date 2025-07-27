@@ -1,7 +1,7 @@
 import { EmptyData } from "@/shared/components/EmptyData";
 import { DisassociateForm } from "./DisassociateForm";
 import { StageHeader } from "./StageHeader";
-import type { AssociatedUsers, Stage } from "@/models/stage";
+import type { AssociatedUsers, Stage } from "@/features/stages/types/Stage";
 import {
   Accordion,
   AccordionContent,

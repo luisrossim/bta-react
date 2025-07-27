@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link, Link2Off } from "lucide-react";
-import type { Stage } from "@/models/stage";
-import type { User } from "@/models/user";
+import type { Stage } from "@/features/stages/types/Stage";
+import type { User } from "@/features/user/types/User";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 
 interface DisassociateFormProps {

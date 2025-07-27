@@ -1,5 +1,5 @@
-import { CrudService } from "../shared/services/crudService";
-import type { AssociatedUsers, AssociateForm, Stage } from "@/models/stage";
+import { CrudService } from "../../../shared/services/crudService";
+import type { AssociatedUsers, AssociateForm, Stage } from "@/features/stages/types/Stage";
 
 class StageService extends CrudService<Stage> {
    constructor(){

@@ -9,7 +9,7 @@ export function GlobalHeader() {
          <div className="flex items-center gap-4 mr-5">
             <Button size={'sm'} variant={"ghost"} className="text-muted-foreground">
                <HelpCircle className="size-3" />
-               <span>Suporte</span>
+               <small>Suporte</small>
             </Button>
             <img width={40} src={"/favicon.svg"} />
          </div>

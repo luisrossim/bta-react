@@ -1,12 +1,12 @@
-import { orderFiltersSchema, type OrderFilters } from "@/models/filters"
+import { orderFiltersSchema, type OrderFilters } from "@/features/order/types/OrderFilters"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useEffect, useMemo, useState } from "react";
-import type { Stage } from "@/models/stage";
-import type { User } from "@/models/user";
-import { stageService } from "@/services/stage-service";
-import { userService } from "@/services/user-service";
+import type { Stage } from "@/features/stages/types/Stage";
+import type { User } from "@/features/user/types/User";
+import { stageService } from "@/features/stages/services/stageService";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
+import { userService } from "@/features/user/services/userService";
 
 interface OrderFilterProps {
    onSubmit: (data: OrderFilters) => void;

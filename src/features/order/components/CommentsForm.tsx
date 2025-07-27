@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { commentsHistorySchema, type CommentsHistory } from "@/models/order-history";
+import { commentsHistorySchema, type CommentsHistory } from "@/features/order/types/OrderHistory";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";

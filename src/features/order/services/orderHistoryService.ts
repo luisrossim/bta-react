@@ -1,4 +1,4 @@
-import type { AtribuicaoRequest, CommentsHistory } from "@/models/order-history";
+import type { AtribuicaoRequest, CommentsHistory } from "@/features/order/types/OrderHistory";
 import { axiosInstance } from "@/lib/axios";
 
 class OrderHistoryService {

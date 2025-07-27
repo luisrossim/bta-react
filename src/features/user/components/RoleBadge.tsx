@@ -1,4 +1,4 @@
-import type { Roles } from "@/models/role";
+import type { Roles } from "@/features/user/types/Role";
 
 interface RoleBadgeProps {
    rounded: boolean

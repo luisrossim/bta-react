@@ -1,9 +1,9 @@
 import { PageHeader } from "@/shared/components/PageHeader";
 import { useParams } from "react-router-dom";
-import { UserForm } from "./components/UserForm";
+import { UserForm } from "../components/UserForm";
 
 
-export default function UserFormPage(){
+export default function CreateUser(){
    const { id } = useParams();
    
    const titleText = id 

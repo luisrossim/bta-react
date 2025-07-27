@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { UserList } from "./components/UserList";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { UserList } from "../components/UserList";
 
-export default function UserPage() {
+export default function ListUsers() {
     const navigate = useNavigate();
 
     return (
