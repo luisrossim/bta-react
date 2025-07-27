@@ -1,4 +1,4 @@
-import { EmptyData } from "@/components/EmptyData";
+import { EmptyData } from "@/shared/components/EmptyData";
 import { DisassociateForm } from "./DisassociateForm";
 import { StageHeader } from "./StageHeader";
 import type { AssociatedUsers, Stage } from "@/models/stage";

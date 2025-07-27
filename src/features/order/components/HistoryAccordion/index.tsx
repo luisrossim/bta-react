@@ -1,4 +1,4 @@
-import { EmptyData } from "@/components/EmptyData";
+import { EmptyData } from "@/shared/components/EmptyData";
 import type { OrderHistory } from "@/models/order-history";
 import {
   Accordion,

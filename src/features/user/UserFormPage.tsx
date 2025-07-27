@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/shared/components/PageHeader";
 import { useParams } from "react-router-dom";
 import { UserForm } from "./components/UserForm";
 

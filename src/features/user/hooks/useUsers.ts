@@ -11,7 +11,7 @@ export function useUsers() {
 
    const fetchUsers = async () => {
       try {
-         const data = await userService.getAll();
+         const data = await userService.get();
          setUsers(data);
       } catch (err: any) {
          //ToastService.showError(err?.response?.data?.message || err?.message);

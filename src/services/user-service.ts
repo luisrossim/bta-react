@@ -1,7 +1,7 @@
 import type { User } from "@/models/user";
-import { GenericService } from "./generic-service";
+import { CrudService } from "../shared/services/crudService";
 
-class UserService extends GenericService<User> {
+class UserService extends CrudService<User> {
     constructor(){
         super("v1/users");
     }

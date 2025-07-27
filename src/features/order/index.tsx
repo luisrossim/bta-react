@@ -1,5 +1,5 @@
 import ServiceOrderList from "./components/OrderList"
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/shared/components/PageHeader";
 import OrderForm from "./components/OrderForm";
 
 export default function ServiceOrderPage() {

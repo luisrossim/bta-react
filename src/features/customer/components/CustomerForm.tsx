@@ -1,46 +1,44 @@
-import { createCustomerSchema, type CreateCustomer } from "@/models/customer";
+import { createCustomerSchema, type CreateCustomer } from "@/features/customer/types/Customer";
 import { InputFormItem } from "@/shared/components/InputFormItem";
-import { useCustomerForm } from "../hooks/useCustomerForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useCreateCustomer, useGetCustomer } from "../hooks/useCustomerApi";
+import { showError } from "@/shared/utils/showMessage";
 
 interface CustomerFormProps {
    id?: string
 }
 
 export default function CustomerForm({ id }: CustomerFormProps){
-   const { fetchCustomerById, saveCustomer } = useCustomerForm();
+   const { data: customer } = useGetCustomer(id);
+   const { mutateAsync: createCustomer } = useCreateCustomer();
+   const navigate = useNavigate();
 
    const form = useForm<CreateCustomer>({
       resolver: zodResolver(createCustomerSchema),
       defaultValues: {
          endereco: {
-            cidade: "Nova Venécia",
-            estado: "ES"
-         }
-      }
-   })
+         cidade: "Nova Venécia",
+         estado: "ES",
+         },
+      },
+   });
 
    const onSubmit = (data: CreateCustomer) => {
-      const customerId = id ? Number(id) : null;
-      saveCustomer(customerId, data);
+      createCustomer(data)
+         .then(() => navigate("sistema/clientes"))
+         .catch((err) => showError(err.message))
    };
-   
-
-   const handeFetchCustomer = async (id: string) => {
-      const user = await fetchCustomerById(id);
-      if(user) {
-         form.reset(user);
-      }
-   }
 
    useEffect(() => {
-      if (id) handeFetchCustomer(id)
-   }, [id]);
+      if (customer) {
+         form.reset(customer);
+      }
+   }, [customer, form]);
 
 
    return (

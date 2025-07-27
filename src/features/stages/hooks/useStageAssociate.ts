@@ -14,9 +14,9 @@ export function useStageAssociate() {
    const fetchStagesAndAssociated = async () => {
       try {
          const [_stages, _associated, _users] = await Promise.all([
-            stageService.getAll(),
+            stageService.get(),
             stageService.getVinculados(),
-            userService.getAll()
+            userService.get()
          ])
 
          setStages(_stages)

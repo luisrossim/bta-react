@@ -13,9 +13,7 @@ export function useOrders() {
       setLoading(true)
       
       try {
-         const _orders = filters 
-            ? await orderService.getAllWithParams(filters)
-            : await orderService.getAll()
+         const _orders = await orderService.get(filters);
 
          setOrders(_orders);
 

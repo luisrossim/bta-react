@@ -1,9 +1,9 @@
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/features/order/hooks/useOrderInfo";
-import { EmptyData } from "@/components/EmptyData";
+import { EmptyData } from "@/shared/components/EmptyData";
 import { AssignUserForm } from "./components/AssignUserForm";
-import { PageTitle } from "@/components/PageHeader";
+import { PageTitle } from "@/shared/components/PageHeader";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
 import { PatternFormat } from "react-number-format";
 import { calculateExecutionTime } from "./utils/calculateExecutionTime";

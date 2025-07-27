@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from "@/shared/components/PageHeader";
 import { AssociatedForm } from "./components/AssociatedForm";
 import { AssociatedList } from "./components/AssociatedList";
 import { useStageAssociate } from "./hooks/useStageAssociate";

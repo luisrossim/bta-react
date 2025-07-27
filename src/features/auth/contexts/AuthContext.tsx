@@ -1,19 +1,19 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { getStorageItem, removeStorageItem } from "@/shared/utils/localStorage";
+import { getStorageItem, removeStorageItem, setStorageItem } from "@/shared/utils/localStorage";
 import type { AuthUser } from "../types/Auth";
-import { StorageKeyEnum } from "@/shared/enums/StorageKeyEnum";
-import { useLogoutMutation } from "../hooks/useLogoutMutation";
-import { useVerifyAuthQuery } from "../hooks/useVerifyAuthQuery";
+import { STORAGE_KEYS } from "@/shared/constants/storageKeys";
+import { useLogoutMutation, useVerifyAuthQuery } from "../hooks/useAuthApi";
 
 interface AuthContextType {
    isAuthenticated: boolean;
+   saveLogin: (user: AuthUser) => void;
    logout: () => void;
    verify: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuthContext = (): AuthContextType => {
+const useAuthContext = (): AuthContextType => {
    const context = useContext(AuthContext);
 
    if (!context) {
@@ -23,9 +23,9 @@ export const useAuthContext = (): AuthContextType => {
    return context;
 };
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
    const [isAuthenticated, setIsAuthenticated] = useState(() => {
-      return !!getStorageItem<AuthUser>(StorageKeyEnum.AUTH);
+      return !!getStorageItem<AuthUser>(STORAGE_KEYS.AUTH);
    });
 
    const { refetch: verifyAuth } = useVerifyAuthQuery();
@@ -46,15 +46,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
    };
 
+   const saveLogin = (user: AuthUser) => {
+      setStorageItem(STORAGE_KEYS.AUTH, user);
+      setIsAuthenticated(true);
+   };
+
    const logout = () => {
-      removeStorageItem(StorageKeyEnum.AUTH);
+      removeStorageItem(STORAGE_KEYS.AUTH);
       setIsAuthenticated(false);
       logoutMutation();
    };
 
    return (
-      <AuthContext.Provider value={{ isAuthenticated, logout, verify }}>
+      <AuthContext.Provider value={{ isAuthenticated, saveLogin, logout, verify }}>
          {children}
       </AuthContext.Provider>
    );
 };
+
+export {
+   useAuthContext,
+   AuthProvider
+}

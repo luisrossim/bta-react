@@ -1,7 +1,7 @@
-import { GenericService } from "./generic-service";
+import { CrudService } from "../shared/services/crudService";
 import type { AssociatedUsers, AssociateForm, Stage } from "@/models/stage";
 
-class StageService extends GenericService<Stage> {
+class StageService extends CrudService<Stage> {
    constructor(){
       super("v1/stages");
    }

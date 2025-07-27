@@ -1,9 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import type { Order } from "@/models/order";
 import { Badge } from "@/components/ui/badge";
-import { EmptyData } from "@/components/EmptyData";
-import { LoadingWrapper } from "@/components/LoadingWrapper";
+import { EmptyData } from "@/shared/components/EmptyData";
 import { calculateExecutionTime } from "../utils/calculateExecutionTime";
 import { UserAssignedTooltip } from "./UserAssignedTooltip";
 import { DropdownActions } from "@/shared/components/DropdownActions";
@@ -15,10 +14,8 @@ interface OrderListTableProps {
    navigate: (id: string) => void
 }
 
-export function OrderListTable({ orders, loading, navigate }: OrderListTableProps){
+export function OrderListTable({ orders, navigate }: OrderListTableProps){
    const isMobile = useIsMobile();
-
-   if (loading) return <LoadingWrapper />
 
    if (!orders || orders.length == 0) return <EmptyData />
 

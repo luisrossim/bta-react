@@ -3,12 +3,12 @@ import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { InputFormItem } from "@/shared/components/InputFormItem";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { rolesData } from "@/utils/data/roles-data";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useUsers } from "../hooks/useUsers";
+import { rolesMock } from "@/shared/mocks/rolesMock";
 
 interface UserFormProps {
    id?: string
@@ -16,7 +16,7 @@ interface UserFormProps {
 
 export function UserForm({ id }: UserFormProps) {
    const { fetchUserById, saveUser } = useUsers();
-   const roles = rolesData;
+   const roles = rolesMock;
 
    const form = useForm<CreateUser | UpdateUser>({
       resolver: zodResolver(id ? updateUserSchema : createUserSchema)

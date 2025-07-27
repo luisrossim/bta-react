@@ -29,8 +29,8 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
    async function fetchStagesAndAssociated() {
       try {
          const [_stages, _users] = await Promise.all([
-            stageService.getAll(),
-            userService.getAll()
+            stageService.get(),
+            userService.get()
          ])
 
          setStages(_stages)

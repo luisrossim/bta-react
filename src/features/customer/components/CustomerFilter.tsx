@@ -8,20 +8,14 @@ interface CustomerFilterProps {
 
 export function CustomerFilter({ search, onSearch }: CustomerFilterProps) {
    return (
-      <div>
-         <p className="font-medium text-slate-600 mb-1">
-            Pesquisar
-         </p>
-
-         <div className="flex relative w-full lg:w-1/2">
-            <Input 
-               type="text" 
-               placeholder="Digite o nome ou CPF do cliente" 
-               value={search} 
-               onChange={(e) => onSearch(e.target.value)} 
-            />
-            <Search size={16} className="absolute right-5 top-3 text-slate-500" />
-         </div>
+     <div className="flex relative w-full lg:w-1/2">
+         <Input 
+            type="text" 
+            placeholder="Pesquisar pelo nome ou CPF" 
+            value={search} 
+            onChange={(e) => onSearch(e.target.value)} 
+         />
+         <Search size={16} className="absolute right-5 top-3 text-muted-foreground" />
       </div>
    )
 }

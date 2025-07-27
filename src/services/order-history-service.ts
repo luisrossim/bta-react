@@ -1,10 +1,9 @@
-import type { AxiosInstance } from "axios";
-import { axiosInstance } from "./axios";
-import type { AtribuicaoRequest, CommentsHistoryDTO } from "@/models/order-history";
+import type { AtribuicaoRequest, CommentsHistory } from "@/models/order-history";
+import { axiosInstance } from "@/lib/axios";
 
 class OrderHistoryService {
-   protected readonly axios: AxiosInstance = axiosInstance;
-   private path = "/v1/orders/history"
+   protected readonly axios = axiosInstance;
+   private path = "v1/orders/history"
 
    constructor(){}
 
@@ -24,7 +23,7 @@ class OrderHistoryService {
       await this.axios.post(`${this.path}/${historyId}/advance`)
    }
 
-   async comments(historyId: string, data: CommentsHistoryDTO) {
+   async comments(historyId: string, data: CommentsHistory) {
       await this.axios.patch(`${this.path}/${historyId}/comments`, data)
    }
 }

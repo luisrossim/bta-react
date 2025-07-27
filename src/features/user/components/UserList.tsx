@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useNavigate } from "react-router-dom";
 import { RoleBadge } from "@/features/user/components/RoleBadge";
 import type { Roles } from "@/models/role";
-import { EmptyData } from "@/components/EmptyData";
+import { EmptyData } from "@/shared/components/EmptyData";
 import { useUsers } from "../hooks/useUsers";
 import { useEffect } from "react";
 import { PatternFormat } from "react-number-format";

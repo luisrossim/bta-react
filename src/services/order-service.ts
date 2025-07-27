@@ -1,8 +1,8 @@
 import type { Assistance, Measurement, Order } from "@/models/order";
-import { GenericService } from "./generic-service";
-import type { AttachmentWithSignedUrl } from "./attachment";
+import { CrudService } from "../shared/services/crudService";
+import type { AttachmentWithSignedUrl } from "../models/attachment";
 
-class OrderService extends GenericService<Order> {
+class OrderService extends CrudService<Order> {
    constructor(){
       super("v1/orders");
    }

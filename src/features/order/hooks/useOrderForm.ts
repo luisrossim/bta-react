@@ -1,7 +1,7 @@
-import type { Customer } from "@/models/customer"
+import type { Customer } from "@/features/customer/types/Customer"
 import type { CreateOrder } from "@/models/order"
 import type { Stage } from "@/models/stage"
-import { customerService } from "@/services/customer-service"
+import { customerService } from "@/features/customer/services/customerService"
 import { orderService } from "@/services/order-service"
 import { stageService } from "@/services/stage-service"
 import { useEffect, useMemo, useState } from "react"
@@ -17,8 +17,8 @@ export function useOrderForm() {
    const loadCustomersAndStages = async () => {      
       try {
          const [_customers, _stages] = await Promise.all([
-            customerService.getAll(),
-            stageService.getAll()
+            customerService.get(),
+            stageService.get()
          ])
 
          setCustomers(_customers);

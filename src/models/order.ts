@@ -1,7 +1,7 @@
 import z from "zod";
-import type { Customer } from "./customer";
+import type { Customer } from "../features/customer/types/Customer";
 import type { OrderHistory } from "./order-history";
-import type { Attachment } from "@/services/attachment";
+import type { Attachment } from "@/models/attachment";
 
 export const createOrderSchema = z.object({
   clienteId: z.number().positive(),

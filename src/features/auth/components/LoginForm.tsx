@@ -3,13 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { InputFormItem } from "@/shared/components/InputFormItem";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../hooks/useLoginMutation";
 import { showError } from "@/shared/utils/showMessage";
 import { authRequestSchema, type AuthRequest, type AuthUser } from "../types/Auth";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useLoginMutation } from "../hooks/useAuthApi";
 
 export function LoginForm() {
    const navigate = useNavigate();
-   const { mutateAsync: authenticate, isPending } = useLoginMutation();
+   const { saveLogin } = useAuthContext();
+     const { mutateAsync: authenticate, isPending } = useLoginMutation();
 
    const form = useForm<AuthRequest>({
       resolver: zodResolver(authRequestSchema)
@@ -25,7 +27,7 @@ export function LoginForm() {
    };
 
    function actionsForSuccess(user: AuthUser) {
-      localStorage.setItem("@bta:auth", JSON.stringify(user));
+      saveLogin(user);
       navigate("/sistema", { replace: true });
    }
 
@@ -36,7 +38,7 @@ export function LoginForm() {
                <InputFormItem 
                   label="Email"
                   name="login"
-                  placeholder="exemplo@bta.com.br"
+                  placeholder="exemplo@btairrigacao.com.br"
                />
 
                <InputFormItem 

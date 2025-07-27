@@ -1,9 +1,10 @@
-import { environment } from '@/environments/environment';
 import { extractAxiosError } from '@/shared/utils/extractAxiosError';
 import axios from 'axios';
 
+const baseURL = "http://localhost:3000/api"
+
 const axiosInstance = axios.create({
-  baseURL: environment.baseURL,
+  baseURL,
   withCredentials: true
 });
 
