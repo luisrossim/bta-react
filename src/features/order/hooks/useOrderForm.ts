@@ -46,10 +46,12 @@ export function useOrderForm() {
 
    const customersOptions = useMemo(
       () =>
-         customers.map((customer) => ({
-            value: customer.id,
-            label: customer.nome,
-         })),
+         Array.isArray(customers)
+            ? customers.map((customer) => ({
+               value: customer.id,
+               label: customer.nome,
+            }))
+            : [],
       [customers]
    );
 
