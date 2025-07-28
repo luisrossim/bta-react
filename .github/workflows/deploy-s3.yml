@@ -23,7 +23,7 @@ jobs:
 
       - name: Buildar aplicação Vite
         env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
         run: npm run build
 
       - name: Deploy para o S3
@@ -32,4 +32,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete --region $AWS_REGION
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete --region $AWS_REGION
