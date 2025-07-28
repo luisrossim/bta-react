@@ -30,7 +30,7 @@ export default function CustomerForm({ id }: CustomerFormProps){
 
    const onSubmit = (data: CreateCustomer) => {
       createCustomer(data)
-         .then(() => navigate("sistema/clientes"))
+         .then(() => navigate("/sistema/clientes"))
          .catch((err) => showError(err.message))
    };
 

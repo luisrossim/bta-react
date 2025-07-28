@@ -22,7 +22,7 @@ function useGetCustomer(id?: string) {
 
 function useCreateCustomer() {
    return useMutation<Customer, Error, CreateCustomer>({
-      mutationFn: customerService.create
+      mutationFn: (data: CreateCustomer) => customerService.create(data)
    });
 }
 
