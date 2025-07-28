@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import type { CreateUser, UpdateUser, User } from "@/features/user/types/User";
 import { userService } from "../services/userService";
+import { showError, showSuccess } from "@/shared/utils/showMessage";
 
 export function useUsers() {
    const [users, setUsers] = useState<User[]>([]);
@@ -14,7 +15,7 @@ export function useUsers() {
          const data = await userService.get();
          setUsers(data);
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message);
+         showError(err.message);
       }
    };
 
@@ -22,7 +23,7 @@ export function useUsers() {
       try {
          return await userService.getById(id);
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message);
+         showError(err.message);
          navigate("/sistema/usuarios");
       }
    };
@@ -32,11 +33,11 @@ export function useUsers() {
 
       try {
          await userService.changeStatus(userId);
-         //ToastService.showSuccess("Status alterado com sucesso");
+         showSuccess("Status alterado com sucesso");
          await fetchUsers();
 
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message);
+         showError(err.message);
       } finally {
          setDisableActions(false);
       }

@@ -3,6 +3,7 @@ import { orderService } from "@/features/order/services/orderService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Order } from "../types/Order";
+import { showError } from "@/shared/utils/showMessage";
 
 export function useOrders() {
    const [orders, setOrders] = useState<Order[]>([])
@@ -18,7 +19,7 @@ export function useOrders() {
          setOrders(_orders);
 
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       } finally {
          setLoading(false);
       }

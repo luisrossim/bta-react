@@ -49,8 +49,8 @@ export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) 
             onOpenChange={handleOpenChange}
          >
             <DialogTrigger asChild>
-               <button type="button" className="cursor-pointer mt-1">
-                  <Plus className="text-primary" />
+               <button type="button" className="flex items-center gap-1 mt-1 text-primary text-sm cursor-pointer">
+                  <Plus size={20} /> Atribuir
                </button>
             </DialogTrigger>
 

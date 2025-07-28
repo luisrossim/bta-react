@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, Phone, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/features/order/hooks/useOrderInfo";
 import { EmptyData } from "@/shared/components/EmptyData";
@@ -14,8 +14,9 @@ import { DisassociateForm } from "@/features/stages/components/DisassociateForm"
 import { AssignUserForm } from "../components/AssignUserForm";
 import { Attachment } from "../components/Attachment";
 import { CommentsForm } from "../components/CommentsForm";
-import { StagesFormHandler } from "../components/StagesFormHandler";
 import { OrderHistoryAccordion } from "../components/OrderHistoryAccordion";
+import { OrderSheets } from "../components/OrderSheets";
+import { Link } from "react-router-dom";
 
 export default function ViewOrder() {
    const {
@@ -49,20 +50,29 @@ export default function ViewOrder() {
    return (
       <div className="space-y-14 mb-14">
          <div className="flex flex-wrap justify-between items-center gap-10">
-            <div className="space-y-1">
-               <PageTitle 
-                  title={historicoAtual.etapa.descricao} 
-               />
-
-               <div>
-                  <p className="text-sm text-muted-foreground">
-                     Tempo de execução: {calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
-                  </p>
-               </div>
+            <div>
+               <PageTitle title={historicoAtual.etapa.descricao} />
+               <Link 
+                  to={`/sistema/clientes/info/${order.cliente.id}`} 
+                  className="flex flex-col gap-1 text-sm text-primary mt-2"
+               >
+                  <div className="flex items-center gap-2">
+                     <User size={16} />
+                     <p>{order.cliente.nome}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                     <Phone size={16} />
+                     <PatternFormat 
+                        format="(##) #####-####" 
+                        displayType="text" 
+                        value={order.cliente.telefone} 
+                     />
+                  </div>
+               </Link>
             </div>
 
             <div className="flex items-center gap-4 flex-wrap">
-               <StagesFormHandler 
+               <OrderSheets
                   order={order} 
                   stage={historicoAtual.etapa.descricao}
                   onSubmitMeasurement={saveMeasurement}
@@ -93,25 +103,20 @@ export default function ViewOrder() {
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
             <ListItem
-               className="bg-slate-50 p-4 rounded-[6px]"
-               label="Cliente"
+               label="Situação"
                value={(
-                  <div className="flex flex-col gap-1">
-                     {order.cliente.nome}
-
-                     <PatternFormat 
-                        format="(##) #####-####" 
-                        displayType="text" 
-                        value={order.cliente.telefone} 
-                     />
+                  <div>
+                     {historicoAtual.concluidoEm 
+                        ? <Badge variant={"success"}>Concluída</Badge> 
+                        : <Badge variant={"warning"}>Em andamento</Badge>
+                     }
                   </div>
                )}
             />
 
             <ListItem
-               className="bg-slate-50 p-4 rounded-[6px]"
                label="Técnicos atribuídos"
                value={(
                   <>
@@ -144,34 +149,23 @@ export default function ViewOrder() {
             />
 
             <ListItem
-               className="bg-slate-50 p-4 rounded-[6px]"
-               label="Situação"
-               value={(
-                  <div>
-                     {historicoAtual.concluidoEm 
-                        ? <Badge variant={"success"}>Concluída</Badge> 
-                        : <Badge variant={"warning"}>Em andamento</Badge>
-                     }
-                  </div>
-               )}
-            />
-
-            <ListItem
-               className="bg-slate-50 p-4 rounded-[6px]"
                label="Iniciada em"
                value={formatTimestamp(historicoAtual.criadoEm)}
             />
 
             <ListItem 
-               className="bg-slate-50 p-4 rounded-[6px]"
                label="Concluída em"
                value={formatTimestamp(historicoAtual.concluidoEm)}
             />
 
             <ListItem
-               className="bg-slate-50 p-4 rounded-[6px]"
                label="Concluída por"
                value={historicoAtual.concluidoPor?.nome}
+            />
+
+            <ListItem 
+               label="Tempo de execução"
+               value={calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
             />
          </div>
 

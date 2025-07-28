@@ -4,6 +4,7 @@ import { stageService } from "@/features/stages/services/stageService";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { userService } from "@/features/user/services/userService";
+import { showError } from "@/shared/utils/showMessage";
 
 export function useStageAssociate() {
    const [stages, setStages] = useState<Stage[]>([]);
@@ -24,7 +25,7 @@ export function useStageAssociate() {
          setUsers(_users)
 
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 

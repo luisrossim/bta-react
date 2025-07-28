@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 
 export const PageTitle = ({ title }: { title: string }) => {
-   return <h1 className="text-2xl font-semibold mb-1">{title}</h1>
+   return <h1 className="text-2xl font-bold mb-1">{title}</h1>
 }
 
 export const PageSubtitle = ({ subtitle }: { subtitle: string }) => {

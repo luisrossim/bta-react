@@ -11,7 +11,7 @@ import { useGetCustomers } from "../hooks/useCustomerApi";
 export default function ListCustomers() {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-    const { data: customers } = useGetCustomers();
+    const { data: customers, isFetching } = useGetCustomers();
 
     const filteredCustomers = useMemo(() => {
         if (!customers) return [];
@@ -37,7 +37,7 @@ export default function ListCustomers() {
         />
 
         <CustomerFilter search={search} onSearch={setSearch} />
-        <CustomerTable customers={filteredCustomers} />
+        <CustomerTable customers={filteredCustomers} isFetching={isFetching} />
     </div>
   );
 }

@@ -1,7 +1,9 @@
 import { useForm, Controller } from "react-hook-form"
+import { showWarning } from "@/shared/utils/showMessage"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Upload } from "lucide-react"
+
 import { useState } from "react"
 import {
   Dialog,
@@ -32,13 +34,13 @@ export function AttachmentForm({ onUpload, disableActions }: AttachmentFormProps
       const file = values.file?.[0]
 
       if(!file) {
-         //return ToastService.showError("Arquivo inválido ou desconhecido.")r
+         showWarning("Arquivo inválido ou desconhecido.");
          return;
       }
 
       if(file.size > maxSizeInBytes) {
-         //return ToastService.showError("O tamanho máximo permitido de arquivos é de 5MB")
-         return
+         showWarning("O tamanho máximo permitido de arquivos é de 5MB");
+         return;
       }
 
       const formData = new FormData();

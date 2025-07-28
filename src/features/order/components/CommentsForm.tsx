@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect } from "react";
-import { Check } from "lucide-react";
 
 interface CommentsFormProps {
    observacoes?: string;
@@ -46,16 +45,13 @@ export function CommentsForm({
                )}
             />
 
-            <div className="flex justify-end gap-2">
-               <Button 
-                  type="submit" 
-                  size={"sm"} 
-                  variant={"dark"} 
-                  disabled={!form.formState.isDirty}
-               >
-                  <Check />Salvar
-               </Button>
-            </div>
+            {form.formState.isDirty && (
+               <div className="flex justify-end gap-2">
+                  <Button type="submit" variant={"success"}>
+                     Salvar observações
+                  </Button>
+               </div>
+            )}
          </form>
       </Form>
    )

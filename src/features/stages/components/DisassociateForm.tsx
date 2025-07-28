@@ -28,6 +28,7 @@ export function DisassociateForm({
       onConfirm={handleConfirm}
       disabled={disableActions}
       title={title}
+      confirmLabel="Desatribuir"
       description={`Deseja remover o vínculo de "${user.nome}" da etapa "${stage.descricao}"?`}
       trigger={
         <Button variant="link" size="icon" className="group relative w-[24px] h-[24px]">

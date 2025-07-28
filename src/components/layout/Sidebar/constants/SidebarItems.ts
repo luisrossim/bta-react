@@ -1,24 +1,25 @@
 import {
-  ClipboardList,
-  LayoutDashboard,
-  ListCheck,
-  Package,
-  UserLock,
-  UsersRound,
+   ChartColumn,
+   ClipboardList,
+   ListCheck,
+   Package,
+   UserLock,
+   UsersRound,
 } from "lucide-react";
 
 const SIDEBAR_ITEMS = [
-  { label: "Dashboard", url: "/sistema/dashboard", icon: LayoutDashboard },
-  { label: "Ordens de serviço", url: "/sistema/ordens", icon: ClipboardList },
-  { label: "Clientes", url: "/sistema/clientes", icon: UsersRound },
-  { label: "Usuários e permissões", url: "/sistema/usuarios", icon: UserLock },
-  { label: "Etapas e vinculações", url: "/sistema/etapas", icon: ListCheck },
-  { label: "Materiais", url: "/sistema/materiais", icon: Package },
+   { label: "Ordens de serviço", url: "/sistema/ordens", icon: ClipboardList },
+   { label: "Etapas e vinculações", url: "/sistema/etapas", icon: ListCheck },
+   { label: "Usuários e permissões", url: "/sistema/usuarios", icon: UserLock },
+   { label: "Clientes", url: "/sistema/clientes", icon: UsersRound },
+   { label: "Relatórios", url: "/sistema/reports", icon: ChartColumn },
+   { label: "Materiais", url: "/sistema/materiais", icon: Package },
 ];
 
 const adminOnlyLabels = [
-  "Usuários e permissões",
-  "Etapas e vinculações",
+   "Usuários e permissões",
+   "Etapas e vinculações",
+   "Relatórios"
 ];
 
 function getSidebarItems(role?: string) {
@@ -33,4 +34,7 @@ function getSidebarItems(role?: string) {
    }
 }
 
-export { SIDEBAR_ITEMS, getSidebarItems };
+export { 
+   SIDEBAR_ITEMS, 
+   getSidebarItems 
+};

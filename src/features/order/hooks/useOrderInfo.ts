@@ -5,6 +5,7 @@ import { orderService } from '@/features/order/services/orderService'
 import { orderHistoryService } from '@/features/order/services/orderHistoryService'
 import { toast } from 'sonner'
 import type { Assistance, Measurement, Order } from '../types/Order'
+import { showError, showSuccess } from '@/shared/utils/showMessage'
 
 export function useOrderInfo() {
    const { id } = useParams()
@@ -25,7 +26,7 @@ export function useOrderInfo() {
          setHistoricoAtual(atual);
          setHistoricoPassados(passados);
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 
@@ -38,7 +39,9 @@ export function useOrderInfo() {
       try {
          await orderHistoryService.atribuir(data);
          loadServiceOrderInfo();
-      } catch (err: any) {}
+      } catch (err: any) {
+         showError(err.message);
+      }
    }
 
    const desatribuir = async (userId: number) => {
@@ -50,19 +53,20 @@ export function useOrderInfo() {
       try {
          await orderHistoryService.desatribuir(data)
          loadServiceOrderInfo()
-      } catch (err: any) {}
+      } catch (err: any) {
+         showError(err.message);
+      }
    }
 
    const concluir = async () => {
       if (!historicoAtual) return;
 
       try {
-         await orderHistoryService.concluir(historicoAtual.id)
-         //ToastService.showSuccess("Etapa concluída com sucesso.")
+         await orderHistoryService.concluir(historicoAtual.id);
+         showSuccess("Etapa concluída com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
-         console.log(err)
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 
@@ -71,10 +75,10 @@ export function useOrderInfo() {
 
       try {
          await orderHistoryService.avancar(historicoAtual.id)
-         //ToastService.showSuccess("Etapa atualizada com sucesso.")
+         showSuccess("Etapa atualizada com sucesso.")
          loadServiceOrderInfo()
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 
@@ -83,11 +87,11 @@ export function useOrderInfo() {
 
       try {
          await orderHistoryService.comments(historicoAtual.id, values)
-         //ToastService.showSuccess("Etapa atualizada com sucesso.")
+         showSuccess("Etapa atualizada com sucesso.")
          loadServiceOrderInfo()
          
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 
@@ -96,10 +100,10 @@ export function useOrderInfo() {
 
       try {
          await orderService.saveMeasurement(order.id, values);
-         //ToastService.showSuccess("Formulário de medição salvo com sucesso.");
+         showSuccess("Formulário de medição salvo com sucesso.");
          loadServiceOrderInfo();
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 
@@ -108,10 +112,10 @@ export function useOrderInfo() {
 
       try {
          await orderService.saveAssistance(order.id, values);
-         //ToastService.showSuccess("Formulário de assistência salvo com sucesso.");
+          showSuccess("Formulário de assistência salvo com sucesso.")
          loadServiceOrderInfo();
       } catch (err: any) {
-         //ToastService.showError(err?.response?.data?.message || err?.message)
+         showError(err.message);
       }
    }
 

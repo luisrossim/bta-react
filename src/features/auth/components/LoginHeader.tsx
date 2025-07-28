@@ -12,7 +12,7 @@ export function LoginHeader() {
 
             <div className="flex flex-col">
                <span className="text-sm font-semibold">BTA Irrigação</span>
-               <span className="text-xs text-muted-foreground">Ordens de serviço</span>
+               <span className="text-xs text-muted-foreground">Gestor</span>
             </div>
          </a>
       </div>

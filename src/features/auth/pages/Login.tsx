@@ -10,9 +10,9 @@ export default function Login() {
 
             <div className="flex flex-1 items-center justify-center">
                <div className="w-full max-w-lg space-y-8">
-                  <div className="flex flex-col items-start gap-2">
+                  <div className="flex flex-col items-start gap-1">
                      <h1 className="text-3xl md:text-4xl font-semibold">Acessar</h1>
-                     <p className="text-muted-foreground">Informe suas credenciais de acesso:</p>
+                     <p className="text-sm">Informe suas credenciais de acesso:</p>
                   </div>
 
                   <LoginForm />

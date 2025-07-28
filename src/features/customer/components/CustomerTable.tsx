@@ -3,15 +3,20 @@ import type { Customer } from "@/features/customer/types/Customer";
 import { PatternFormat } from "react-number-format";
 import { formatDate } from "@/shared/utils/formatDate";
 import { GenericTable } from "@/shared/components/GenericTable";
+import { LoadingIcon } from "@/shared/components/LoadingIcon";
 
 interface CustomerTableProps {
-    customers?: Customer[]
+    customers?: Customer[];
+    isFetching: boolean;
 }
 
 export function CustomerTable({ 
-    customers = [] 
+    customers = [],
+    isFetching
 }: CustomerTableProps){
     const navigate = useNavigate(); 
+
+    if(isFetching) return <LoadingIcon />
 
     return (
         <GenericTable

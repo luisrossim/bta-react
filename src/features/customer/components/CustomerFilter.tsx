@@ -8,7 +8,7 @@ interface CustomerFilterProps {
 
 export function CustomerFilter({ search, onSearch }: CustomerFilterProps) {
    return (
-     <div className="flex relative w-full lg:w-1/2">
+     <div className="flex relative w-full lg:w-1/2 xl:w-1/3">
          <Input 
             type="text" 
             placeholder="Pesquisar pelo nome ou CPF" 

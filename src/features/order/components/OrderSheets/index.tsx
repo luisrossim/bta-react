@@ -3,19 +3,19 @@ import { AssistanceForm } from "./components/AssistanceForm";
 import type { ReactNode } from "react";
 import type { Assistance, Measurement, Order } from "../../types/Order";
 
-interface StagesFormHandlerProps {
+interface OrderSheetsProps {
    order: Order;
    stage: string;
    onSubmitMeasurement: (values: Measurement) => void
    onSubmitAssistance: (values: Assistance) => void
 }
 
-export function StagesFormHandler({ 
+export function OrderSheets({ 
    order,
    stage,
    onSubmitMeasurement, 
-   onSubmitAssistance 
-}: StagesFormHandlerProps) {
+   onSubmitAssistance
+}: OrderSheetsProps) {
    const stageComponents: Record<string, ReactNode> = {
       "Medição": <MeasurementForm order={order} onSubmit={onSubmitMeasurement} />,
       "Assistência": <AssistanceForm order={order} onSubmit={onSubmitAssistance} />,
