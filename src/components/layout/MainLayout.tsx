@@ -9,7 +9,7 @@ export default function MainLayout() {
          <SidebarLayout />
          <SidebarInset>
             <GlobalHeader />
-            <main className="bg-white md:rounded-sm md:shadow md:m-4 p-4 mb-8 md:p-8">
+            <main className="bg-white border md:border-none md:rounded-sm md:shadow md:m-4 p-4 mb-8 md:p-8">
                <Outlet />
             </main>
          </SidebarInset>

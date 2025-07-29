@@ -11,14 +11,9 @@ import { AuthProvider } from "./features/auth/contexts/AuthContext";
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <div className="relative">
-                <AuthProvider>
-                    <RouterProvider router={router} />
-                </AuthProvider>
-                <div className="absolute bottom-0 p-1 text-center text-xs md:text-sm w-full bg-amber-400">
-                    Esta é uma versão de teste, haverá carregamentos inicias longos e perca de dados
-                </div>
-            </div>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
             <Toaster richColors />
         </QueryClientProvider>
     </StrictMode>

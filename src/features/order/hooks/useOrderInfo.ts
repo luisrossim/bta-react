@@ -38,6 +38,7 @@ export function useOrderInfo() {
 
       try {
          await orderHistoryService.atribuir(data);
+         showSuccess("Usuário atribuído com sucesso.")
          loadServiceOrderInfo();
       } catch (err: any) {
          showError(err.message);
@@ -51,8 +52,9 @@ export function useOrderInfo() {
       }
 
       try {
-         await orderHistoryService.desatribuir(data)
-         loadServiceOrderInfo()
+         await orderHistoryService.desatribuir(data);
+         showSuccess("Usuário desatribuído com sucesso.")
+         loadServiceOrderInfo();
       } catch (err: any) {
          showError(err.message);
       }
@@ -86,9 +88,9 @@ export function useOrderInfo() {
       if (!historicoAtual) return;
 
       try {
-         await orderHistoryService.comments(historicoAtual.id, values)
-         showSuccess("Etapa atualizada com sucesso.")
-         loadServiceOrderInfo()
+         await orderHistoryService.comments(historicoAtual.id, values);
+         showSuccess("Etapa atualizada com sucesso.");
+         loadServiceOrderInfo();
          
       } catch (err: any) {
          showError(err.message);

@@ -72,6 +72,7 @@ export function SelectFormItem<T extends FieldValues>({
                            className="h-9"
                            value={search}
                            onValueChange={setSearch}
+                           autoFocus={false}
                         />
 
                         <CommandList>

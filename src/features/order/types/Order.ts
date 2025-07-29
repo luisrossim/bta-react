@@ -9,11 +9,12 @@ const createOrderSchema = z.object({
 })
 
 const measurementSchema = z.object({
-  hasAutomacao: z.boolean(),
-  hasOrcamentoBanco: z.boolean(),
-  hasProjetoPlantio: z.boolean(),
-  quantidadeSetores: z.coerce.number()
-})
+  hasAutomacao: z.boolean().optional().nullable(),
+  hasOrcamentoBanco: z.boolean().optional().nullable(),
+  hasProjetoPlantio: z.boolean().optional().nullable(),
+  quantidadeSetores: z.coerce.number().optional().nullable(),
+});
+
 
 const assistanceSchema = z.object({
   problema: z.string(),
