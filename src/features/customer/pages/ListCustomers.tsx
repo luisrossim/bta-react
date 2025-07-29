@@ -31,7 +31,7 @@ export default function ListCustomers() {
             subtitle="Gerencie seus clientes, visualize endereços e histórico de serviços"
             action={
             <Button onClick={() => navigate("/sistema/clientes/form")}>
-                <Plus /> Adicionar
+                <Plus /> Novo cliente
             </Button>
             }
         />

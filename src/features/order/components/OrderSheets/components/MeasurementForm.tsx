@@ -64,12 +64,12 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                      <div>
                         <SheetHeader>
                            <SheetTitle>Ficha de Medição</SheetTitle>
-                           <span className="flex items-center gap-1 text-sm text-primary">
+                           <SheetDescription className="flex items-center gap-1 text-sm text-primary">
                               <UserRound size={14} />{order.cliente.nome}
-                           </span>
+                           </SheetDescription>
                         </SheetHeader>
 
-                        <SheetDescription className="grid grid-cols-1 mt-6 gap-4 p-4">
+                        <div className="grid grid-cols-1 mt-6 gap-4 p-4">
                            <div className="flex items-center space-x-2">
                               <Controller
                               name="hasAutomacao"
@@ -78,7 +78,7 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                                  <>
                                     <Checkbox 
                                        id="hasAutomacao" 
-                                       checked={field.value} 
+                                       checked={field.value ?? false} 
                                        onCheckedChange={field.onChange} 
                                     />
 
@@ -98,7 +98,7 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                                  <>
                                     <Checkbox 
                                        id="hasProjetoPlantio" 
-                                       checked={field.value} 
+                                       checked={field.value ?? false} 
                                        onCheckedChange={field.onChange} 
                                     />
 
@@ -118,7 +118,7 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                                  <>
                                     <Checkbox 
                                        id="hasOrcamentoBanco" 
-                                       checked={field.value} 
+                                       checked={field.value ?? false} 
                                        onCheckedChange={field.onChange}
                                     />
 
@@ -135,7 +135,7 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                               name="quantidadeSetores"
                               type="number"
                            />
-                        </SheetDescription>
+                        </div>
                      </div>
 
                      <SheetFooter>

@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthContext } from "@/features/auth/contexts/AuthContext";
 import { getStorageItem } from "@/shared/utils/localStorage";
 import { STORAGE_KEYS } from "@/shared/constants/storageKeys";
-import { LogOut, Settings } from "lucide-react";
+import { HelpCircle, LogOut, Settings } from "lucide-react";
 import { type AuthUser } from "@/features/auth/types/Auth";
 import {
    DropdownMenu,
@@ -54,6 +54,9 @@ export function SidebarFooterContent() {
                   align="end"
                   sideOffset={4}
                >
+                  <DropdownMenuItem onClick={() => {}}>
+                     <HelpCircle /> Suporte
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => logout()}>
                      <LogOut /> Sair do sistema
                   </DropdownMenuItem>

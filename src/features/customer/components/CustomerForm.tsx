@@ -7,7 +7,7 @@ import { Check } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCreateCustomer, useGetCustomer } from "../hooks/useCustomerApi";
-import { showError } from "@/shared/utils/showMessage";
+import { showError, showSuccess } from "@/shared/utils/showMessage";
 
 interface CustomerFormProps {
    id?: string
@@ -22,15 +22,18 @@ export default function CustomerForm({ id }: CustomerFormProps){
       resolver: zodResolver(createCustomerSchema),
       defaultValues: {
          endereco: {
-         cidade: "Nova Venécia",
-         estado: "ES",
+            cidade: "Nova Venécia",
+            estado: "ES",
          },
       },
    });
 
    const onSubmit = (data: CreateCustomer) => {
       createCustomer(data)
-         .then(() => navigate("/sistema/clientes"))
+         .then(() => {
+            showSuccess("Cliente cadastrado com sucesso.");
+            navigate("/sistema/clientes");
+         })
          .catch((err) => showError(err.message))
    };
 

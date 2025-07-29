@@ -7,6 +7,7 @@ import { showError } from "@/shared/utils/showMessage";
 import { authRequestSchema, type AuthRequest, type AuthUser } from "../types/Auth";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useLoginMutation } from "../hooks/useAuthApi";
+import { Loader } from "lucide-react";
 
 export function LoginForm() {
    const navigate = useNavigate();
@@ -53,7 +54,7 @@ export function LoginForm() {
                className="w-full"
                disabled={isPending}
             >
-               Acessar
+               {isPending ? <Loader className="animate-spin" /> : 'Acessar' }
             </Button>
          </form>
       </FormProvider>

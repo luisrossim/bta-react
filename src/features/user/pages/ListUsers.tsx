@@ -14,7 +14,7 @@ export default function ListUsers() {
                 subtitle="Gerencie as informações e permissões dos usuários do sistema."
                 action={
                     <Button onClick={() => navigate("/sistema/usuarios/form")}>
-                        <Plus /> Adicionar
+                        <Plus /> Novo usuário
                     </Button>
                 }
             />
