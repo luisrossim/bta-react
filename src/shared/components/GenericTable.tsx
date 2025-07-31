@@ -13,7 +13,7 @@ type DropdownAction = {
    onClick: () => void
 }
 
-type Column<T> = {
+export type Column<T> = {
    header: string;
    render: (row: T) => React.ReactNode;
    className?: string;
@@ -51,7 +51,10 @@ export function GenericTable<T>({
             {data.map((row) => (
                <TableRow key={getRowId(row)}>
                   {columns.map((col, index) => (
-                     <TableCell key={index} className={col.className}>
+                     <TableCell 
+                        key={index} 
+                        className={col.className}
+                     >
                         {col.render(row)}
                      </TableCell>
                   ))}

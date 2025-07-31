@@ -35,7 +35,7 @@ export function useOrderForm() {
       try {
          const order = await orderService.create(data);
          toast.success("Ordem de serviço criada com sucesso", { id: toastId });
-         navigate(`/sistema/ordens/info/${order.id}`)
+         navigate(`/sistema/ordens/${order.id}`)
 
       } catch (err: any) {
          toast.error(err?.response?.data?.message || err?.message, { id: toastId });

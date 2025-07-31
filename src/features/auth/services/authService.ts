@@ -6,8 +6,9 @@ export async function authenticate(data: AuthRequest): Promise<AuthUser> {
    return response.data;
 }
 
-export async function verify(): Promise<void> {
-   await axiosInstance.get<void>('v1/auth/me');
+export async function verify(): Promise<string> {
+   const response = await axiosInstance.get<string>('v1/auth/me');
+   return response.statusText;
 }
 
 export async function logout(): Promise<void> {

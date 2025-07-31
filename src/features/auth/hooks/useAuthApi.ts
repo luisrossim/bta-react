@@ -27,7 +27,7 @@ const useLogoutMutation = () => {
 };
 
 const useVerifyAuthQuery = () => {
-   return useQuery<void, Error>({
+   return useQuery<string, Error>({
       queryKey: ["me"],
       queryFn: verify,
       enabled: false

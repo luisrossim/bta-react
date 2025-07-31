@@ -32,12 +32,12 @@ const router = createBrowserRouter([
          { path: "", loader: () => redirect("ordens") },
 
          { path: "ordens", element: <ListOrders /> },
-         { path: "ordens/info/:id", element: <ViewOrder /> },
+         { path: "ordens/:id", element: <ViewOrder /> },
          
          { path: "clientes", element: <ListCustomers /> },
          { path: "clientes/form", element: <CreateCustomer /> },
          { path: "clientes/form/:id", element: <CreateCustomer /> },
-         { path: "clientes/info/:id", element: <ViewCustomer /> },
+         { path: "clientes/:id", element: <ViewCustomer /> },
 
          { path: "usuarios", element: <ListUsers /> },
          { path: "usuarios/form", element: <CreateUser /> },

@@ -1,14 +1,14 @@
 import { Input } from "@/components/ui/input"
+import { useFormContext, type FieldValues, type Path } from "react-hook-form"
+import { InputMasked } from "./InputMasked"
+import { cn } from "@/lib/utils"
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form"
-import { useFormContext, type FieldValues, type Path } from "react-hook-form"
-import { InputMasked } from "./InputMasked"
-import { cn } from "@/lib/utils"
 
 interface InputFormItemProps<T extends FieldValues> {
   name: Path<T>
