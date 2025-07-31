@@ -21,11 +21,6 @@ export default function ViewCustomer() {
          <PageHeader 
             title="Informações do cliente"
             subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."
-            action={
-               <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
-                  <Edit2 /> Editar
-               </Button>
-            }
          />
 
          <div className="grid grid-cols-1 gap-14 my-10">
@@ -113,6 +108,19 @@ export default function ViewCustomer() {
                <p>Criado em {formatTimestamp(customer.criadoEm)}</p>
                <p>Atualizado em {formatTimestamp(customer.atualizadoEm)}</p>
             </div>
+         </div>
+
+         <div className="flex justify-end gap-4 items-center">
+            <Button 
+               variant={'outline'} 
+               onClick={() => navigate(-1)} 
+               className="px-8"
+            >
+               Voltar
+            </Button>
+            <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
+               <Edit2 /> Editar
+            </Button>
          </div>
       </div>
    )

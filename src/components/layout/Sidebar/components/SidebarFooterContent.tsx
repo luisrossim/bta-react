@@ -33,7 +33,7 @@ export function SidebarFooterContent() {
                   >
                      <Avatar>
                         <AvatarFallback>
-                           <Settings />
+                           <Settings className="text-neutral-600" />
                         </AvatarFallback>
                      </Avatar>
                      

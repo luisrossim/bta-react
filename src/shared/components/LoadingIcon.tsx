@@ -1,23 +1,19 @@
-import loadingAnimation from "@/assets/images/tube-spinner.svg";
+import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
 
 interface LoadingIconProps {
-  size?: number;
-  alt?: string;
+   size?: number
+   className?: string
 }
 
 export function LoadingIcon({ 
-   size = 42, 
-   alt = "Carregando..."
+   size = 22, 
+   className = "text-blue-500"
 }: LoadingIconProps) {
-  return (
-    <div className="flex justify-center items-center">
-      <img
-        src={loadingAnimation}
-        alt={alt}
-        width={size}
-        height={size}
-        aria-busy="true"
+   return (
+      <Loader 
+         size={size} 
+         className={cn('animate-spin m-auto', className)} 
       />
-    </div>
-  );
+   )
 }

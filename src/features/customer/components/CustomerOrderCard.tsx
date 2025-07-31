@@ -14,7 +14,7 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
 
    return (
       <Link
-         to={`/sistema/ordens/info/${order.id}`}
+         to={`/sistema/ordens/${order.id}`}
          className="group flex items-start gap-4 p-5 rounded border bg-slate-50 hover:bg-slate-100 transition-colors"
       >
          <div className="bg-primary text-white rounded-xl p-2">
@@ -26,7 +26,7 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
                {historicoAtual.etapa.descricao}
             </p>
 
-            <p className="text-slate-500 mb-2">
+            <p className="text-slate-500">
                Criada em {formatTimestamp(order.criadoEm)}
             </p>
             

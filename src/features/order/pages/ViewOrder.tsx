@@ -53,7 +53,7 @@ export default function ViewOrder() {
             <div>
                <PageTitle title={historicoAtual.etapa.descricao} />
                <Link 
-                  to={`/sistema/clientes/info/${order.cliente.id}`} 
+                  to={`/sistema/clientes/${order.cliente.id}`} 
                   className="flex flex-col gap-1 text-sm text-primary mt-2"
                >
                   <div className="flex items-center gap-2">

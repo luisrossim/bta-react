@@ -1,8 +1,20 @@
+import { useEffect } from "react";
 import { LoginForm } from "../components/LoginForm";
 import { LoginHeader } from "../components/LoginHeader";
 import { WelcomeSection } from "../components/WelcomeSection";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+   const { isAuthenticated } = useAuthContext();
+   const navigate = useNavigate();
+   
+   useEffect(() => {
+      if (isAuthenticated) {
+         navigate('/sistema');
+      }
+   }, [isAuthenticated]);
+
    return (
       <div className="grid min-h-svh lg:grid-cols-2">
          <div className="flex flex-col gap-4 p-4 md:p-10">

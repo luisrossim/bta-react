@@ -26,7 +26,7 @@ export function useOrders() {
    }
 
    const navigateToServiceOrder = (id: string) => {
-      navigate(`/sistema/ordens/info/${id}`)
+      navigate(`/sistema/ordens/${id}`)
    }
 
    return {
