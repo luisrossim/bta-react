@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DropdownActions } from "@/shared/components/DropdownActions";
+import { EmptyData } from "./EmptyData";
 
 type DropdownAction = {
    label: string
@@ -32,6 +33,9 @@ export function GenericTable<T>({
    getRowId = (row: any) => row.id,
    actions,
 }: GenericTableProps<T>) {
+   
+   if(!data || data.length === 0) return <EmptyData />
+
    return (
       <Table className="table-striped">
          <TableHeader>

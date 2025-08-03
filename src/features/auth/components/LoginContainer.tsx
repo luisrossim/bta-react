@@ -3,13 +3,13 @@ import { LoginHeader } from "../components/LoginHeader";
 import welcome from "@/assets/images/welcome.avif";
 
 interface LoginContainerProps {
-   children: ReactNode
+   form: ReactNode
 }
 
-export default function LoginContainer({ children }: LoginContainerProps) {
+export default function LoginContainer({ form }: LoginContainerProps) {
    return (
-      <div className="grid min-h-svh lg:grid-cols-2">
-         <div className="flex flex-col gap-4 p-4 md:p-10">
+      <div className="grid min-h-svh lg:grid-cols-3">
+         <div className="flex flex-col gap-4 p-4 md:p-10 col-span-2">
             <LoginHeader />
 
             <div className="flex flex-1 items-center justify-center">
@@ -19,7 +19,7 @@ export default function LoginContainer({ children }: LoginContainerProps) {
                      <p className="text-sm">Informe suas credenciais de acesso:</p>
                   </div>
 
-                  {children}
+                  {form}
                </div>
             </div>
          </div>

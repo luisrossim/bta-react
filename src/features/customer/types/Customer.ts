@@ -11,6 +11,11 @@ export const createCustomerSchema = z.object({
 
 export type CreateCustomer = z.infer<typeof createCustomerSchema>;
 
+export interface UpdateCustomer {
+   id: number | string;
+   data: Partial<CreateCustomer>;
+}
+
 export interface Customer extends CreateCustomer {
     id: number
     ordemServico: Order[]

@@ -14,40 +14,40 @@ export function CustomerTable({
     customers = [],
     isFetching
 }: CustomerTableProps){
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     if(isFetching) return <LoadingIcon />
 
     const columns: Column<Customer>[] = [
-       {
+        {
             header: "Nome",
-            render: (c) => <span className="font-medium">{c.nome}</span>,
+            render: (customer) => <span className="font-medium">{customer.nome}</span>,
         },
         {
             header: "CPF",
-            render: (c) => (
+            render: (customer) => (
                 <PatternFormat 
                     format="###.###.###-##" 
                     displayType="text" 
-                    value={c.cpf} 
+                    value={customer.cpf} 
                 />
             ),
         },
         {
             header: "Telefone",
-            render: (c) => (
+            render: (customer) => (
                 <PatternFormat 
                     format="(##) #####-####" 
                     displayType="text" 
-                    value={c.telefone} 
+                    value={customer.telefone} 
                 />
             ),
         },
         {
             header: "Criado em",
-            render: (c) => (
+            render: (customer) => (
                 <span className="text-slate-500">
-                    {formatDate(c.criadoEm)}
+                    {formatDate(customer.criadoEm)}
                 </span>
             )
         },

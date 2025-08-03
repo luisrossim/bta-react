@@ -15,8 +15,10 @@ export default function Login() {
    }, [isAuthenticated]);
 
    return (
-      <LoginContainer>
-         <LoginForm />
-      </LoginContainer>
+      <LoginContainer 
+         form={(
+            <LoginForm />
+         )}
+      />
    );
 }

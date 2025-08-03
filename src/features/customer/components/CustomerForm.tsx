@@ -3,19 +3,20 @@ import { InputFormItem } from "@/shared/components/InputFormItem";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useCreateCustomer, useGetCustomer } from "../hooks/useCustomerApi";
+import { useCreateCustomerMutation, useGetCustomerQuery, useUpdateCustomerMutation } from "../hooks/useCustomerApi";
 import { showError, showSuccess } from "@/shared/utils/showMessage";
+import { MaskFormItem } from "@/shared/components/InputMasked";
 
 interface CustomerFormProps {
-   id?: string
+   customerId?: string
 }
 
-export default function CustomerForm({ id }: CustomerFormProps){
-   const { data: customer } = useGetCustomer(id);
-   const { mutateAsync: createCustomer } = useCreateCustomer();
+export default function CustomerForm({ customerId }: CustomerFormProps){
+   const { data: customer } = useGetCustomerQuery(customerId);
+   const { mutateAsync: createCustomer } = useCreateCustomerMutation();
+   const { mutateAsync: updateCustomer } = useUpdateCustomerMutation();
    const navigate = useNavigate();
 
    const form = useForm<CreateCustomer>({
@@ -28,14 +29,22 @@ export default function CustomerForm({ id }: CustomerFormProps){
       },
    });
 
-   const onSubmit = (data: CreateCustomer) => {
-      createCustomer(data)
-         .then(() => {
-            showSuccess("Cliente cadastrado com sucesso.");
-            navigate("/sistema/clientes");
-         })
-         .catch((err) => showError(err.message))
+   const onSubmit = async (values: CreateCustomer) => {
+      try {
+         if (customerId) {
+            await updateCustomer({ id: customerId, data: values });
+         } else {
+            await createCustomer(values);
+         }
+
+         showSuccess("Operação realizada com sucesso.");
+         navigate("/sistema/clientes");
+
+      } catch (err: any) {
+         showError(err.message);
+      }
    };
+
 
    useEffect(() => {
       if (customer) {
@@ -46,25 +55,28 @@ export default function CustomerForm({ id }: CustomerFormProps){
 
    return (
       <FormProvider {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10">
+         <form 
+            onSubmit={form.handleSubmit(onSubmit)} 
+            className="mt-10"
+         >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                <InputFormItem 
                   label="Nome"
                   name="nome"
                />
 
-               <InputFormItem 
+               <MaskFormItem 
                   label="Telefone"
                   name="telefone"
-                  maskFormat="(##) #####-####"
-                  maskPlaceholder="(99) 99999-9999"
+                  format="(##) #####-####"
+                  placeholder="(99) 99999-9999"
                />
 
-               <InputFormItem 
+               <MaskFormItem 
                   label="CPF"
                   name="cpf"
-                  maskFormat="###.###.###-##"
-                  maskPlaceholder="999.999.999-99"
+                  format="###.###.###-##"
+                  placeholder="999.999.999-99"
                />
 
                <InputFormItem 
@@ -104,14 +116,16 @@ export default function CustomerForm({ id }: CustomerFormProps){
             </div>
 
             <div className="flex items-center gap-4 my-10 justify-end">
-               <Link to={"/sistema/clientes"}>
-                  <Button className="px-8" variant={"outline"}>
-                     Cancelar
-                  </Button>
-               </Link>
+               <Button 
+                  type="button"
+                  variant={"outline"} 
+                  onClick={() => navigate(-1)}
+               >
+                  Cancelar
+               </Button>
 
-               <Button type="submit" className="!px-12">
-                  <Check /> { id ? "Editar" : "Cadastrar" }
+               <Button type="submit">
+                  { customerId ? "Editar" : "Cadastrar" }
                </Button>
             </div>
          </form>

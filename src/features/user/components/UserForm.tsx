@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useUsers } from "../hooks/useUsers";
 import { rolesMock } from "@/shared/mocks/rolesMock";
+import { MaskFormItem } from "@/shared/components/InputMasked";
 
 interface UserFormProps {
    id?: string
@@ -78,11 +79,11 @@ export function UserForm({ id }: UserFormProps) {
                   placeholder="Selecione um cargo"
                />
 
-               <InputFormItem 
+               <MaskFormItem 
                   label="Telefone"
                   name="telefone"
-                  maskFormat="(##) #####-####"
-                  maskPlaceholder="(99) 99999-9999"
+                  format="(##) #####-####"
+                  placeholder="(99) 99999-9999"
                />
             </div>
 
