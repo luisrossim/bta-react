@@ -1,9 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthContext } from "@/features/auth/contexts/AuthContext";
-import { getStorageItem } from "@/shared/utils/localStorage";
-import { STORAGE_KEYS } from "@/shared/constants/storageKeys";
 import { HelpCircle, LogOut, Settings } from "lucide-react";
-import { type AuthUser } from "@/features/auth/types/Auth";
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -18,9 +15,8 @@ import {
 } from "@/components/ui/sidebar";
 
 export function SidebarFooterContent() {
-   const userLogged = getStorageItem<AuthUser>(STORAGE_KEYS.AUTH);
    const { isMobile } = useSidebar();
-   const { logout } = useAuthContext();
+   const { userLogged, logout } = useAuthContext();
 
    return (
       <SidebarMenu>
@@ -32,8 +28,8 @@ export function SidebarFooterContent() {
                      className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
                      <Avatar>
-                        <AvatarFallback>
-                           <Settings className="text-neutral-600" />
+                        <AvatarFallback className="bg-transparent">
+                           <Settings />
                         </AvatarFallback>
                      </Avatar>
                      
