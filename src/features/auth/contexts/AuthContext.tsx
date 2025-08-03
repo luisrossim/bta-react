@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { getStorageItem, removeStorageItem, setStorageItem } from "@/shared/utils/localStorage";
 import type { AuthUser } from "../types/Auth";
 import { STORAGE_KEYS } from "@/shared/constants/storageKeys";
@@ -31,19 +31,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    const { refetch: verifyAuth } = useVerifyAuthQuery();
    const { mutate: logoutMutation } = useLogoutMutation();
 
-   useEffect(() => {
-      if (isAuthenticated) {
-         verify();
-      }
-   }, []);
-
    const verify = async () => {
-      try {
-         await verifyAuth();
-         setIsAuthenticated(true);
-      } catch {
+      const result = await verifyAuth();
+
+      if(result.error) {
          logout();
+         return;
       }
+      
+      setIsAuthenticated(true); 
    };
 
    const saveLogin = (user: AuthUser) => {
