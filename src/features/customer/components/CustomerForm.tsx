@@ -22,6 +22,9 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
    const form = useForm<CreateCustomer>({
       resolver: zodResolver(createCustomerSchema),
       defaultValues: {
+         nome: '',
+         telefone: '',
+         cpf: '',
          endereco: {
             cidade: "Nova Venécia",
             estado: "ES",
@@ -80,6 +83,11 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
                />
 
                <InputFormItem 
+                  label="Descrição do endereço"
+                  name="endereco.descricao"
+               />
+
+               <InputFormItem 
                   label="Cidade"
                   name="endereco.cidade"
                   disabled
@@ -115,17 +123,17 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
                />
             </div>
 
-            <div className="flex items-center gap-4 my-10 justify-end">
+            <div className="flex items-center gap-4 mt-20">
+               <Button type="submit">
+                  { customerId ? "Editar" : "Cadastrar" }
+               </Button>
+
                <Button 
                   type="button"
                   variant={"outline"} 
                   onClick={() => navigate(-1)}
                >
                   Cancelar
-               </Button>
-
-               <Button type="submit">
-                  { customerId ? "Editar" : "Cadastrar" }
                </Button>
             </div>
          </form>

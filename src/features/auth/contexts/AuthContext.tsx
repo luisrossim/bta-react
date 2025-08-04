@@ -35,6 +35,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    const { mutate: logoutMutation } = useLogoutMutation();
 
    const verify = async () => {
+      const hasAuthKey = !!getStorageItem<AuthUser>(STORAGE_KEYS.AUTH);
+
+      if(!hasAuthKey) {
+         logout();
+         return;
+      }
+
       const result = await verifyAuth();
 
       if(result.error) {

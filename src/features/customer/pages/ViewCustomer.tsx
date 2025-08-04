@@ -6,12 +6,8 @@ export default function ViewCustomer() {
    const { id } = useParams();
 
    return (
-      <div className="space-y-6">
-         <PageHeader 
-            title="Informações do cliente"
-            subtitle="Visualize os dados do cliente, incluindo endereço e ordens de serviços vinculadas."
-         />
-
+      <div>
+         <PageHeader title="Informações do cliente"/>
          <CustomerInfo customerId={id} />
       </div>
    )

@@ -34,9 +34,10 @@ export function InputFormItem<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel className="self-start text-slate-600">
+          <FormLabel>
             {label}
           </FormLabel>
+
           <FormControl>
             <Input
               {...field}
@@ -46,6 +47,7 @@ export function InputFormItem<T extends FieldValues>({
               className={cn("w-full", className)}
             />
           </FormControl>
+          
           <FormMessage />
         </FormItem>
       )}

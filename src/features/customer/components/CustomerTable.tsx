@@ -21,7 +21,11 @@ export function CustomerTable({
     const columns: Column<Customer>[] = [
         {
             header: "Nome",
-            render: (customer) => <span className="font-medium">{customer.nome}</span>,
+            render: (customer) => (
+                <span className="font-medium">
+                    {customer.nome}
+                </span>
+            )
         },
         {
             header: "CPF",

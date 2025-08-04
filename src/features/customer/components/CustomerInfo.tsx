@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { Edit2, MapPinned } from "lucide-react";
+import { MapPinned } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyData } from "@/shared/components/EmptyData";
 import { ListItem } from "@/shared/components/ListItem";
@@ -23,8 +23,8 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
 
    return (
       <>
-         <div className="grid grid-cols-1 gap-14 my-10">
-            <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+         <div className="grid grid-cols-1 gap-8 mt-10">
+            <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10">
                <ListItem 
                   label="Nome" 
                   value={customer.nome}
@@ -55,6 +55,11 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
                <ListItem 
                   label="Endereço" 
                   value={`${customer.endereco.cidade} (${customer.endereco.estado})`} 
+               />
+
+               <ListItem 
+                  label="Descrição do endereço" 
+                  value={customer.endereco.descricao} 
                />
 
                <ListItem 
@@ -92,34 +97,50 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
                   label="Referência" 
                   value={customer.endereco.referencia} 
                />
+
+               <ListItem 
+                  label="Cadastrado em" 
+                  value={formatTimestamp(customer.criadoEm)}
+               />
+
+               <ListItem 
+                  label="Atualizado em" 
+                  value={formatTimestamp(customer.criadoEm)}
+               />
             </div>
 
-            <div>
-               <h2 className="mb-2 text-slate-500 font-medium text-sm">Ordens de serviço</h2>
-               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5">
-                  {customer.ordemServico.length > 0 && customer.ordemServico.map((order) => (
-                     <CustomerOrderCard key={order.id} order={order} />
-                  ))}
-               </div>
-            </div>
-
-            <div className="text-sm space-y-1">
-               <h2 className="text-slate-500 font-medium">Informações do registro</h2>
-               <p>Criado em {formatTimestamp(customer.criadoEm)}</p>
-               <p>Atualizado em {formatTimestamp(customer.atualizadoEm)}</p>
-            </div>
+            <ListItem 
+               label="Ordens de serviço"
+               value={
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
+                     {customer.ordemServico.length > 0 
+                        ? customer.ordemServico.map(order => (
+                           <CustomerOrderCard 
+                              key={order.id} 
+                              order={order} 
+                           />
+                        ))
+                        : (
+                           <p className="font-light text-muted-foreground">
+                              Nenhum registro encontrado
+                           </p>
+                        )
+                  }
+                  </div>
+               }
+            />
          </div>
 
-         <div className="flex justify-end gap-4 items-center">
+         <div className="flex gap-4 items-center mt-20">
+            <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
+               Editar
+            </Button>
+
             <Button 
                variant={'outline'} 
-               onClick={() => navigate(-1)} 
-               className="px-8"
+               onClick={() => navigate(-1)}
             >
                Voltar
-            </Button>
-            <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
-               <Edit2 /> Editar
             </Button>
          </div>
       </>

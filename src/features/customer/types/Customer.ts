@@ -3,9 +3,9 @@ import { createAddressSchema } from "@/features/user/types/Address";
 import { z } from "zod";
 
 export const createCustomerSchema = z.object({
-    nome: z.string().nonempty(),
-    telefone: z.string().nonempty(),
-    cpf: z.string().length(11),
+    nome: z.string().nonempty({ message: 'Nome é obrigatório.' }),
+    telefone: z.string().nonempty({ message: 'Telefone é obrigatório.' }),
+    cpf: z.string().length(11, { message: 'CPF inválido.' }),
     endereco: createAddressSchema
 })
 

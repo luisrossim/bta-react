@@ -39,7 +39,7 @@ export function LoginForm() {
                <InputFormItem 
                   label="Email"
                   name="login"
-                  placeholder="exemplo@btairrigacao.com.br"
+                  placeholder="fulano@btairrigacao.com.br"
                />
 
                <InputFormItem 

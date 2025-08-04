@@ -10,9 +10,9 @@ export default function CreateCustomer(){
       : "Cadastrar novo cliente";
 
    return (
-      <>
+      <div>
          <PageHeader title={title} />
          <CustomerForm customerId={id} />
-      </>
+      </div>
    )
 }
