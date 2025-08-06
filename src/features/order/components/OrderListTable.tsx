@@ -7,23 +7,27 @@ import { DropdownActions } from "@/shared/components/DropdownActions";
 import { formatTimestamp } from "@/shared/utils/formatDate";
 import type { Order } from "../types/Order";
 import { useCalculateExecutionTime } from "../hooks/useCalculateExecutionTime";
+import { LoadingIcon } from "@/shared/components/LoadingIcon";
 
 interface OrderListTableProps {
-   orders: Order[]
-   loading: boolean
+   data: Order[]
+   isLoading: boolean
    navigate: (id: string) => void
 }
 
-export function OrderListTable({ orders, navigate }: OrderListTableProps){
+export function OrderListTable({ data, isLoading, navigate }: OrderListTableProps){
    const isMobile = useIsMobile();
    const { calculateExecutionTime } = useCalculateExecutionTime();
 
-   if (!orders || orders.length == 0) return <EmptyData />
+   if (!data || data.length == 0) return <EmptyData />
+
+   if(isLoading) return <LoadingIcon />
 
    return (
       <Table className="table-striped">
          <TableHeader>
                <TableRow>
+                  <TableHead>Número</TableHead>
                   <TableHead>Cliente</TableHead>
                   <TableHead>Etapa</TableHead>
                   <TableHead>Atribuídos</TableHead>
@@ -34,11 +38,15 @@ export function OrderListTable({ orders, navigate }: OrderListTableProps){
                </TableRow>
          </TableHeader>
          <TableBody>
-               {orders.map((order) => {
+               {data.map((order) => {
                   const historicoAtual = order.historicoOs[0];
 
                   return (
                      <TableRow key={order.id}>
+                        <TableCell className="text-primary text-xs">
+                           #{order.numero}
+                        </TableCell>
+
                         <TableCell className="font-medium">
                            {order.cliente.nome.length > 16 && isMobile
                               ? `${order.cliente.nome.slice(0, 16)}...`

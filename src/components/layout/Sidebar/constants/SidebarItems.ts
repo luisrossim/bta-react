@@ -25,7 +25,7 @@ const adminOnlyLabels = [
 function getSidebarItems(role?: string) {
    if(!role) return [];
 
-   if (role === "Admin") {
+   if (role === "Administrador") {
       return SIDEBAR_ITEMS;
    } else {
       return SIDEBAR_ITEMS.filter(

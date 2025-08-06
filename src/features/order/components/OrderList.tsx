@@ -33,8 +33,8 @@ export default function OrderList() {
          />
 
          <OrderListTable
-            orders={orders} 
-            loading={loading}
+            data={orders} 
+            isLoading={loading}
             navigate={navigateToServiceOrder}
          />
       </div>

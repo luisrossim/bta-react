@@ -68,7 +68,7 @@ export function AttachmentForm({ onUpload, disableActions }: AttachmentFormProps
                   <Upload className="text-muted-foreground" />
                </div>
                <span className="text-xs font-medium text-center w-full">
-                  Anexar
+                  Anexar arquivo
                </span>
             </button>
          </DialogTrigger>

@@ -33,6 +33,7 @@ type Order = Omit<CreateOrder, "etapaId"> &
   Measurement &
   Assistance & {
     id: string;
+    numero: number;
     cliente: Customer,
     anexos?: Attachment[],
     historicoOs: OrderHistory[],

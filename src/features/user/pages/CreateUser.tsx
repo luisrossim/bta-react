@@ -10,17 +10,9 @@ export default function CreateUser(){
       ? "Editar informações do usuário" 
       : "Cadastrar novo usuário";
 
-   const subTitleText = id 
-      ? "Altere as informações do usuário existente" 
-      : "Preencha as informações do usuário e defina uma senha de acesso";
-
    return (
       <>
-         <PageHeader 
-            title={titleText}
-            subtitle={subTitleText}
-         />
-
+         <PageHeader title={titleText}/>
          <UserForm id={id} />
       </>
    )

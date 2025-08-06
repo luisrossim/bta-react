@@ -9,13 +9,13 @@ interface ListItemProps {
 export function ListItem({ label, value, className }: ListItemProps) {
    return (
       <div className={cn("flex flex-col gap-1 text-sm", className)}>
-         <h2 className="text-muted-foreground">
-            <p>{label}</p>
+         <h2 className="text-black font-medium">
+            {label}
          </h2>
 
          {value 
-            ? <div className="font-medium">{value}</div>
-            : <p className="font-light text-muted-foreground">Nada informado</p>
+            ? <div>{value}</div>
+            : <p className="font-light text-muted-foreground">-</p>
          }
       </div>
    )

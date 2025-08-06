@@ -51,7 +51,10 @@ export default function ViewOrder() {
       <div className="space-y-14 mb-14">
          <div className="flex flex-wrap justify-between items-center gap-10">
             <div>
-               <PageTitle title={historicoAtual.etapa.descricao} />
+               <PageTitle title={`Ordem de serviço #${order.numero}`} />
+
+               <h2 className="text-primary font-medium">{historicoAtual.etapa.descricao}</h2>
+
                <Link 
                   to={`/sistema/clientes/${order.cliente.id}`} 
                   className="flex flex-col gap-1 text-sm text-primary mt-2"
@@ -103,9 +106,10 @@ export default function ViewOrder() {
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
+         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
             <ListItem
                label="Situação"
+               className="bg-muted p-3 rounded-sm"
                value={(
                   <div>
                      {historicoAtual.concluidoEm 
@@ -118,6 +122,7 @@ export default function ViewOrder() {
 
             <ListItem
                label="Técnicos atribuídos"
+               className="bg-muted p-3 rounded-sm"
                value={(
                   <>
                      {historicoAtual.atribuicoes.length > 0 &&
@@ -150,21 +155,25 @@ export default function ViewOrder() {
 
             <ListItem
                label="Iniciada em"
+               className="bg-muted p-3 rounded-sm"
                value={formatTimestamp(historicoAtual.criadoEm)}
             />
 
             <ListItem 
                label="Concluída em"
+               className="bg-muted p-3 rounded-sm"
                value={formatTimestamp(historicoAtual.concluidoEm)}
             />
 
             <ListItem
                label="Concluída por"
+               className="bg-muted p-3 rounded-sm"
                value={historicoAtual.concluidoPor?.nome}
             />
 
             <ListItem 
                label="Tempo de execução"
+               className="bg-muted p-3 rounded-sm"
                value={calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
             />
          </div>
