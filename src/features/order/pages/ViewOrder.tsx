@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, Phone, User } from "lucide-react";
+import { ArrowRight, CheckCircle, Waypoints } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/features/order/hooks/useOrderInfo";
 import { EmptyData } from "@/shared/components/EmptyData";
@@ -51,24 +51,12 @@ export default function ViewOrder() {
       <div className="space-y-14 mb-14">
          <div className="flex flex-wrap justify-between items-center gap-10">
             <div>
-               <PageTitle title={historicoAtual.etapa.descricao} />
-               <Link 
-                  to={`/sistema/clientes/${order.cliente.id}`} 
-                  className="flex flex-col gap-1 text-sm text-primary mt-2"
-               >
-                  <div className="flex items-center gap-2">
-                     <User size={16} />
-                     <p>{order.cliente.nome}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                     <Phone size={16} />
-                     <PatternFormat 
-                        format="(##) #####-####" 
-                        displayType="text" 
-                        value={order.cliente.telefone} 
-                     />
-                  </div>
-               </Link>
+               <PageTitle title={`Ordem de serviço #${order.numero}`} />
+
+               <div className="flex items-center gap-2 text-primary text-sm mt-2">
+                  <Waypoints size={16} />
+                  <h2>{historicoAtual.etapa.descricao}</h2>
+               </div>
             </div>
 
             <div className="flex items-center gap-4 flex-wrap">
@@ -103,9 +91,28 @@ export default function ViewOrder() {
             </div>
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
+         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            <ListItem
+               label="Cliente"
+               className="bg-muted p-3 rounded-sm"
+               value={(
+                  <Link 
+                     to={`/sistema/clientes/${order.cliente.id}`} 
+                     className="flex flex-col gap-1 text-sm text-primary"
+                  >
+                     <p>{order.cliente.nome}</p>
+                     <PatternFormat 
+                        format="(##) #####-####" 
+                        displayType="text" 
+                        value={order.cliente.telefone} 
+                     />
+                  </Link>
+               )}
+            />
+
             <ListItem
                label="Situação"
+               className="bg-muted p-3 rounded-sm"
                value={(
                   <div>
                      {historicoAtual.concluidoEm 
@@ -118,6 +125,7 @@ export default function ViewOrder() {
 
             <ListItem
                label="Técnicos atribuídos"
+               className="bg-muted p-3 rounded-sm"
                value={(
                   <>
                      {historicoAtual.atribuicoes.length > 0 &&
@@ -150,21 +158,25 @@ export default function ViewOrder() {
 
             <ListItem
                label="Iniciada em"
+               className="bg-muted p-3 rounded-sm"
                value={formatTimestamp(historicoAtual.criadoEm)}
             />
 
             <ListItem 
                label="Concluída em"
+               className="bg-muted p-3 rounded-sm"
                value={formatTimestamp(historicoAtual.concluidoEm)}
             />
 
             <ListItem
                label="Concluída por"
+               className="bg-muted p-3 rounded-sm"
                value={historicoAtual.concluidoPor?.nome}
             />
 
             <ListItem 
                label="Tempo de execução"
+               className="bg-muted p-3 rounded-sm"
                value={calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
             />
          </div>

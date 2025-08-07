@@ -16,7 +16,7 @@ export function Attachment({
 }: AttachmentProps) {
 
    return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
          <AttachmentList 
             attachments={attachments} 
             onRequest={onRequestView} 

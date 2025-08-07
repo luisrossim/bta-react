@@ -7,4 +7,4 @@ export const roleSchema = z.object({
 
 export type Role = z.infer<typeof roleSchema>
 
-export type Roles = 'Admin' | 'Técnico' | 'Assistente'
+export type Roles = 'Administrador' | 'Técnico' | 'Assistente'

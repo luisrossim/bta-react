@@ -21,7 +21,7 @@ interface HistoryAccordionProps {
 export function OrderHistoryAccordion({ order, orderHistory }: HistoryAccordionProps) {
    if (!orderHistory || orderHistory.length === 0) {
       return <EmptyData />
-   } 
+   }
 
    return (
       <>
@@ -89,12 +89,15 @@ export function OrderHistoryAccordion({ order, orderHistory }: HistoryAccordionP
                         label="Técnicos atribuídos" 
                         value={(
                            <div className="flex flex-wrap gap-1">
-                              {item.atribuicoes?.map(({ usuario }, index) => (
-                                 <UserAssignedTooltip 
-                                    key={index} 
-                                    user={usuario}
-                                 />
-                              ))}
+                              {item.atribuicoes.length > 0 
+                                 ? item.atribuicoes?.map(({ usuario }, index) => (
+                                    <UserAssignedTooltip 
+                                       key={index} 
+                                       user={usuario}
+                                    />
+                                 ))
+                                 : <p className="font-light text-sm">Nenhum</p>  
+                              }
                            </div>
                         )} 
                      />

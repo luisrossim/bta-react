@@ -4,11 +4,11 @@ import { InputFormItem } from "@/shared/components/InputFormItem";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useUsers } from "../hooks/useUsers";
 import { rolesMock } from "@/shared/mocks/rolesMock";
+import { MaskFormItem } from "@/shared/components/InputMasked";
 
 interface UserFormProps {
    id?: string
@@ -78,22 +78,22 @@ export function UserForm({ id }: UserFormProps) {
                   placeholder="Selecione um cargo"
                />
 
-               <InputFormItem 
+               <MaskFormItem 
                   label="Telefone"
                   name="telefone"
-                  maskFormat="(##) #####-####"
-                  maskPlaceholder="(99) 99999-9999"
+                  format="(##) #####-####"
+                  placeholder="(99) 99999-9999"
                />
             </div>
 
-            <div className="flex items-center gap-4 my-10 justify-end">
-               <Link to={"/sistema/usuarios"}>
-                  <Button className="px-8" variant={"outline"}>Cancelar</Button>
-               </Link>
-
-               <Button type="submit" className="!px-12">
-                  <Check /> { id ? "Editar" : "Cadastrar" }
+            <div className="flex items-center gap-4 mt-20">
+               <Button type="submit">
+                  { id ? "Salvar" : "Cadastrar" }
                </Button>
+
+               <Link to={"/sistema/usuarios"}>
+                  <Button variant={"outline"}>Cancelar</Button>
+               </Link>
             </div>
          </form>
       </FormProvider>

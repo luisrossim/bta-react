@@ -27,12 +27,12 @@ export function AttachmentList({ attachments, onRequest }: AttachmentListProps) 
             <button
                key={attachment.id}
                onClick={() => onRequest(attachment.id)}
-               className="group flex flex-col gap-1 cursor-pointer items-center justify-center p-5 rounded-[12px] border hover:bg-accent transition-colors min-h-[140px]"
+               className="group flex gap-1 flex-col cursor-pointer items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors"
             >
                <div className="flex items-center justify-center">
                   {getFileIcon(attachment.tipo)}
                </div>
-               <span className="text-xs text-center font-medium truncate w-full mt-4">
+               <span className="text-xs text-center font-medium truncate w-full mt-2">
                   {attachment.descricao}
                </span>
                <span className="text-xs text-center text-muted-foreground truncate w-full">

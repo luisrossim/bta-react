@@ -1,4 +1,5 @@
 import { axiosInstance } from '@/lib/axios';
+import type { PaginatedResponse } from '../types/PaginatedResponse';
 
 export abstract class CrudService<T> {
     protected readonly axios = axiosInstance;
@@ -16,6 +17,13 @@ export abstract class CrudService<T> {
     async get(params?: Record<string, any>): Promise<T[]> {
         const response = await this.axios.get<T[]>(this.path, {
             ...(params && { params }),
+        });
+        return response.data;
+    }
+
+    async getAllPaginated(params?: Record<string, any>): Promise<PaginatedResponse<T>> {
+        const response = await this.axios.get<PaginatedResponse<T>>(this.path, {
+            params,
         });
         return response.data;
     }

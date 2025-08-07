@@ -15,26 +15,29 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
    return (
       <Link
          to={`/sistema/ordens/${order.id}`}
-         className="group flex items-start gap-4 p-5 rounded border bg-slate-50 hover:bg-slate-100 transition-colors"
+         className="group flex items-center gap-4 p-4 rounded-md border hover:bg-accent transition-colors"
       >
-         <div className="bg-primary text-white rounded-xl p-2">
-            <ClipboardList className="h-5 w-5" />
+         <div className="bg-primary text-white rounded-full p-2">
+            <ClipboardList className="h-4 w-4" />
          </div>
 
-         <div className="flex flex-col justify-between gap-1 text-sm w-full">
-            <p className="font-semibold">
-               {historicoAtual.etapa.descricao}
-            </p>
+         <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 text-sm w-full">
+            <div className="flex flex-col gap-1">
+               <p className="font-medium">
+                  {historicoAtual.etapa.descricao}
+               </p>
+               <p className="text-muted-foreground text-xs">
+                  Criada em {formatTimestamp(order.criadoEm)}
+               </p>
+            </div>
 
-            <p className="text-slate-500">
-               Criada em {formatTimestamp(order.criadoEm)}
-            </p>
-            
-            {isConcluida ? (
-               <Badge variant="success">Concluída</Badge>
-            ) : (
-               <Badge variant="warning">Em andamento</Badge>
-            )}
+            <div>
+               {isConcluida ? (
+                  <Badge variant="success">Concluída</Badge>
+               ) : (
+                  <Badge variant="warning">Em andamento</Badge>
+               )}
+            </div>
          </div>
       </Link>
    );

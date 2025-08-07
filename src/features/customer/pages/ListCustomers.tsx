@@ -1,43 +1,58 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { CustomerFilter } from "../components/CustomerFilter";
 import { CustomerTable } from "../components/CustomerTable";
-
-import { useState, useMemo } from "react";
-import { useGetCustomers } from "../hooks/useCustomerApi";
+import { useGetCustomersQuery } from "../hooks/useCustomerApi";
+import { Pagination } from "@/shared/components/Pagination";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 export default function ListCustomers() {
     const navigate = useNavigate();
+
     const [search, setSearch] = useState("");
-    const { data: customers, isFetching } = useGetCustomers();
+    const [page, setPage] = useState(1);
+    const debouncedSearch = useDebounce(search, 500);
 
-    const filteredCustomers = useMemo(() => {
-        if (!customers) return [];
+    const { data, isFetching } = useGetCustomersQuery(page, debouncedSearch);
 
-        const searchTerm = search.trim().toLowerCase();
+    function handleSearchChange(search: string) {
+        setSearch(search);
+        setPage(1);
+    }
 
-        return customers.filter((c) => (
-            c.nome.toLowerCase().startsWith(searchTerm) ||
-            c.cpf.startsWith(searchTerm)
-        ));
-    }, [customers, search]);
+    return (
+        <div className="space-y-10">
+            <PageHeader
+                title="Clientes"
+                subtitle="Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade."
+                action={
+                <Button onClick={() => navigate("/sistema/clientes/form")}>
+                    <Plus /> Novo cliente
+                </Button>
+                }
+            />
 
-  return (
-    <div className="space-y-10">
-        <PageHeader
-            title="Clientes"
-            subtitle="Gerencie seus clientes, visualize endereços e histórico de serviços"
-            action={
-            <Button onClick={() => navigate("/sistema/clientes/form")}>
-                <Plus /> Novo cliente
-            </Button>
-            }
-        />
+            <CustomerFilter
+                search={search}
+                onSearch={handleSearchChange}
+            />
 
-        <CustomerFilter search={search} onSearch={setSearch} />
-        <CustomerTable customers={filteredCustomers} isFetching={isFetching} />
-    </div>
-  );
+            <CustomerTable
+                customers={data?.data ?? []}
+                isFetching={isFetching}
+            />
+
+            {data && data.data.length > 0 && (
+                <Pagination
+                    page={data.page}
+                    totalItems={data.total}
+                    totalPages={data.totalPages}
+                    onPageChange={setPage}
+                />
+            )}
+        </div>
+    );
 }

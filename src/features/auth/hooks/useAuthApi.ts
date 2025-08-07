@@ -8,10 +8,10 @@ const useLoginMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation<AuthUser, Error, AuthRequest>({
-    mutationFn: authenticate,
-    onSuccess: (user) => {
-      queryClient.setQueryData(["auth"], user);
-    }
+      mutationFn: authenticate,
+      onSuccess: (user) => {
+         queryClient.setQueryData(["auth"], user);
+      }
   });
 };
 
@@ -30,7 +30,8 @@ const useVerifyAuthQuery = () => {
    return useQuery<string, Error>({
       queryKey: ["me"],
       queryFn: verify,
-      enabled: false
+      enabled: false,
+      retry: false
    });
 };
 

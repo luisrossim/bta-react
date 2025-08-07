@@ -7,8 +7,8 @@ interface RoleBadgeProps {
 
 export const RoleBadge = ({ rounded, role }: RoleBadgeProps) => {
    const roundedSize = rounded == true ? 'rounded-full' : 'rounded-sm';
-   const backgroundMap: Record<'Admin' | 'Técnico' | 'Assistente', string> = {
-      'Admin': 'bg-red-600 text-orange-100',
+   const backgroundMap: Record<'Administrador' | 'Técnico' | 'Assistente', string> = {
+      'Administrador': 'bg-red-600 text-orange-100',
       'Técnico': 'bg-sky-600 text-sky-100',
       'Assistente': 'bg-emerald-600 text-green-100',
    }

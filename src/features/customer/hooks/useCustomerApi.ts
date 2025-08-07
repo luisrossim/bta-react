@@ -1,15 +1,28 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { CreateCustomer, Customer } from "@/features/customer/types/Customer";
+import { type UpdateCustomer, type CreateCustomer, type Customer } from "@/features/customer/types/Customer";
 import { customerService } from "@/features/customer/services/customerService";
+import type { PaginatedResponse } from "@/shared/types/PaginatedResponse";
 
-function useGetCustomers() {
-   return useQuery<Customer[], Error>({
-      queryKey: ["customers"],
-      queryFn: () => customerService.get(),
+function useGetCustomersQuery(page: number, search: string) {
+   const params: Record<string, any> = { page };
+
+   if (search.trim()) {
+      const isCpf = /^\d/.test(search);
+      if (isCpf) {
+         params.cpf = search;
+      } else {
+         params.nome = search;
+      }
+   }
+
+   return useQuery<PaginatedResponse<Customer>, Error>({
+      queryKey: ["customers", page, search],
+      queryFn: () => customerService.getAllPaginated(params),
+      refetchOnWindowFocus: false
    });
 }
 
-function useGetCustomer(id?: string) {
+function useGetCustomerQuery(id?: string) {
    return useQuery<Customer, Error>({
       queryKey: ["get-customer-id", id],
       queryFn: () => {
@@ -20,14 +33,21 @@ function useGetCustomer(id?: string) {
    });
 }
 
-function useCreateCustomer() {
+function useCreateCustomerMutation() {
    return useMutation<Customer, Error, CreateCustomer>({
       mutationFn: (data: CreateCustomer) => customerService.create(data)
    });
 }
 
+function useUpdateCustomerMutation() {
+   return useMutation<Customer, Error, UpdateCustomer>({
+      mutationFn: ({ id, data }) => customerService.update(id, data),
+   });
+}
+
 export {
-   useGetCustomers,
-   useGetCustomer,
-   useCreateCustomer
+   useGetCustomersQuery,
+   useGetCustomerQuery,
+   useCreateCustomerMutation,
+   useUpdateCustomerMutation
 };

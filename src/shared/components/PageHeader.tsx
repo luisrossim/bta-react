@@ -10,7 +10,7 @@ export const PageSubtitle = ({ subtitle }: { subtitle: string }) => {
 
 interface PageHeaderProps {
    title: string
-   subtitle: string
+   subtitle?: string
    action?: ReactNode
 }
 
@@ -19,7 +19,7 @@ export const PageHeader = ({ title, subtitle, action }: PageHeaderProps) => {
       <div className="flex flex-wrap justify-between items-center gap-8">
          <div>
             <PageTitle title={title} />
-            <PageSubtitle subtitle={subtitle} />
+            {subtitle && <PageSubtitle subtitle={subtitle} />}
          </div>
 
          {action}

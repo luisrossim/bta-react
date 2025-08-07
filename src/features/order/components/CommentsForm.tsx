@@ -45,13 +45,15 @@ export function CommentsForm({
                )}
             />
 
-            {form.formState.isDirty && (
-               <div className="flex justify-end gap-2">
-                  <Button type="submit" variant={"success"}>
-                     Salvar observações
-                  </Button>
-               </div>
-            )}
+            <div className="flex justify-end gap-2">
+               <Button 
+               type="submit" 
+               variant={"dark"}
+               disabled={!form.formState.isDirty}
+               >
+                  Salvar observações
+               </Button>
+            </div>
          </form>
       </Form>
    )
