@@ -15,8 +15,9 @@ export abstract class CrudService<T> {
     }
 
     async get(params?: Record<string, any>): Promise<T[]> {
+        const queryParams = params ?? { raw: 1 };
         const response = await this.axios.get<T[]>(this.path, {
-            ...(params && { params }),
+            params: queryParams,
         });
         return response.data;
     }
