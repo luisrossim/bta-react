@@ -9,7 +9,7 @@ interface ListItemProps {
 export function ListItem({ label, value, className }: ListItemProps) {
    return (
       <div className={cn("flex flex-col gap-1 text-sm", className)}>
-         <h2 className="text-black font-medium">
+         <h2 className="font-semibold">
             {label}
          </h2>
 

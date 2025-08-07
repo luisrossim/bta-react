@@ -40,6 +40,7 @@ export function GenericTable<T>({
       <Table className="table-striped">
          <TableHeader>
             <TableRow>
+               {actions && <TableHead className="w-[30px]"></TableHead>}
                {columns.map((col, index) => (
                   <TableHead 
                      key={index} 
@@ -48,12 +49,16 @@ export function GenericTable<T>({
                      {col.header}
                   </TableHead>
                ))}
-               {actions && <TableHead className="text-right">Ações</TableHead>}
             </TableRow>
          </TableHeader>
          <TableBody>
             {data.map((row) => (
                <TableRow key={getRowId(row)}>
+                  {actions && (
+                     <TableCell className="flex gap-2 items-center justify-end">
+                        <DropdownActions actions={actions(row)} />
+                     </TableCell>
+                  )}
                   {columns.map((col, index) => (
                      <TableCell 
                         key={index} 
@@ -62,11 +67,6 @@ export function GenericTable<T>({
                         {col.render(row)}
                      </TableCell>
                   ))}
-                  {actions && (
-                     <TableCell className="flex gap-2 items-center justify-end">
-                        <DropdownActions actions={actions(row)} />
-                     </TableCell>
-                  )}
                </TableRow>
             ))}
          </TableBody>

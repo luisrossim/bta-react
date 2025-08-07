@@ -1,11 +1,23 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type UpdateCustomer, type CreateCustomer, type Customer } from "@/features/customer/types/Customer";
 import { customerService } from "@/features/customer/services/customerService";
+import type { PaginatedResponse } from "@/shared/types/PaginatedResponse";
 
-function useGetCustomersQuery() {
-   return useQuery<Customer[], Error>({
-      queryKey: ["customers"],
-      queryFn: () => customerService.get(),
+function useGetCustomersQuery(page: number, search: string) {
+   const params: Record<string, any> = { page };
+
+   if (search.trim()) {
+      const isCpf = /^\d/.test(search);
+      if (isCpf) {
+         params.cpf = search;
+      } else {
+         params.nome = search;
+      }
+   }
+
+   return useQuery<PaginatedResponse<Customer>, Error>({
+      queryKey: ["customers", page, search],
+      queryFn: () => customerService.getAllPaginated(params),
       refetchOnWindowFocus: false
    });
 }
