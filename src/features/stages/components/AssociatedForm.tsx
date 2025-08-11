@@ -73,14 +73,12 @@ export function AssociatedForm({
                      label="Etapa"
                      name="stageId"
                      options={stageOptions}
-                     placeholder="Selecione uma etapa"
                   />
 
                   <SelectFormItem 
                      label="Usuário"
                      name="userId"
                      options={userOptions}
-                     placeholder="Selecione um usuário"
                   />
 
                   <DialogFooter>

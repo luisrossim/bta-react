@@ -1,98 +1,113 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { Badge } from "@/components/ui/badge";
-import { EmptyData } from "@/shared/components/EmptyData";
 import { UserAssignedTooltip } from "./UserAssignedTooltip";
-import { DropdownActions } from "@/shared/components/DropdownActions";
 import { formatTimestamp } from "@/shared/utils/formatDate";
 import type { Order } from "../types/Order";
 import { useCalculateExecutionTime } from "../hooks/useCalculateExecutionTime";
 import { LoadingIcon } from "@/shared/components/LoadingIcon";
+import { GenericTable, type Column } from "@/shared/components/GenericTable";
+import { useNavigate } from "react-router-dom";
 
 interface OrderListTableProps {
    data: Order[]
-   isLoading: boolean
-   navigate: (id: string) => void
+   isFetching: boolean
 }
 
-export function OrderListTable({ data, isLoading, navigate }: OrderListTableProps){
-   const isMobile = useIsMobile();
+export function OrderListTable({ 
+   data, 
+   isFetching, 
+}: OrderListTableProps){
    const { calculateExecutionTime } = useCalculateExecutionTime();
+   const navigate = useNavigate();
+   const isMobile = useIsMobile();
 
-   if (!data || data.length == 0) return <EmptyData />
+   if(isFetching) return <LoadingIcon />
 
-   if(isLoading) return <LoadingIcon />
+   const columns: Column<Order>[] = [
+      {
+         header: "N°",
+         render: (order) => (
+            <span className="text-primary text-sm">
+               {order.numero}
+            </span>
+         )
+      },
+      {
+         header: "Cliente",
+         render: (order) => (
+            <span>
+               {order.cliente.nome.length > 28 && isMobile
+                  ? `${order.cliente.nome.slice(0, 28)}...`
+                  : order.cliente.nome
+               }
+            </span>
+         )
+      },
+      {
+         header: "Etapa atual",
+         render: (order) => (
+            <span className="text-primary font-medium">
+               {order.historicoOs[0].etapa.descricao}
+            </span>
+         )
+      },
+      {
+         header: "Atribuídos",
+         render: (order) => (
+            <>
+               {order.historicoOs[0].atribuicoes?.map((atribuicao, index) => (
+                  <UserAssignedTooltip key={index} user={atribuicao.usuario} />
+               ))}
+            </>
+         )
+      },
+      {
+         header: "Situação",
+         render: (order) => (
+            <>
+               {order.historicoOs[0].concluidoEm 
+                  ? <Badge variant={"success"}>Concluída</Badge> 
+                  : <Badge variant={"warning"}>Em andamento</Badge>
+               }
+            </>
+         )
+      },
+      {
+         header: "Tempo de execução",
+         render: (order) => (
+            <span>
+               {calculateExecutionTime(order.historicoOs[0].criadoEm, order.historicoOs[0].concluidoEm)}
+            </span>
+         )
+      },
+      {
+         header: "Atualizado em",
+         render: (order) => (
+               <span className="text-muted-foreground">
+                  {formatTimestamp(order.historicoOs[0].atualizadoEm)}
+               </span>
+         )
+      },
+      {
+         header: "Criado em",
+         render: (order) => (
+               <span className="text-muted-foreground">
+                  {formatTimestamp(order.criadoEm)}
+               </span>
+         )
+      },
+   ];
 
    return (
-      <Table className="table-striped">
-         <TableHeader>
-               <TableRow>
-                  <TableHead>Número</TableHead>
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Etapa</TableHead>
-                  <TableHead>Atribuídos</TableHead>
-                  <TableHead>Situação</TableHead>
-                  <TableHead>Execução</TableHead>
-                  <TableHead>Criado em</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-               </TableRow>
-         </TableHeader>
-         <TableBody>
-               {data.map((order) => {
-                  const historicoAtual = order.historicoOs[0];
-
-                  return (
-                     <TableRow key={order.id}>
-                        <TableCell className="text-primary text-xs">
-                           #{order.numero}
-                        </TableCell>
-
-                        <TableCell className="font-medium">
-                           {order.cliente.nome.length > 16 && isMobile
-                              ? `${order.cliente.nome.slice(0, 16)}...`
-                              : order.cliente.nome
-                           }
-                        </TableCell>
-
-                        <TableCell className="text-primary font-medium">
-                           {historicoAtual.etapa.descricao}
-                        </TableCell>
-
-                        <TableCell>
-                           {historicoAtual.atribuicoes?.map((atribuicao, index) => (
-                              <UserAssignedTooltip key={index} user={atribuicao.usuario} />
-                           ))}
-                        </TableCell>
-
-                        <TableCell>
-                           {historicoAtual.concluidoEm 
-                              ? <Badge variant={"success"}>Concluída</Badge> 
-                              : <Badge variant={"warning"}>Em andamento</Badge>
-                           }
-                        </TableCell>
-
-                        <TableCell className="text-slate-500">
-                              {calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
-                        </TableCell>
-
-                        <TableCell className="text-slate-500">
-                              {formatTimestamp(historicoAtual.criadoEm)}
-                        </TableCell>
-
-                        <TableCell className="flex justify-end">
-                           <DropdownActions 
-                              actions={[
-                                 {
-                                    label: 'Visualizar',
-                                    onClick: () => navigate(order.id)
-                                 }
-                              ]}
-                           />
-                        </TableCell>
-                     </TableRow>
-                  )
-               })}
-         </TableBody>
-      </Table>
-   )
+      <GenericTable
+         data={data}
+         columns={columns}
+         actions={(order) => [
+            {
+               label: 'Visualizar',
+               onClick: () => navigate(`/sistema/ordens/${order.id}`)
+            }
+         ]}
+      />
+   );
 }

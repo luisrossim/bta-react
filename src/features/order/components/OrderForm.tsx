@@ -1,4 +1,4 @@
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -48,26 +48,25 @@ export default function OrderForm() {
             <DialogContent>
                <form 
                   onSubmit={form.handleSubmit(onSubmit)} 
-                  className="space-y-6"
+                  className="flex flex-col justify-between gap-8"
                >
-                  <DialogHeader>
-                     <DialogTitle>Nova ordem de serviço</DialogTitle>
-                     <DialogDescription>
-                        Selecione o cliente e uma etapa específica
-                     </DialogDescription>
-                  </DialogHeader>
+                  <div className="space-y-6">
+                     <DialogHeader>
+                        <DialogTitle>Nova ordem de serviço</DialogTitle>
+                     </DialogHeader>
 
-                  <SelectFormItem 
-                     label="Cliente"
-                     name="clienteId"
-                     options={customersOptions}
-                  />
+                     <SelectFormItem 
+                        label="Etapa"
+                        name="etapaId"
+                        options={stageOptions}
+                     />
 
-                  <SelectFormItem 
-                     label="Etapa"
-                     name="etapaId"
-                     options={stageOptions}
-                  />
+                     <SelectFormItem 
+                        label="Cliente"
+                        name="clienteId"
+                        options={customersOptions}
+                     />
+                  </div>
 
                   <DialogFooter>
                      <DialogClose asChild>

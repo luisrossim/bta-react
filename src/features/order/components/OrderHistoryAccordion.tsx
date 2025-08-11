@@ -33,17 +33,11 @@ export function OrderHistoryAccordion({ order, orderHistory }: HistoryAccordionP
                className="mb-3"
             >
                <AccordionItem value={item.etapa.descricao}>
-                  <AccordionTrigger className="cursor-pointer hover:no-underline items-center rounded-b-none rounded-tr-[6px] border rounded-tl-[6px] px-2 py-1 bg-primary/75 text-white">
+                  <AccordionTrigger className="cursor-pointer hover:no-underline items-center py-2 px-2 border rounded-none bg-muted-foreground text-white">
                      <StageHeader stage={item.etapa} />
                   </AccordionTrigger>
                   
                   <AccordionContent className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 border">
-                     <ListItem 
-                        className="lg:col-span-3 xl:col-span-4" 
-                        label="Observações" 
-                        value={item.observacoes} 
-                     />
-
                      {item.etapa.descricao == "Medição" && (
                         <>
                            <ListItem 
@@ -100,6 +94,12 @@ export function OrderHistoryAccordion({ order, orderHistory }: HistoryAccordionP
                               }
                            </div>
                         )} 
+                     />
+
+                     <ListItem 
+                        className="lg:col-span-3 xl:col-span-4" 
+                        label="Observações" 
+                        value={item.observacoes} 
                      />
                   </AccordionContent>
                </AccordionItem>

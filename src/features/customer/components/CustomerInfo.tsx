@@ -5,9 +5,9 @@ import { EmptyData } from "@/shared/components/EmptyData";
 import { ListItem } from "@/shared/components/ListItem";
 import { PatternFormat } from "react-number-format";
 import { formatTimestamp } from "@/shared/utils/formatDate";
-import { CustomerOrderCard } from "./CustomerOrderCard";
 import { useGetCustomerQuery } from "../hooks/useCustomerApi";
 import { LoadingIcon } from "@/shared/components/LoadingIcon";
+import { CustomerOrderItem } from "./CustomerOrderItem";
 
 interface CustomerInfoProps {
    customerId?: string
@@ -28,7 +28,7 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
                <ListItem 
                   label="Nome" 
                   value={customer.nome}
-                  className="bg-muted p-3 rounded-sm"
+                  className="bg-muted p-3 rounded-sm lg:col-span-2"
                />
 
                <ListItem 
@@ -57,14 +57,8 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
 
                <ListItem 
                   label="Endereço" 
-                  value={`${customer.endereco.cidade} (${customer.endereco.estado})`} 
-                  className="bg-muted p-3 rounded-sm"
-               />
-
-               <ListItem 
-                  label="Descrição do endereço" 
                   value={customer.endereco.descricao} 
-                  className="bg-muted p-3 rounded-sm"
+                  className="bg-muted p-3 rounded-sm lg:col-span-2"
                />
 
                <ListItem 
@@ -104,17 +98,17 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
                <ListItem 
                   label="Referência" 
                   value={customer.endereco.referencia} 
-                  className="bg-muted p-3 rounded-sm row-span-2"
-               />
-
-               <ListItem 
-                  label="Cadastrado em" 
-                  value={formatTimestamp(customer.criadoEm)}
                   className="bg-muted p-3 rounded-sm"
                />
 
                <ListItem 
                   label="Atualizado em" 
+                  value={formatTimestamp(customer.criadoEm)}
+                  className="bg-muted p-3 rounded-sm"
+               />
+
+               <ListItem 
+                  label="Cadastrado em" 
                   value={formatTimestamp(customer.criadoEm)}
                   className="bg-muted p-3 rounded-sm"
                />
@@ -126,7 +120,7 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
                   <div className="grid grid-cols-1 gap-4 mt-2">
                      {customer.ordemServico.length > 0 
                         ? customer.ordemServico.map(order => (
-                           <CustomerOrderCard 
+                           <CustomerOrderItem 
                               key={order.id} 
                               order={order} 
                            />
@@ -142,7 +136,7 @@ export function CustomerInfo({ customerId }: CustomerInfoProps) {
             />
          </div>
 
-         <div className="flex gap-4 items-center mt-20">
+         <div className="flex gap-4 items-center mt-12">
             <Button onClick={() => navigate(`/sistema/clientes/form/${customer.id}`)}>
                Editar informações
             </Button>

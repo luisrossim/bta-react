@@ -75,7 +75,6 @@ export function UserForm({ id }: UserFormProps) {
                   label="Cargo"
                   name="role.id"
                   options={rolesOptions}
-                  placeholder="Selecione um cargo"
                />
 
                <MaskFormItem 

@@ -7,12 +7,15 @@ import type { User } from "@/features/user/types/User";
 import { stageService } from "@/features/stages/services/stageService";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { userService } from "@/features/user/services/userService";
+import { showError } from "@/shared/utils/showMessage";
 
 interface OrderFilterProps {
    onSubmit: (data: OrderFilters) => void;
 }
 
-export function OrderFilter({ onSubmit }: OrderFilterProps) {
+export function OrderFilter({ 
+   onSubmit 
+}: OrderFilterProps) {
    const [stages, setStages] = useState<Stage[]>([]);
    const [users, setUsers] = useState<User[]>([])
    const form = useForm<OrderFilters>({
@@ -20,7 +23,7 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
       defaultValues: {
          stageId: -1,
          userId: -1,
-         status: "todos"
+         status: "todas"
       }
    })
 
@@ -36,14 +39,17 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
          setStages(_stages)
          setUsers(_users)
 
-      } catch (err: any) {}
+      } catch (err: any) {
+         showError("Erro ao buscar filtros")
+      }
    }
-
-   const defaultOption = { value: -1, label: "Todos" };
 
    const stageOptions = useMemo(
       () =>
-         [defaultOption].concat(
+         [{ 
+            value: -1, 
+            label: "Todas" 
+         }].concat(
             stages.map((stage) => ({
                value: stage.id,
                label: stage.descricao,
@@ -54,7 +60,10 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
 
    const userOptions = useMemo(
       () =>
-         [defaultOption].concat(
+         [{ 
+            value: -1, 
+            label: "Todos" 
+         }].concat(
             users.map((user) => ({
                value: user.id,
                label: user.nome,
@@ -64,9 +73,10 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
    );
 
    const situationOptions = [
-      { value: "todos", label: "Todos" },
+      { value: "todas", label: "Todas" },
       { value: "andamento", label: "Em andamento" },
       { value: "concluida", label: "Concluída" },
+      { value: "cancelada", label: "Cancelada" },
    ];
 
    useEffect(() => {

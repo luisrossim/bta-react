@@ -1,23 +1,23 @@
-import type { Customer } from "@/features/customer/types/Customer"
-import type { Stage } from "@/features/stages/types/Stage"
 import { customerService } from "@/features/customer/services/customerService"
+import type { CustomerRaw } from "@/features/customer/types/Customer"
 import { orderService } from "@/features/order/services/orderService"
 import { stageService } from "@/features/stages/services/stageService"
+import type { Stage } from "@/features/stages/types/Stage"
 import { useEffect, useMemo, useState } from "react"
+import type { CreateOrder } from "../types/Order"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import type { CreateOrder } from "../types/Order"
 
 export function useOrderForm() {
-   const [customers, setCustomers] = useState<Customer[]>([])
-   const [stages, setStages] = useState<Stage[]>([])
-   const [disableActions, setDisableActions] = useState<boolean>(false)
-   const navigate = useNavigate()
+   const [customers, setCustomers] = useState<CustomerRaw[]>([]);
+   const [stages, setStages] = useState<Stage[]>([]);
+   const [disableActions, setDisableActions] = useState<boolean>(false);
+   const navigate = useNavigate();
 
    const loadCustomersAndStages = async () => {      
       try {
          const [_customers, _stages] = await Promise.all([
-            customerService.get(),
+            customerService.getAll(),
             stageService.get()
          ])
 

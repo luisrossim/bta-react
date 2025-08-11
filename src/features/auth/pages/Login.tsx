@@ -16,9 +16,7 @@ export default function Login() {
 
    return (
       <LoginContainer 
-         form={(
-            <LoginForm />
-         )}
+         form={<LoginForm />}
       />
    );
 }

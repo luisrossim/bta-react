@@ -1,3 +1,5 @@
+import { DropdownActions } from "@/shared/components/DropdownActions";
+import { EmptyData } from "./EmptyData";
 import {
   Table,
   TableBody,
@@ -6,11 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DropdownActions } from "@/shared/components/DropdownActions";
-import { EmptyData } from "./EmptyData";
 
 type DropdownAction = {
-   label: string
+   label: string; 
+   destructive?: boolean;
    onClick: () => void
 }
 
@@ -41,6 +42,7 @@ export function GenericTable<T>({
          <TableHeader>
             <TableRow>
                {actions && <TableHead className="w-[30px]"></TableHead>}
+
                {columns.map((col, index) => (
                   <TableHead 
                      key={index} 
@@ -59,6 +61,7 @@ export function GenericTable<T>({
                         <DropdownActions actions={actions(row)} />
                      </TableCell>
                   )}
+
                   {columns.map((col, index) => (
                      <TableCell 
                         key={index} 

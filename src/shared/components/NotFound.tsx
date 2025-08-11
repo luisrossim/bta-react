@@ -8,9 +8,9 @@ function NotFoundPage() {
       <div className="w-full max-w-md bg-white shadow rounded-xl p-8 text-center">
         <div className="flex flex-col items-center gap-4">
           <AlertCircle className="w-12 h-12 text-primary/60" />
-          <h1 className="text-2xl font-semibold text-slate-800">Página não encontrada</h1>
+          <h1 className="text-2xl font-semibold text-slate-800">Recurso indisponível</h1>
           <p className="text-sm text-slate-600">
-            A URL acessada não corresponde a nenhum conteúdo disponível no sistema.
+            Esta funcionalidade não está disponível no sistema ou encontra-se em fase de desenvolvimento.
           </p>
           <Link to="/sistema">
             <Button className="mt-6 bg-slate-800 hover:bg-slate-900 text-white">

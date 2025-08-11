@@ -51,7 +51,6 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
          diametroAdutoraMestre: order.diametroAdutoraMestre ?? "",
          polegadasValvulasRegistro: order.polegadasValvulasRegistro ?? null,
          tipoEnergiaId: order.tipoEnergiaId ?? null,
-         motobombaId: order.motobombaId ?? null,
          problema: order.problema ?? ""
       }
    });
@@ -63,7 +62,6 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
             diametroAdutoraMestre: order.diametroAdutoraMestre ?? "",
             polegadasValvulasRegistro: order.polegadasValvulasRegistro ?? null,
             tipoEnergiaId: order.tipoEnergiaId ?? null,
-            motobombaId: order.motobombaId ?? null,
             problema: order.problema ?? ""
          });
       }

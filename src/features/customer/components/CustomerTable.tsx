@@ -48,9 +48,17 @@ export function CustomerTable({
             ),
         },
         {
+            header: "Endereço",
+            render: (customer) => (
+                <div className="w-[180px] truncate">
+                    <span>{customer.endereco.descricao}</span>
+                </div>
+            ),
+        },
+        {
             header: "Criado em",
             render: (customer) => (
-                <span className="text-slate-500">
+                <span className="text-muted-foreground">
                     {formatDate(customer.criadoEm)}
                 </span>
             )

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface CommentsFormProps {
    observacoes?: string;
@@ -15,27 +15,37 @@ export function CommentsForm({
    observacoes,
    onSubmit 
 }: CommentsFormProps) {
+   const [edit, setEdit] = useState(true);
+
    const form = useForm<CommentsHistory>({
       resolver: zodResolver(commentsHistorySchema),
       defaultValues: { observacoes }
    });
 
-   useEffect(() => {
+   const resetForm = () => {
       form.reset({ observacoes })
+   }
+
+   useEffect(() => {
+      resetForm();
    }, [observacoes])
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+         <form 
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+         >
             <FormField
                control={form.control}
                name="observacoes"
+               disabled={edit}
                render={({ field }) => (
                   <FormItem>
                      <FormControl>
                         <Textarea
                            placeholder="Nada informado"
-                           className="min-h-[100px] rounded-[12px]"
+                           className="min-h-[100px] rounded-[12px] text-sm"
                            {...field}
                         />
                      </FormControl>
@@ -46,13 +56,37 @@ export function CommentsForm({
             />
 
             <div className="flex justify-end gap-2">
-               <Button 
-               type="submit" 
-               variant={"dark"}
-               disabled={!form.formState.isDirty}
-               >
-                  Salvar observações
-               </Button>
+               {edit 
+                  ? (
+                     <Button 
+                        type="button"
+                        onClick={() => setEdit(false)}
+                     >
+                        Editar observações
+                     </Button>
+                  ) 
+                  : (
+                     <>
+                        <Button 
+                           type="button" 
+                           variant={"outline"}
+                           onClick={() => {
+                              resetForm();
+                              setEdit(true);
+                           }}
+                        >
+                           Cancelar
+                        </Button>
+
+                        <Button 
+                           type="submit" 
+                           variant={"dark"}
+                        >
+                           Salvar observações
+                        </Button>
+                     </>
+                  )
+               }
             </div>
          </form>
       </Form>
