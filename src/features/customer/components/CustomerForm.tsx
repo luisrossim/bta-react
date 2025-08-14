@@ -26,9 +26,8 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
          telefone: '',
          cpf: '',
          endereco: {
-            cidade: "Nova Venécia",
-            estado: "ES",
-         },
+            descricao: ''
+         }
       },
    });
 
@@ -83,20 +82,8 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
                />
 
                <InputFormItem 
-                  label="Descrição do endereço"
+                  label="Endereço"
                   name="endereco.descricao"
-               />
-
-               <InputFormItem 
-                  label="Cidade"
-                  name="endereco.cidade"
-                  disabled
-               />
-
-               <InputFormItem 
-                  label="Estado"
-                  name="endereco.estado"
-                  disabled
                />
 
                <InputFormItem 
@@ -123,7 +110,7 @@ export default function CustomerForm({ customerId }: CustomerFormProps){
                />
             </div>
 
-            <div className="flex items-center gap-4 mt-20">
+            <div className="flex items-center gap-4 mt-10">
                <Button type="submit">
                   { customerId ? "Salvar" : "Cadastrar" }
                </Button>

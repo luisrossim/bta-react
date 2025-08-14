@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { measurementSchema, type Measurement, type Order } from "@/features/order/types/Order";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ClipboardCheck, UserRound } from "lucide-react";
+import { ClipboardCheck } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { InputFormItem } from "@/shared/components/InputFormItem";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -15,8 +17,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useEffect, useState } from "react";
-import { measurementSchema, type Measurement, type Order } from "@/features/order/types/Order";
 
 interface MeasurementFormProps {
    order: Order
@@ -49,7 +49,10 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
 
    return (
       <FormProvider {...form}>
-            <Sheet open={open} onOpenChange={setOpen}>
+            <Sheet 
+               open={open} 
+               onOpenChange={setOpen}
+            >
                <SheetTrigger>
                   <Button variant="outline">
                      <ClipboardCheck className="mr-2" /> Ficha de Medição
@@ -64,8 +67,8 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                      <div>
                         <SheetHeader>
                            <SheetTitle>Ficha de Medição</SheetTitle>
-                           <SheetDescription className="flex items-center gap-1 text-sm text-primary">
-                              <UserRound size={14} />{order.cliente.nome}
+                           <SheetDescription className="flex items-center gap-1 text-sm text-muted-foreground">
+                              Preencha as informações abaixo:
                            </SheetDescription>
                         </SheetHeader>
 
@@ -143,9 +146,11 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
                            <Button variant="outline" type="button">Cancelar</Button>
                         </SheetClose>
                         
-                        <Button type="submit" disabled={!form.formState.isDirty}>
-                           Salvar
-                        </Button>
+                        {form.formState.isDirty && (
+                           <Button type="submit">
+                              Salvar
+                           </Button>
+                        )}
                      </SheetFooter>
                   </form>
                </SheetContent>

@@ -2,16 +2,16 @@ import z from "zod";
 import type { Stage } from "../../stages/types/Stage";
 import type { User } from "../../user/types/User";
 
-interface AtribuicaoRequest {
+export interface AtribuicaoRequest {
    historyId: string
    userId: number
 }
 
-interface Atribuicao {
+export interface Atribuicao {
    usuario: User
 }
 
-interface OrderHistory {
+export interface OrderHistory {
    id: string;
    etapa: Stage
    atribuicoes: Atribuicao[]
@@ -23,25 +23,15 @@ interface OrderHistory {
 }
 
 
-const commentsHistorySchema = z.object({
+export const commentsHistorySchema = z.object({
   observacoes: z.string()
 })
 
-type CommentsHistory = z.infer<typeof commentsHistorySchema>
+export type CommentsHistory = z.infer<typeof commentsHistorySchema>
 
 
-const createAtribuicaoSchema = z.object({
+export const createAtribuicaoSchema = z.object({
    userId: z.number()
 })
 
-type CreateAtribuicao = z.infer<typeof createAtribuicaoSchema>
-
-export {
-   type Atribuicao,
-   type AtribuicaoRequest,
-   type OrderHistory,
-   type CommentsHistory,
-   type CreateAtribuicao,
-   commentsHistorySchema,
-   createAtribuicaoSchema
-}
+export type CreateAtribuicao = z.infer<typeof createAtribuicaoSchema>

@@ -4,11 +4,11 @@ import { formatTimestamp } from "@/shared/utils/formatDate";
 import { ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface CustomerOrderCardProps {
+interface CustomerOrderItemProps {
   order: Order;
 }
 
-export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
+export function CustomerOrderItem({ order }: CustomerOrderItemProps) {
    const historicoAtual = order.historicoOs[0];
    const isConcluida = !!historicoAtual.concluidoEm;
 
@@ -29,6 +29,9 @@ export function CustomerOrderCard({ order }: CustomerOrderCardProps) {
                <p className="text-muted-foreground text-xs">
                   Criada em {formatTimestamp(order.criadoEm)}
                </p>
+               <span className="text-primary text-xs">
+                  N° {order.numero}
+               </span>
             </div>
 
             <div>

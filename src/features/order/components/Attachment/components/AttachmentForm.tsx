@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form"
 import { showWarning } from "@/shared/utils/showMessage"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Plus } from "lucide-react"
+import { FilePlus2 } from "lucide-react"
 import { useState } from "react"
 import {
   Dialog,
@@ -61,10 +61,10 @@ export function AttachmentForm({ onUpload, disableActions }: AttachmentFormProps
       <Dialog open={openModal} onOpenChange={handleOpenChange}>
          <DialogTrigger asChild>
             <button
-               className="group flex flex-col gap-2 cursor-pointer items-center justify-center p-4 rounded-lg hover:bg-muted border border-dashed transition-colors"
+               className="group flex flex-col gap-2 cursor-pointer items-center justify-center p-4 rounded-lg hover:bg-muted border border-dashed transition-colors min-h-[140px]"
             >
                <div className="flex items-center justify-center">
-                  <Plus className="text-muted-foreground" />
+                  <FilePlus2 className="text-muted-foreground" />
                </div>
             </button>
          </DialogTrigger>

@@ -8,6 +8,7 @@ function useGetCustomersQuery(page: number, search: string) {
 
    if (search.trim()) {
       const isCpf = /^\d/.test(search);
+      
       if (isCpf) {
          params.cpf = search;
       } else {
@@ -17,7 +18,7 @@ function useGetCustomersQuery(page: number, search: string) {
 
    return useQuery<PaginatedResponse<Customer>, Error>({
       queryKey: ["customers", page, search],
-      queryFn: () => customerService.getAllPaginated(params),
+      queryFn: () => customerService.getPaginated(params),
       refetchOnWindowFocus: false
    });
 }

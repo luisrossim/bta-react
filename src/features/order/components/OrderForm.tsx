@@ -1,4 +1,4 @@
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { useOrderForm } from "../hooks/useOrderForm";
 import { useState } from "react";
 import { createOrderSchema, type CreateOrder } from "../types/Order";
+import { useCreateOrderMutation } from "../hooks/useOrderApi";
 
 export default function OrderForm() {
    const [openModal, setOpenModal] = useState(false);
@@ -14,9 +15,9 @@ export default function OrderForm() {
    const {
       customersOptions,
       stageOptions,
-      save,
-      disableActions
    } = useOrderForm();
+
+   const { mutateAsync: createOrder, isPending } = useCreateOrderMutation();
 
    const form = useForm<CreateOrder>({
       resolver: zodResolver(createOrderSchema)
@@ -30,9 +31,9 @@ export default function OrderForm() {
       }
    };
 
-   const onSubmit = (data: CreateOrder) => {
+   const onSubmit = async (data: CreateOrder) => {
+      await createOrder(data);
       setOpenModal(false);
-      save(data);
    }
 
    return (
@@ -48,26 +49,25 @@ export default function OrderForm() {
             <DialogContent>
                <form 
                   onSubmit={form.handleSubmit(onSubmit)} 
-                  className="space-y-6"
+                  className="flex flex-col justify-between gap-8"
                >
-                  <DialogHeader>
-                     <DialogTitle>Nova ordem de serviço</DialogTitle>
-                     <DialogDescription>
-                        Selecione o cliente e uma etapa específica
-                     </DialogDescription>
-                  </DialogHeader>
+                  <div className="space-y-6">
+                     <DialogHeader>
+                        <DialogTitle>Nova ordem de serviço</DialogTitle>
+                     </DialogHeader>
 
-                  <SelectFormItem 
-                     label="Cliente"
-                     name="clienteId"
-                     options={customersOptions}
-                  />
+                     <SelectFormItem 
+                        label="Etapa"
+                        name="etapaId"
+                        options={stageOptions}
+                     />
 
-                  <SelectFormItem 
-                     label="Etapa"
-                     name="etapaId"
-                     options={stageOptions}
-                  />
+                     <SelectFormItem 
+                        label="Cliente"
+                        name="clienteId"
+                        options={customersOptions}
+                     />
+                  </div>
 
                   <DialogFooter>
                      <DialogClose asChild>
@@ -76,7 +76,7 @@ export default function OrderForm() {
                         </Button>
                      </DialogClose>
                      <Button 
-                        disabled={disableActions} 
+                        disabled={isPending} 
                         type="submit"
                      >
                         Cadastrar

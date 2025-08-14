@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { CustomerFilter } from "../components/CustomerFilter";
 import { CustomerTable } from "../components/CustomerTable";
 import { useGetCustomersQuery } from "../hooks/useCustomerApi";
-import { Pagination } from "@/shared/components/Pagination";
+import { PaginationFooter } from "@/shared/components/PaginationFooter";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 
 export default function ListCustomers() {
@@ -16,7 +16,7 @@ export default function ListCustomers() {
     const [page, setPage] = useState(1);
     const debouncedSearch = useDebounce(search, 500);
 
-    const { data, isFetching } = useGetCustomersQuery(page, debouncedSearch);
+    const { data: result, isFetching } = useGetCustomersQuery(page, debouncedSearch);
 
     function handleSearchChange(search: string) {
         setSearch(search);
@@ -29,9 +29,9 @@ export default function ListCustomers() {
                 title="Clientes"
                 subtitle="Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade."
                 action={
-                <Button onClick={() => navigate("/sistema/clientes/form")}>
-                    <Plus /> Novo cliente
-                </Button>
+                    <Button onClick={() => navigate("/sistema/clientes/form")}>
+                        <Plus /> Novo cliente
+                    </Button>
                 }
             />
 
@@ -41,15 +41,15 @@ export default function ListCustomers() {
             />
 
             <CustomerTable
-                customers={data?.data ?? []}
+                customers={result?.data ?? []}
                 isFetching={isFetching}
             />
 
-            {data && data.data.length > 0 && (
-                <Pagination
-                    page={data.page}
-                    totalItems={data.total}
-                    totalPages={data.totalPages}
+            {result && result.data.length > 0 && (
+                <PaginationFooter
+                    page={result.page}
+                    totalItems={result.totalItems}
+                    totalPages={result.totalPages}
                     onPageChange={setPage}
                 />
             )}

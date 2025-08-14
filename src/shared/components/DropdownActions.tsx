@@ -8,8 +8,9 @@ import {
 
 interface DropdownActionsProps {
    actions: Array<{ 
-      label: string, 
-      onClick: () => void 
+      label: string;
+      destructive?: boolean;
+      onClick: () => void;
    }>
 }
 
@@ -26,6 +27,7 @@ export function DropdownActions({ actions }: DropdownActionsProps) {
                   key={index}
                   onClick={action.onClick}
                   className="cursor-pointer"
+                  variant={action.destructive ? "destructive" : "default"}
                >
                   {action.label}
                </DropdownMenuItem>

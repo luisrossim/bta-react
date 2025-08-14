@@ -1,10 +1,9 @@
-import { ArrowRight, CheckCircle, Waypoints } from "lucide-react";
+import { ArrowRight, CheckCircle, ClipboardList, Phone, UserRound, Waypoints } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOrderInfo } from "@/features/order/hooks/useOrderInfo";
 import { EmptyData } from "@/shared/components/EmptyData";
 import { PageTitle } from "@/shared/components/PageHeader";
 import { ConfirmDialog } from "@/shared/components/ConfirmDialog";
-import { PatternFormat } from "react-number-format";
 import { Badge } from "@/components/ui/badge";
 import { ListItem } from "@/shared/components/ListItem";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +15,7 @@ import { Attachment } from "../components/Attachment";
 import { CommentsForm } from "../components/CommentsForm";
 import { OrderHistoryAccordion } from "../components/OrderHistoryAccordion";
 import { OrderSheets } from "../components/OrderSheets";
+import { formatTelefone } from "@/shared/utils/formatTelephone";
 import { Link } from "react-router-dom";
 
 export default function ViewOrder() {
@@ -51,11 +51,32 @@ export default function ViewOrder() {
       <div className="space-y-14 mb-14">
          <div className="flex flex-wrap justify-between items-center gap-10">
             <div>
-               <PageTitle title={`Ordem de serviço #${order.numero}`} />
-
-               <div className="flex items-center gap-2 text-primary text-sm mt-2">
-                  <Waypoints size={16} />
-                  <h2>{historicoAtual.etapa.descricao}</h2>
+               <PageTitle title='Ordem de serviço' />
+               
+               <div className="flex flex-col gap-2 text-sm text-primary mt-4">
+                  <div className="flex items-center gap-2">
+                     <ClipboardList size={16} />
+                     <h2>N° {order.numero}</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                     <Waypoints size={16} />
+                     <h2>{historicoAtual.etapa.descricao}</h2>
+                  </div>
+                  <Link 
+                     to={`/sistema/clientes/${order.cliente.id}`}
+                     className="hover:bg-accent transition-colors" 
+                  >
+                     <div className="flex items-center flex-wrap gap-4">
+                        <div className="flex items-center gap-2">
+                           <UserRound size={16} />
+                           <h2>{order.cliente.nome}</h2>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <Phone size={14} />
+                           {formatTelefone(order.cliente.telefone)}
+                        </div>
+                     </div>
+                  </Link>
                </div>
             </div>
 
@@ -92,24 +113,6 @@ export default function ViewOrder() {
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-            <ListItem
-               label="Cliente"
-               className="bg-muted p-3 rounded-sm"
-               value={(
-                  <Link 
-                     to={`/sistema/clientes/${order.cliente.id}`} 
-                     className="flex flex-col gap-1 text-sm text-primary"
-                  >
-                     <p>{order.cliente.nome}</p>
-                     <PatternFormat 
-                        format="(##) #####-####" 
-                        displayType="text" 
-                        value={order.cliente.telefone} 
-                     />
-                  </Link>
-               )}
-            />
-
             <ListItem
                label="Situação"
                className="bg-muted p-3 rounded-sm"

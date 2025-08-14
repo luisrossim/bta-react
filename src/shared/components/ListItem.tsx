@@ -15,7 +15,7 @@ export function ListItem({ label, value, className }: ListItemProps) {
 
          {value 
             ? <div>{value}</div>
-            : <p className="font-light text-muted-foreground">-</p>
+            : <p>-</p>
          }
       </div>
    )

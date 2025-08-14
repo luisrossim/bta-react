@@ -14,18 +14,15 @@ export abstract class CrudService<T> {
         return response.data;
     }
 
-    async get(params?: Record<string, any>): Promise<T[]> {
-        const queryParams = params ?? { raw: 1 };
-        const response = await this.axios.get<T[]>(this.path, {
-            params: queryParams,
-        });
+    async get(): Promise<T[]> {
+        const response = await this.axios.get<T[]>(this.path);
         return response.data;
     }
 
-    async getAllPaginated(params?: Record<string, any>): Promise<PaginatedResponse<T>> {
-        const response = await this.axios.get<PaginatedResponse<T>>(this.path, {
-            params,
-        });
+    async getPaginated(params?: Record<string, any>): Promise<PaginatedResponse<T>> {
+        const response = await this.axios.get<PaginatedResponse<T>>(
+            this.path, { params }
+        );
         return response.data;
     }
 

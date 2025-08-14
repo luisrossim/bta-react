@@ -1,7 +1,7 @@
 import { differenceInDays, differenceInHours, differenceInMinutes } from "date-fns";
 
 export function useCalculateExecutionTime() {
-   const calculateExecutionTime = (criadoEm: Date, concluidoEm: Date) => {
+   const calculateExecutionTime = (criadoEm: Date, concluidoEm?: Date) => {
       const endDate = concluidoEm ?? new Date();
    
       const intervaloEmDias = differenceInDays(endDate, criadoEm);

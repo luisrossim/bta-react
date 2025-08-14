@@ -34,9 +34,7 @@ export function InputFormItem<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>
-            {label}
-          </FormLabel>
+          <FormLabel>{label}</FormLabel>
 
           <FormControl>
             <Input

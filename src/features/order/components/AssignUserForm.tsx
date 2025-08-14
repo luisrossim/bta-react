@@ -70,7 +70,6 @@ export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) 
                      label="Usuário"
                      name="userId"
                      options={stageUsersOptions}
-                     placeholder="Selecione um usuário"
                   />
 
                   <DialogFooter>

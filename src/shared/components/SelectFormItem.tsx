@@ -23,7 +23,7 @@ export function SelectFormItem<T extends FieldValues>({
    name,
    label,
    options,
-   placeholder = "Selecionar"
+   placeholder = "Selecione uma opção"
 }: SelectFormItemProps<T>) {
    const { control } = useFormContext();
    const [search, setSearch] = useState("");
@@ -65,7 +65,9 @@ export function SelectFormItem<T extends FieldValues>({
                      </FormControl>
                   </PopoverTrigger>
 
-                  <PopoverContent>
+                  <PopoverContent
+                     onOpenAutoFocus={(e) => e.preventDefault()}   
+                  >
                      <Command>
                         <CommandInput
                            placeholder="Pesquisar..."
@@ -81,10 +83,10 @@ export function SelectFormItem<T extends FieldValues>({
                            </CommandEmpty>
 
                            <CommandGroup>
-                              {filteredOptions.map((option) => (
+                              {filteredOptions.map((option, index) => (
                                  <CommandItem
+                                    key={index}
                                     value={option.label}
-                                    key={option.value}
                                     onSelect={() => {
                                        field.onChange(option.value)
                                        setSearch("");
