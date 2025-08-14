@@ -7,6 +7,7 @@ import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { useOrderForm } from "../hooks/useOrderForm";
 import { useState } from "react";
 import { createOrderSchema, type CreateOrder } from "../types/Order";
+import { useCreateOrderMutation } from "../hooks/useOrderApi";
 
 export default function OrderForm() {
    const [openModal, setOpenModal] = useState(false);
@@ -14,9 +15,9 @@ export default function OrderForm() {
    const {
       customersOptions,
       stageOptions,
-      save,
-      disableActions
    } = useOrderForm();
+
+   const { mutateAsync: createOrder, isPending } = useCreateOrderMutation();
 
    const form = useForm<CreateOrder>({
       resolver: zodResolver(createOrderSchema)
@@ -30,9 +31,9 @@ export default function OrderForm() {
       }
    };
 
-   const onSubmit = (data: CreateOrder) => {
+   const onSubmit = async (data: CreateOrder) => {
+      await createOrder(data);
       setOpenModal(false);
-      save(data);
    }
 
    return (
@@ -75,7 +76,7 @@ export default function OrderForm() {
                         </Button>
                      </DialogClose>
                      <Button 
-                        disabled={disableActions} 
+                        disabled={isPending} 
                         type="submit"
                      >
                         Cadastrar

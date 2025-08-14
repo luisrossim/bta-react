@@ -1,7 +1,7 @@
 import type { PaginatedResponse } from "@/shared/types/PaginatedResponse";
 import { orderService } from "@/features/order/services/orderService";
-import { useQuery } from "@tanstack/react-query";
-import type { Order } from "../types/Order";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { CreateOrder, Order } from "../types/Order";
 import type { OrderFilters } from "../types/OrderFilters";
 
 function useGetOrdersQuery(page: number, filters: OrderFilters) {
@@ -14,4 +14,18 @@ function useGetOrdersQuery(page: number, filters: OrderFilters) {
    });
 }
 
-export { useGetOrdersQuery };
+function useCreateOrderMutation() {
+   const queryClient = useQueryClient();
+
+   return useMutation<Order, Error, CreateOrder>({
+      mutationFn: (data: CreateOrder) => orderService.create(data),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["orders"]})
+      }
+   });
+}
+
+export { 
+   useGetOrdersQuery,
+   useCreateOrderMutation
+};

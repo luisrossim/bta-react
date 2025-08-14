@@ -1,18 +1,13 @@
 import { customerService } from "@/features/customer/services/customerService"
 import type { CustomerRaw } from "@/features/customer/types/Customer"
-import { orderService } from "@/features/order/services/orderService"
 import { stageService } from "@/features/stages/services/stageService"
 import type { Stage } from "@/features/stages/types/Stage"
+import { showError } from "@/shared/utils/showMessage"
 import { useEffect, useMemo, useState } from "react"
-import type { CreateOrder } from "../types/Order"
-import { useNavigate } from "react-router-dom"
-import { toast } from "sonner"
 
 export function useOrderForm() {
    const [customers, setCustomers] = useState<CustomerRaw[]>([]);
    const [stages, setStages] = useState<Stage[]>([]);
-   const [disableActions, setDisableActions] = useState<boolean>(false);
-   const navigate = useNavigate();
 
    const loadCustomersAndStages = async () => {      
       try {
@@ -24,23 +19,8 @@ export function useOrderForm() {
          setCustomers(_customers);
          setStages(_stages);
 
-      } catch (err: any) {}
-   }
-
-
-   const save = async (data: CreateOrder) => {
-      setDisableActions(true);
-      const toastId = toast.loading("Criando ordem de serviço");
-      
-      try {
-         const order = await orderService.create(data);
-         toast.success("Ordem de serviço criada com sucesso", { id: toastId });
-         navigate(`/sistema/ordens/${order.id}`)
-
       } catch (err: any) {
-         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
-      } finally {
-         setDisableActions(false);
+         showError(err);
       }
    }
 
@@ -69,9 +49,7 @@ export function useOrderForm() {
    }, [])
 
    return {
-      save,  
       customersOptions,
       stageOptions,
-      disableActions
    }
 }
