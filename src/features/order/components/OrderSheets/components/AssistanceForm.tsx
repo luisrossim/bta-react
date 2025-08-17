@@ -50,7 +50,7 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
          observacoes: order.observacoes ?? "",
          diametroAdutoraMestre: order.diametroAdutoraMestre ?? "",
          polegadasValvulasRegistro: order.polegadasValvulasRegistro ?? null,
-         tipoEnergiaId: order.tipoEnergiaId ?? null,
+         tipoEnergiaId: order.tipoEnergia?.id ?? null,
          problema: order.problema ?? ""
       }
    });
@@ -61,7 +61,7 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
             observacoes: order.observacoes ?? "",
             diametroAdutoraMestre: order.diametroAdutoraMestre ?? "",
             polegadasValvulasRegistro: order.polegadasValvulasRegistro ?? null,
-            tipoEnergiaId: order.tipoEnergiaId ?? null,
+            tipoEnergiaId: order.tipoEnergia?.id ?? null,
             problema: order.problema ?? ""
          });
       }
