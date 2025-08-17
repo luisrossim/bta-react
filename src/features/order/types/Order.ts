@@ -2,6 +2,7 @@ import z from "zod";
 import type { Customer } from "@/features/customer/types/Customer";
 import type { OrderHistory } from "@/features/order/types/OrderHistory";
 import type { Attachment } from "./Attachment";
+import type { EnergyType } from "./EnergyType";
 
 export const createOrderSchema = z.object({
   clienteId: z.number().positive(),
@@ -35,6 +36,6 @@ export type Order = Omit<CreateOrder, "etapaId"> &
     cliente: Customer,
     anexos?: Attachment[],
     historicoOs: OrderHistory[],
-    tipoEnergia?: any
+    tipoEnergia?: EnergyType
     criadoEm: Date;
   };
