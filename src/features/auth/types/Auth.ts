@@ -8,6 +8,7 @@ export const authRequestSchema = z.object({
 export type AuthRequest = z.infer<typeof authRequestSchema>
 
 export type AuthUser = {
+   id: number
    login: string
    role: string
 }

@@ -1,85 +1,89 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useNavigate } from "react-router-dom";
-import { RoleBadge } from "@/features/user/components/RoleBadge";
-import type { Roles } from "@/features/user/types/Role";
-import { EmptyData } from "@/shared/components/EmptyData";
-import { useUsers } from "../hooks/useUsers";
-import { useEffect } from "react";
-import { PatternFormat } from "react-number-format";
-import { UserStatusToggle } from "./UserStatusToggle";
-import { DropdownActions } from "@/shared/components/DropdownActions";
-import { formatDate } from "@/shared/utils/formatDate";
+import { RoleBadge } from '@/features/user/components/RoleBadge';
+import type { Roles } from '@/features/user/types/Role';
+import { GenericTable, type Column } from '@/shared/components/GenericTable';
+import { LoadingIcon } from '@/shared/components/LoadingIcon';
+import { formatTimestamp } from '@/shared/utils/formatDate';
+import { PatternFormat } from 'react-number-format';
+import { useNavigate } from 'react-router-dom';
+import type { User } from '../types/User';
+import { UserStatusToggle } from './UserStatusToggle';
 
+interface UserListProps {
+    users?: User[];
+    onChangeUserStatus: (userId: number) => Promise<void>;
+    isFetching: boolean;
+    disableActions: boolean;
+}
 
-export function UserList() {
-   const navigate = useNavigate();
-   
-   const {
-      users,
-      changeUserStatus,
-      fetchUsers,
-      disableActions
-   } = useUsers();
+export function UserList({
+    users = [],
+    isFetching,
+    onChangeUserStatus,
+    disableActions,
+}: UserListProps) {
+    const navigate = useNavigate();
 
-   useEffect(() => {
-      fetchUsers();
-   }, [])
+    if (isFetching) return <LoadingIcon />;
 
-   if(!users || users.length == 0) return <EmptyData />
+    const columns: Column<User>[] = [
+        {
+            header: 'Nome',
+            render: (user) => <span className="font-medium">{user.nome}</span>,
+        },
+        {
+            header: 'Cargo',
+            render: (user) => (
+                <RoleBadge
+                    role={user.role.descricao as Roles}
+                    rounded={false}
+                />
+            ),
+        },
+        {
+            header: 'Email',
+            render: (user) => user.email,
+        },
+        {
+            header: 'Telefone',
+            render: (user) => (
+                <PatternFormat
+                    format="(##) #####-####"
+                    displayType="text"
+                    value={user.telefone}
+                />
+            ),
+        },
+        {
+            header: 'Criado em',
+            render: (user) => (
+                <span className="text-muted-foreground">
+                    {formatTimestamp(user.criadoEm)}
+                </span>
+            ),
+        },
+        {
+            header: 'Situação',
+            render: (user) => (
+                <UserStatusToggle
+                    user={user}
+                    onToggle={onChangeUserStatus}
+                    disableActions={disableActions}
+                />
+            ),
+        },
+    ];
 
-   return (
-      <Table className="table-striped">
-         <TableHeader>
-            <TableRow>
-               <TableHead>Nome</TableHead>
-               <TableHead>Cargo</TableHead>
-               <TableHead>Email</TableHead>
-               <TableHead>Telefone</TableHead>
-               <TableHead>Criado em</TableHead>
-               <TableHead></TableHead>
-            </TableRow>
-         </TableHeader>
-         <TableBody>
-            {users.map((user) => (
-               <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.nome}</TableCell>
-                  <TableCell>
-                     <RoleBadge 
-                        role={user.role.descricao as Roles} 
-                        rounded={false} 
-                     />
-                  </TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                     <PatternFormat 
-                        format="(##) #####-####" 
-                        displayType="text" 
-                        value={user.telefone} 
-                     />
-                  </TableCell>
-                  <TableCell className="text-slate-500">
-                     {formatDate(user.criadoEm)}
-                  </TableCell>
-                  
-                  <TableCell className="flex gap-3 items-center justify-end">
-                     <UserStatusToggle
-                        user={user}
-                        onToggle={changeUserStatus}
-                        disableActions={disableActions} 
-                     />
-
-                     <DropdownActions 
-                        actions={[
-                           {
-                              label: "Editar",
-                              onClick: () => navigate(`/sistema/usuarios/form/${user.id}`)
-                           }
-                        ]}
-                     />
-                  </TableCell>
-               </TableRow>
-            ))}
-         </TableBody>
-      </Table>
-   )
+    return (
+        <GenericTable
+            data={users}
+            columns={columns}
+            actions={(user) => [
+                {
+                    label: 'Editar',
+                    onClick: () =>
+                        navigate(`/sistema/usuarios/form/${user.id}`),
+                },
+            ]}
+        />
+    );
 }

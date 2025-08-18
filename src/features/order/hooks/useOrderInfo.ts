@@ -1,176 +1,201 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { type AtribuicaoRequest, type CommentsHistory, type OrderHistory } from '@/features/order/types/OrderHistory'
-import { orderService } from '@/features/order/services/orderService'
-import { orderHistoryService } from '@/features/order/services/orderHistoryService'
-import { toast } from 'sonner'
-import type { Assistance, Measurement, Order } from '../types/Order'
-import { showError, showSuccess } from '@/shared/utils/showMessage'
+import { orderHistoryService } from '@/features/order/services/orderHistoryService';
+import { orderService } from '@/features/order/services/orderService';
+import {
+    type AtribuicaoRequest,
+    type CommentsHistory,
+    type OrderHistory,
+} from '@/features/order/types/OrderHistory';
+import { showError, showSuccess } from '@/shared/utils/showMessage';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+import type { Assistance, Measurement, Order } from '../types/Order';
 
 export function useOrderInfo() {
-   const { id } = useParams()
-   const [order, setOrder] = useState<Order | null>(null)
-   const [historicoAtual, setHistoricoAtual] = useState<OrderHistory | null>(null)
-   const [historicoPassados, setHistoricoPassados] = useState<OrderHistory[]>([])
-   const [disableActions, setDisableActions] = useState<boolean>(false); 
+    const { id } = useParams();
+    const [order, setOrder] = useState<Order | null>(null);
+    const [historicoAtual, setHistoricoAtual] = useState<OrderHistory | null>(
+        null
+    );
+    const [historicoPassados, setHistoricoPassados] = useState<OrderHistory[]>(
+        []
+    );
+    const [disableActions, setDisableActions] = useState<boolean>(false);
 
-   useEffect(() => {
-      if (id) loadServiceOrderInfo()
-   }, [id])
+    useEffect(() => {
+        if (id) loadServiceOrderInfo();
+    }, [id]);
 
-   const loadServiceOrderInfo = async () => {
-      try {
-         const _order = await orderService.getById(id!)
-         const [atual, ...passados] = _order.historicoOs;
-         setOrder(_order);
-         setHistoricoAtual(atual);
-         setHistoricoPassados(passados);
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+    const loadServiceOrderInfo = async () => {
+        try {
+            const _order = await orderService.getById(id!);
+            const [atual, ...passados] = _order.historicoOs;
+            setOrder(_order);
+            setHistoricoAtual(atual);
+            setHistoricoPassados(passados);
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const atribuir = async (userId: number) => {
-      const data: AtribuicaoRequest = {
-         historyId: historicoAtual!.id,
-         userId
-      }
+    const atribuir = async (userId: number) => {
+        const data: AtribuicaoRequest = {
+            historyId: historicoAtual!.id,
+            userId,
+        };
 
-      try {
-         await orderHistoryService.atribuir(data);
-         showSuccess("Usuário atribuído com sucesso.")
-         loadServiceOrderInfo();
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.atribuir(data);
+            showSuccess('Usuário atribuído com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const desatribuir = async (userId: number) => {
-      const data: AtribuicaoRequest = {
-         historyId: historicoAtual!.id,
-         userId
-      }
+    const seAtribuir = async (userId: number) => {
+        const data: AtribuicaoRequest = {
+            historyId: historicoAtual!.id,
+            userId,
+        };
 
-      try {
-         await orderHistoryService.desatribuir(data);
-         showSuccess("Usuário desatribuído com sucesso.")
-         loadServiceOrderInfo();
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.seAtribuir(data);
+            showSuccess('Auto atribuição realizada com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const concluir = async () => {
-      if (!historicoAtual) return;
+    const desatribuir = async (userId: number) => {
+        const data: AtribuicaoRequest = {
+            historyId: historicoAtual!.id,
+            userId,
+        };
 
-      try {
-         await orderHistoryService.concluir(historicoAtual.id);
-         showSuccess("Etapa concluída com sucesso.")
-         loadServiceOrderInfo()
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.desatribuir(data);
+            showSuccess('Usuário desatribuído com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const avancar = async () => {
-      if (!historicoAtual) return;
+    const concluir = async () => {
+        if (!historicoAtual) return;
 
-      try {
-         await orderHistoryService.avancar(historicoAtual.id)
-         showSuccess("Etapa atualizada com sucesso.")
-         loadServiceOrderInfo()
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.concluir(historicoAtual.id);
+            showSuccess('Etapa concluída com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const comments = async (values: CommentsHistory) => {
-      if (!historicoAtual) return;
+    const avancar = async () => {
+        if (!historicoAtual) return;
 
-      try {
-         await orderHistoryService.comments(historicoAtual.id, values);
-         showSuccess("Etapa atualizada com sucesso.");
-         loadServiceOrderInfo();
-         
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.avancar(historicoAtual.id);
+            showSuccess('Etapa atualizada com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const saveMeasurement = async (values: Measurement) => {
-      if(!order) return;
+    const comments = async (values: CommentsHistory) => {
+        if (!historicoAtual) return;
 
-      try {
-         await orderService.saveMeasurement(order.id, values);
-         showSuccess("Formulário de medição salvo com sucesso.");
-         loadServiceOrderInfo();
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderHistoryService.comments(historicoAtual.id, values);
+            showSuccess('Etapa atualizada com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const saveAssistance = async (values: Assistance) => {
-      if(!order) return;
+    const saveMeasurement = async (values: Measurement) => {
+        if (!order) return;
 
-      try {
-         await orderService.saveAssistance(order.id, values);
-          showSuccess("Formulário de assistência salvo com sucesso.")
-         loadServiceOrderInfo();
-      } catch (err: any) {
-         showError(err.message);
-      }
-   }
+        try {
+            await orderService.saveMeasurement(order.id, values);
+            showSuccess('Formulário de medição salvo com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-   const uploadFile = async (file: FormData) => {
-      if(!order) return;
-      
-      setDisableActions(true);
+    const saveAssistance = async (values: Assistance) => {
+        if (!order) return;
 
-      const toastId = toast.loading("Salvando arquivo...");
+        try {
+            await orderService.saveAssistance(order.id, values);
+            showSuccess('Formulário de assistência salvo com sucesso.');
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-      try {
-         await orderService.uploadAttachment(order.id, file);
-         toast.success("Arquivo salvo com sucesso!", { id: toastId });
-         loadServiceOrderInfo();
+    const uploadFile = async (file: FormData) => {
+        if (!order) return;
 
-      } catch (err: any) {
-         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
-      } finally {
-         setDisableActions(false);
-      }
-   }
+        setDisableActions(true);
 
-   const viewAttachment = async (attachmentId: string) => {
-      setDisableActions(true);
+        const toastId = toast.loading('Salvando arquivo...');
 
-      const toastId = toast.loading("Buscando arquivo...");
+        try {
+            await orderService.uploadAttachment(order.id, file);
+            toast.success('Arquivo salvo com sucesso!', { id: toastId });
+            loadServiceOrderInfo();
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || err?.message, {
+                id: toastId,
+            });
+        } finally {
+            setDisableActions(false);
+        }
+    };
 
-      try {
-         const attachment = await orderService.viewAttachment(attachmentId);
-         toast.success("Arquivo encontrado com sucesso!", { id: toastId });
-         return attachment;
+    const viewAttachment = async (attachmentId: string) => {
+        setDisableActions(true);
 
-      } catch (err: any) {
-         toast.error(err?.response?.data?.message || err?.message, { id: toastId });
-      } finally {
-         setDisableActions(false);
-      }
-   }
+        const toastId = toast.loading('Buscando arquivo...');
 
-   return {
-      id,
-      order,
-      historicoAtual,
-      historicoPassados,
-      atribuir,
-      desatribuir,
-      concluir,
-      avancar,
-      comments,
-      uploadFile,
-      viewAttachment,
-      saveMeasurement,
-      saveAssistance,
-      disableActions
-   }
+        try {
+            const attachment = await orderService.viewAttachment(attachmentId);
+            toast.success('Arquivo encontrado com sucesso!', { id: toastId });
+            return attachment;
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || err?.message, {
+                id: toastId,
+            });
+        } finally {
+            setDisableActions(false);
+        }
+    };
+
+    return {
+        id,
+        order,
+        historicoAtual,
+        historicoPassados,
+        atribuir,
+        seAtribuir,
+        desatribuir,
+        concluir,
+        avancar,
+        comments,
+        uploadFile,
+        viewAttachment,
+        saveMeasurement,
+        saveAssistance,
+        disableActions,
+    };
 }

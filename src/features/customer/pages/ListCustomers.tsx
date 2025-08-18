@@ -1,22 +1,25 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { PageHeader } from "@/shared/components/PageHeader";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { CustomerFilter } from "../components/CustomerFilter";
-import { CustomerTable } from "../components/CustomerTable";
-import { useGetCustomersQuery } from "../hooks/useCustomerApi";
-import { PaginationFooter } from "@/shared/components/PaginationFooter";
-import { useDebounce } from "@/shared/hooks/useDebounce";
+import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/shared/components/PageHeader';
+import { PaginationFooter } from '@/shared/components/PaginationFooter';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CustomerFilter } from '../components/CustomerFilter';
+import { CustomerTable } from '../components/CustomerTable';
+import { useGetCustomersQuery } from '../hooks/useCustomerApi';
 
 export default function ListCustomers() {
     const navigate = useNavigate();
 
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const debouncedSearch = useDebounce(search, 500);
 
-    const { data: result, isFetching } = useGetCustomersQuery(page, debouncedSearch);
+    const { data: result, isFetching } = useGetCustomersQuery(
+        page,
+        debouncedSearch
+    );
 
     function handleSearchChange(search: string) {
         setSearch(search);
@@ -24,21 +27,18 @@ export default function ListCustomers() {
     }
 
     return (
-        <div className="space-y-10">
+        <div className='space-y-10'>
             <PageHeader
-                title="Clientes"
-                subtitle="Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade."
+                title='Clientes'
+                subtitle='Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade.'
                 action={
-                    <Button onClick={() => navigate("/sistema/clientes/form")}>
+                    <Button onClick={() => navigate('/sistema/clientes/form')}>
                         <Plus /> Novo cliente
                     </Button>
                 }
             />
 
-            <CustomerFilter
-                search={search}
-                onSearch={handleSearchChange}
-            />
+            <CustomerFilter search={search} onSearch={handleSearchChange} />
 
             <CustomerTable
                 customers={result?.data ?? []}

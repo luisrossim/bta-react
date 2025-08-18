@@ -1,11 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { getStorageItem, removeStorageItem, setStorageItem } from "@/shared/utils/localStorage";
 import type { AuthUser } from "../types/Auth";
 import { STORAGE_KEYS } from "@/shared/constants/storageKeys";
 import { useLogoutMutation, useVerifyAuthQuery } from "../hooks/useAuthApi";
 
 interface AuthContextType {
-   userLogged?: AuthUser
+   userLogged?: AuthUser;
+   isAdmin: boolean;
    isAuthenticated: boolean;
    saveLogin: (user: AuthUser) => void;
    logout: () => void;
@@ -30,6 +31,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    const [isAuthenticated, setIsAuthenticated] = useState(() => {
       return !!getStorageItem<AuthUser>(STORAGE_KEYS.AUTH);
    });
+
+   const isAdmin = useMemo(() => {
+      const user = getStorageItem<AuthUser>(STORAGE_KEYS.AUTH);
+      return user?.role == "Administrador";
+   }, [isAuthenticated]);
 
    const { refetch: verifyAuth } = useVerifyAuthQuery();
    const { mutate: logoutMutation } = useLogoutMutation();
@@ -64,7 +70,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    };
 
    return (
-      <AuthContext.Provider value={{ userLogged, isAuthenticated, saveLogin, logout, verify }}>
+      <AuthContext.Provider value={{ userLogged, isAdmin, isAuthenticated, saveLogin, logout, verify }}>
          {children}
       </AuthContext.Provider>
    );
