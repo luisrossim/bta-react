@@ -9,7 +9,11 @@ interface UserStatusToggleProps {
    disableActions: boolean
 }
 
-export function UserStatusToggle({ user, onToggle, disableActions }: UserStatusToggleProps) {
+export function UserStatusToggle({ 
+   user, 
+   onToggle, 
+   disableActions
+}: UserStatusToggleProps) {
    const actionTitle = user.isAtivo ? "Desativar usuário" : "Ativar usuário";
 
    return (

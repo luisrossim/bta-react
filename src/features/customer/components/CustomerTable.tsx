@@ -1,69 +1,67 @@
-import { useNavigate } from "react-router-dom";
-import type { Customer } from "@/features/customer/types/Customer";
-import { PatternFormat } from "react-number-format";
-import { formatDate } from "@/shared/utils/formatDate";
-import { GenericTable, type Column } from "@/shared/components/GenericTable";
-import { LoadingIcon } from "@/shared/components/LoadingIcon";
+import type { Customer } from '@/features/customer/types/Customer';
+import { GenericTable, type Column } from '@/shared/components/GenericTable';
+import { LoadingIcon } from '@/shared/components/LoadingIcon';
+import { formatDate } from '@/shared/utils/formatDate';
+import { PatternFormat } from 'react-number-format';
+import { useNavigate } from 'react-router-dom';
 
 interface CustomerTableProps {
     customers?: Customer[];
     isFetching: boolean;
 }
 
-export function CustomerTable({ 
+export function CustomerTable({
     customers = [],
-    isFetching
-}: CustomerTableProps){
+    isFetching,
+}: CustomerTableProps) {
     const navigate = useNavigate();
 
-    if(isFetching) return <LoadingIcon />
+    if (isFetching) return <LoadingIcon />;
 
     const columns: Column<Customer>[] = [
         {
-            header: "Nome",
+            header: 'Nome',
             render: (customer) => (
-                <span className="font-medium">
-                    {customer.nome}
-                </span>
-            )
+                <span className='font-medium'>{customer.nome}</span>
+            ),
         },
         {
-            header: "CPF",
+            header: 'CPF',
             render: (customer) => (
-                <PatternFormat 
-                    format="###.###.###-##" 
-                    displayType="text" 
-                    value={customer.cpf} 
+                <PatternFormat
+                    format='###.###.###-##'
+                    displayType='text'
+                    value={customer.cpf}
                 />
             ),
         },
         {
-            header: "Telefone",
+            header: 'Telefone',
             render: (customer) => (
-                <PatternFormat 
-                    format="(##) #####-####" 
-                    displayType="text" 
-                    value={customer.telefone} 
+                <PatternFormat
+                    format='(##) #####-####'
+                    displayType='text'
+                    value={customer.telefone}
                 />
             ),
         },
         {
-            header: "Endereço",
+            header: 'Endereço',
             render: (customer) => (
-                <div className="w-[180px] truncate">
+                <div className='w-[180px] truncate'>
                     <span>{customer.endereco.descricao}</span>
                 </div>
             ),
         },
         {
-            header: "Criado em",
+            header: 'Criado em',
             render: (customer) => (
-                <span className="text-muted-foreground">
+                <span className='text-muted-foreground'>
                     {formatDate(customer.criadoEm)}
                 </span>
-            )
+            ),
         },
-    ]
+    ];
 
     return (
         <GenericTable
@@ -71,12 +69,13 @@ export function CustomerTable({
             columns={columns}
             actions={(customer) => [
                 {
-                    label: "Visualizar",
+                    label: 'Visualizar',
                     onClick: () => navigate(`/sistema/clientes/${customer.id}`),
                 },
                 {
-                    label: "Editar",
-                    onClick: () => navigate(`/sistema/clientes/form/${customer.id}`),
+                    label: 'Editar',
+                    onClick: () =>
+                        navigate(`/sistema/clientes/form/${customer.id}`),
                 },
             ]}
         />
