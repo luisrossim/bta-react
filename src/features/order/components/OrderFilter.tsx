@@ -1,13 +1,14 @@
 import { orderFiltersSchema, type OrderFilters } from "@/features/order/types/OrderFilters"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { FormProvider, useForm, useWatch } from "react-hook-form"
-import { useEffect, useMemo, useState } from "react";
-import type { Stage } from "@/features/stages/types/Stage";
-import type { User } from "@/features/user/types/User";
 import { stageService } from "@/features/stages/services/stageService";
+import { useAuthContext } from "@/features/auth/contexts/AuthContext";
 import { SelectFormItem } from "@/shared/components/SelectFormItem";
 import { userService } from "@/features/user/services/userService";
+import { FormProvider, useForm, useWatch } from "react-hook-form"
+import type { Stage } from "@/features/stages/types/Stage";
 import { showError } from "@/shared/utils/showMessage";
+import type { User } from "@/features/user/types/User";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useMemo, useState } from "react";
 
 interface OrderFilterProps {
    onSubmit: (data: OrderFilters) => void;
@@ -17,12 +18,14 @@ export function OrderFilter({
    onSubmit 
 }: OrderFilterProps) {
    const [stages, setStages] = useState<Stage[]>([]);
-   const [users, setUsers] = useState<User[]>([])
+   const [users, setUsers] = useState<User[]>([]);
+   const { isAdmin, userLogged } = useAuthContext();
+
    const form = useForm<OrderFilters>({
       resolver: zodResolver(orderFiltersSchema),
       defaultValues: {
          stageId: -1,
-         userId: -1,
+         userId: isAdmin ? -1 : userLogged?.id,
          status: "todas"
       }
    })
@@ -31,10 +34,13 @@ export function OrderFilter({
 
    async function fetchStagesAndAssociated() {
       try {
-         const [_stages, _users] = await Promise.all([
-            stageService.get(),
-            userService.get()
-         ])
+         const _stages = await stageService.get();
+
+         let _users: User[] = [];
+
+         if(isAdmin) {
+            _users = await userService.get();
+         }
 
          setStages(_stages)
          setUsers(_users)
@@ -96,11 +102,13 @@ export function OrderFilter({
                options={stageOptions}
             />
 
-            <SelectFormItem 
-               name="userId"
-               label="Usuário"
-               options={userOptions}
-            />
+            { isAdmin && (
+               <SelectFormItem 
+                  name="userId"
+                  label="Usuário"
+                  options={userOptions}
+               />
+            )}
 
             <SelectFormItem 
                name="status"

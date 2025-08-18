@@ -17,8 +17,11 @@ import { OrderHistoryAccordion } from "../components/OrderHistoryAccordion";
 import { OrderSheets } from "../components/OrderSheets";
 import { formatTelefone } from "@/shared/utils/formatTelephone";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "@/features/auth/contexts/AuthContext";
 
 export default function ViewOrder() {
+   const { isAdmin } = useAuthContext();
+
    const {
       order,
       historicoAtual,
@@ -151,12 +154,20 @@ export default function ViewOrder() {
                         )
                      )}
 
-                     <AssignUserForm 
-                        stageUsers={historicoAtual.etapa.etapaUsuario}
-                        onAtribuir={atribuir} 
-                     />
+                     { isAdmin && (
+                        <AssignUserForm 
+                           stageUsers={historicoAtual.etapa.etapaUsuario}
+                           onAtribuir={atribuir} 
+                        />
+                     )}
                   </>
                )}
+            />
+
+            <ListItem 
+               label="Tempo de execução"
+               className="bg-muted p-3 rounded-sm"
+               value={calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
             />
 
             <ListItem
@@ -175,12 +186,6 @@ export default function ViewOrder() {
                label="Concluída por"
                className="bg-muted p-3 rounded-sm"
                value={historicoAtual.concluidoPor?.nome}
-            />
-
-            <ListItem 
-               label="Tempo de execução"
-               className="bg-muted p-3 rounded-sm"
-               value={calculateExecutionTime(historicoAtual.criadoEm, historicoAtual.concluidoEm!)}
             />
          </div>
 
