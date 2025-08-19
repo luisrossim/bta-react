@@ -170,7 +170,6 @@ export function useOrderInfo() {
 
         try {
             const attachment = await orderService.viewAttachment(attachmentId);
-            toast.success('Arquivo encontrado com sucesso!', { id: toastId });
             return attachment;
         } catch (err: any) {
             toast.error(err?.response?.data?.message || err?.message, {

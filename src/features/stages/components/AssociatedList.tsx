@@ -1,79 +1,79 @@
-import { EmptyData } from "@/shared/components/EmptyData";
-import { DisassociateForm } from "./DisassociateForm";
-import { StageHeader } from "./StageHeader";
-import type { AssociatedUsers, Stage } from "@/features/stages/types/Stage";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { Badge } from '@/components/ui/badge';
+import type { AssociatedUsers, Stage } from '@/features/stages/types/Stage';
+import { EmptyData } from '@/shared/components/EmptyData';
+import { DisassociateForm } from './DisassociateForm';
 
 interface AssociatedListProps {
-   stages: Stage[]
-   associated: AssociatedUsers[]
-   onDisassociate: (stageId: number, userId: number) => void
-   disableActions: boolean
+    stages: Stage[];
+    associated: AssociatedUsers[];
+    onDisassociate: (stageId: number, userId: number) => void;
+    disableActions: boolean;
 }
 
-export function AssociatedList({ 
-   stages, 
-   associated,
-   onDisassociate,
-   disableActions
+export function AssociatedList({
+    stages,
+    associated,
+    onDisassociate,
+    disableActions,
 }: AssociatedListProps) {
-   if (!stages || !associated) {
-      return <EmptyData />
-   }
+    if (!stages || !associated) {
+        return <EmptyData />;
+    }
 
-   return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-8 my-4">
-         {stages.map((stage, index) => {
-            const vinculados = associated.find(a => a.stageId === stage.id);
+    return (
+        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 my-4'>
+            {stages.map((stage, index) => {
+                const vinculados = associated.find(
+                    (a) => a.stageId === stage.id
+                );
 
-            return (
-               <Accordion key={index} type="single" collapsible defaultValue={stage.descricao}>
-                  <AccordionItem value={stage.descricao}>
-                     <AccordionTrigger className="cursor-pointer items-center hover:no-underline rounded-b-none rounded-tr-[6px] border rounded-tl-[6px] px-2 py-1 bg-primary/75 text-white">
-                        <StageHeader stage={stage} />
-                     </AccordionTrigger>
-                     
-                     <AccordionContent className="p-2 border">
+                return (
+                    <div
+                        key={index}
+                        className='space-y-4 border min-h-[150px] rounded-lg p-4'
+                    >
+                        <div className='flex items-center gap-2'>
+                            <Badge className='w-[24px] h-[24px]'>
+                                {stage.id}
+                            </Badge>
+                            <h2 className='font-semibold text-sm'>
+                                {stage.descricao}
+                            </h2>
+                        </div>
+
                         {vinculados && vinculados.users.length > 0 ? (
-                           <ul className="grid grid-cols-1 text-sm gap-2">
-                              {vinculados.users.map(user => (
-                                 <li 
-                                    key={user.id} 
-                                    className="flex items-center justify-between gap-4"
-                                 >
-                                    <div className="flex items-center gap-2">
-                                       <DisassociateForm
-                                          stage={stage} 
-                                          user={user}
-                                          onSubmit={onDisassociate}
-                                          disableActions={disableActions}
-                                       />
-                                       <span className="font-medium">
-                                          {user.nome}
-                                       </span> 
-                                    </div>
+                            <ul className='grid grid-cols-1 text-sm gap-1'>
+                                {vinculados.users.map((user) => (
+                                    <li
+                                        key={user.id}
+                                        className='flex items-center justify-between gap-4'
+                                    >
+                                        <div className='flex items-center gap-2'>
+                                            <DisassociateForm
+                                                stage={stage}
+                                                user={user}
+                                                onSubmit={onDisassociate}
+                                                disableActions={disableActions}
+                                            />
+                                            <span>{user.nome}</span>
+                                        </div>
 
-                                    <span className="text-slate-500 text-xs">
-                                       {user.role?.descricao}
-                                    </span>
-                                 </li>
-                              ))}
-                           </ul>
+                                        <span className='text-muted-foreground text-xs'>
+                                            {user.role?.descricao
+                                                ?.slice(0, 3)
+                                                .toUpperCase()}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
                         ) : (
-                           <p className="text-sm p-4 text-slate-500">
-                              Nenhum usuário vinculado
-                           </p>
+                            <p className='text-muted-foreground text-sm'>
+                                Nenhum usuário vinculado
+                            </p>
                         )}
-                     </AccordionContent>
-                  </AccordionItem>
-               </Accordion>
-            );
-         })}
-      </div>
-   )
+                    </div>
+                );
+            })}
+        </div>
+    );
 }
