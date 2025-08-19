@@ -21,7 +21,7 @@ export function AssociatedList({
     }
 
     return (
-        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 my-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 my-4'>
             {stages.map((stage, index) => {
                 const vinculados = associated.find(
                     (a) => a.stageId === stage.id
