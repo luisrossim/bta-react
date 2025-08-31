@@ -22,30 +22,50 @@ import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { showError } from '../utils/showMessage';
+import { LoadingIcon } from './LoadingIcon';
 
 type Option = {
     value: any;
     label: string;
 };
 
-interface SelectFormItemProps {
+interface SelectAsyncFormItemProps {
     name: string;
     label: string;
-    options: Option[];
     placeholder?: string;
+    fetchOptions: () => Promise<any>;
+    getOptions: (data: any) => Option[];
+    isLoading: boolean;
     allowClear?: boolean;
 }
 
-export function SelectFormItem({
+export function SelectAsyncFormItem({
     name,
     label,
-    options,
     placeholder = 'Selecione uma opção',
+    fetchOptions,
+    getOptions,
+    isLoading,
     allowClear = true,
-}: SelectFormItemProps) {
+}: SelectAsyncFormItemProps) {
     const { control } = useFormContext();
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
+    const [options, setOptions] = useState<Option[]>([]);
+
+    const handleOpenChange = async (isOpen: boolean) => {
+        setOpen(isOpen);
+
+        if (isOpen && options.length === 0) {
+            try {
+                const result = await fetchOptions();
+                setOptions(getOptions(result.data));
+            } catch {
+                showError('Erro ao buscar registros');
+            }
+        }
+    };
 
     const filteredOptions = options.filter((option) =>
         option.label.toLowerCase().startsWith(search.toLowerCase())
@@ -63,7 +83,7 @@ export function SelectFormItem({
                         {label}
                     </FormLabel>
 
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover open={open} onOpenChange={handleOpenChange}>
                         <PopoverTrigger asChild>
                             <FormControl>
                                 <Button
@@ -76,11 +96,12 @@ export function SelectFormItem({
                                 >
                                     {field.value
                                         ? options.find(
-                                              (language) =>
-                                                  language.value === field.value
+                                              (option) =>
+                                                  option.value === field.value
                                           )?.label
                                         : placeholder}
-                                    <ChevronsUpDown className='opacity-50' />
+
+                                    <ChevronsUpDown className='opacity-50 ml-auto' />
                                 </Button>
                             </FormControl>
                         </PopoverTrigger>
@@ -114,9 +135,15 @@ export function SelectFormItem({
                                 )}
 
                                 <CommandList>
-                                    <CommandEmpty>
-                                        Nenhum registro encontrado.
-                                    </CommandEmpty>
+                                    {isLoading ? (
+                                        <div className='py-4'>
+                                            <LoadingIcon />
+                                        </div>
+                                    ) : (
+                                        <CommandEmpty>
+                                            Nenhum registro encontrado.
+                                        </CommandEmpty>
+                                    )}
 
                                     <CommandGroup>
                                         {filteredOptions.map(
@@ -150,8 +177,6 @@ export function SelectFormItem({
                             </Command>
                         </PopoverContent>
                     </Popover>
-
-                    {/* <FormMessage /> */}
                 </FormItem>
             )}
         />

@@ -8,7 +8,7 @@ import {
 import { InputFormItem } from '@/shared/components/InputFormItem';
 import { MaskFormItem } from '@/shared/components/InputMasked';
 import { SelectFormItem } from '@/shared/components/SelectFormItem';
-import { rolesMock } from '@/shared/mocks/rolesMock';
+import { roles } from '@/shared/mocks/roles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -21,7 +21,6 @@ interface UserFormProps {
 
 export function UserForm({ id }: UserFormProps) {
     const { fetchUserById, saveUser } = useUsers();
-    const roles = rolesMock;
 
     const form = useForm<CreateUser | UpdateUser>({
         resolver: zodResolver(id ? updateUserSchema : createUserSchema),

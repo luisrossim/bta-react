@@ -6,7 +6,7 @@ import { axiosInstance } from '@/lib/axios';
 
 class OrderHistoryService {
     protected readonly axios = axiosInstance;
-    private path = 'v1/orders/history';
+    private path = '/orders/history';
 
     constructor() {}
 

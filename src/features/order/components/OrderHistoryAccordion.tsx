@@ -86,7 +86,7 @@ export function OrderHistoryAccordion({
                                 value={
                                     <UserAssignedTooltip
                                         key={index}
-                                        user={item.concluidoPor}
+                                        name={item.concluidoPor.nome}
                                     />
                                 }
                             />
@@ -100,7 +100,7 @@ export function OrderHistoryAccordion({
                                                 ({ usuario }, index) => (
                                                     <UserAssignedTooltip
                                                         key={index}
-                                                        user={usuario}
+                                                        name={usuario.nome}
                                                     />
                                                 )
                                             )

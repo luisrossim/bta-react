@@ -1,121 +1,112 @@
-import { orderFiltersSchema, type OrderFilters } from "@/features/order/types/OrderFilters"
-import { stageService } from "@/features/stages/services/stageService";
-import { useAuthContext } from "@/features/auth/contexts/AuthContext";
-import { SelectFormItem } from "@/shared/components/SelectFormItem";
-import { userService } from "@/features/user/services/userService";
-import { FormProvider, useForm, useWatch } from "react-hook-form"
-import type { Stage } from "@/features/stages/types/Stage";
-import { showError } from "@/shared/utils/showMessage";
-import type { User } from "@/features/user/types/User";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useMemo, useState } from "react";
+import { useAuthContext } from '@/features/auth/contexts/AuthContext';
+import {
+    orderFiltersSchema,
+    type OrderFilters,
+} from '@/features/order/types/OrderFilters';
+import { useGetStagesQuery } from '@/features/stages/hooks/useStageApi';
+import type { Stage } from '@/features/stages/types/Stage';
+import { useGetUsersQuery } from '@/features/user/hooks/useUserApi';
+import type { User } from '@/features/user/types/User';
+import { DatePickerFormItem } from '@/shared/components/DatePickerFormItem';
+import { SelectAsyncFormItem } from '@/shared/components/SelectAsyncFormItem';
+import { SelectFormItem } from '@/shared/components/SelectFormItem';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { endOfMonth, startOfMonth } from 'date-fns';
+import { useEffect } from 'react';
+import {
+    FormProvider,
+    useForm,
+    useWatch,
+} from 'react-hook-form';
+import { situationOptions } from '../constants/situationOptions';
 
 interface OrderFilterProps {
-   onSubmit: (data: OrderFilters) => void;
+    onSubmit: (data: OrderFilters) => void;
 }
 
-export function OrderFilter({ 
-   onSubmit 
+export function OrderFilter({
+    onSubmit,
 }: OrderFilterProps) {
-   const [stages, setStages] = useState<Stage[]>([]);
-   const [users, setUsers] = useState<User[]>([]);
-   const { isAdmin, userLogged } = useAuthContext();
+    const { isAdmin } = useAuthContext();
+    const {
+        isFetching: loadingStages,
+        refetch: getStages,
+    } = useGetStagesQuery({ enabled: false });
 
-   const form = useForm<OrderFilters>({
-      resolver: zodResolver(orderFiltersSchema),
-      defaultValues: {
-         stageId: -1,
-         userId: isAdmin ? -1 : userLogged?.id,
-         status: "todas"
-      }
-   })
+    const { isFetching: loadingUsers, refetch: getUsers } =
+        useGetUsersQuery({
+            enabled: false,
+        });
 
-   const watchedValues = useWatch({ control: form.control });
+    const form = useForm<OrderFilters>({
+        resolver: zodResolver(orderFiltersSchema),
+        defaultValues: {
+            startDate: startOfMonth(new Date()),
+            endDate: endOfMonth(new Date()),
+        },
+    });
 
-   async function fetchStagesAndAssociated() {
-      try {
-         const _stages = await stageService.get();
+    const watchedValues = useWatch({
+        control: form.control,
+    });
 
-         let _users: User[] = [];
+    useEffect(() => {
+        onSubmit(watchedValues);
+    }, [watchedValues]);
 
-         if(isAdmin) {
-            _users = await userService.get();
-         }
+    return (
+        <FormProvider {...form}>
+            <form className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end my-4'>
+                <SelectAsyncFormItem
+                    name='stageId'
+                    label='Etapa'
+                    fetchOptions={getStages}
+                    isLoading={loadingStages}
+                    getOptions={(data) =>
+                        data.map((u: Stage) => ({
+                            label: u.descricao,
+                            value: u.id,
+                        }))
+                    }
+                />
 
-         setStages(_stages)
-         setUsers(_users)
+                {isAdmin && (
+                    <SelectAsyncFormItem
+                        name='userId'
+                        label='Usuário'
+                        fetchOptions={getUsers}
+                        isLoading={loadingUsers}
+                        getOptions={(data) =>
+                            data.map((u: User) => ({
+                                label: u.nome,
+                                value: u.id,
+                            }))
+                        }
+                    />
+                )}
 
-      } catch (err: any) {
-         showError("Erro ao buscar filtros")
-      }
-   }
+                <SelectFormItem
+                    name='status'
+                    label='Situação'
+                    options={situationOptions}
+                />
 
-   const stageOptions = useMemo(
-      () =>
-         [{ 
-            value: -1, 
-            label: "Todas" 
-         }].concat(
-            stages.map((stage) => ({
-               value: stage.id,
-               label: stage.descricao,
-            }))
-         ),
-      [stages]
-   );
+                <DatePickerFormItem
+                    name='startDate'
+                    label='Data inicial'
+                    disabledDates={{
+                        after: watchedValues.endDate,
+                    }}
+                />
 
-   const userOptions = useMemo(
-      () =>
-         [{ 
-            value: -1, 
-            label: "Todos" 
-         }].concat(
-            users.map((user) => ({
-               value: user.id,
-               label: user.nome,
-            }))
-         ),
-      [users]
-   );
-
-   const situationOptions = [
-      { value: "todas", label: "Todas" },
-      { value: "andamento", label: "Em andamento" },
-      { value: "concluida", label: "Concluída" },
-      { value: "cancelada", label: "Cancelada" },
-   ];
-
-   useEffect(() => {
-      onSubmit(watchedValues);
-   }, [watchedValues.stageId, watchedValues.userId, watchedValues.status]);
-
-   useEffect(() => {
-      fetchStagesAndAssociated()
-   }, []);
-
-   return (
-      <FormProvider {...form}>
-         <form className="grid grid-cols-1 xl:grid-cols-3 gap-4 items-end my-4">
-            <SelectFormItem 
-               name="stageId"
-               label="Etapa"
-               options={stageOptions}
-            />
-
-            { isAdmin && (
-               <SelectFormItem 
-                  name="userId"
-                  label="Usuário"
-                  options={userOptions}
-               />
-            )}
-
-            <SelectFormItem 
-               name="status"
-               label="Situação"
-               options={situationOptions}
-            />
-         </form>
-      </FormProvider>
-   )
+                <DatePickerFormItem
+                    name='endDate'
+                    label='Data final'
+                    disabledDates={{
+                        before: watchedValues.startDate,
+                    }}
+                />
+            </form>
+        </FormProvider>
+    );
 }
