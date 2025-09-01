@@ -1,6 +1,9 @@
 import type { Customer } from '@/features/customer/types/Customer';
-import { GenericTable, type Column } from '@/shared/components/GenericTable';
 import { LoadingIcon } from '@/shared/components/LoadingIcon';
+import {
+    GenericTable,
+    type Column,
+} from '@/shared/components/table-components/GenericTable';
 import { formatDate } from '@/shared/utils/formatDate';
 import { PatternFormat } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';

@@ -38,7 +38,7 @@ export function useOrderInfo() {
         }
     };
 
-    const atribuir = async (userId: number) => {
+    const atribuir = async (userId: string) => {
         const data: AtribuicaoRequest = {
             historyId: historicoAtual!.id,
             userId,
@@ -53,7 +53,7 @@ export function useOrderInfo() {
         }
     };
 
-    const seAtribuir = async (userId: number) => {
+    const seAtribuir = async (userId: string) => {
         const data: AtribuicaoRequest = {
             historyId: historicoAtual!.id,
             userId,
@@ -68,7 +68,7 @@ export function useOrderInfo() {
         }
     };
 
-    const desatribuir = async (userId: number) => {
+    const desatribuir = async (userId: string) => {
         const data: AtribuicaoRequest = {
             historyId: historicoAtual!.id,
             userId,
@@ -166,15 +166,11 @@ export function useOrderInfo() {
     const viewAttachment = async (attachmentId: string) => {
         setDisableActions(true);
 
-        const toastId = toast.loading('Buscando arquivo...');
-
         try {
             const attachment = await orderService.viewAttachment(attachmentId);
             return attachment;
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || err?.message, {
-                id: toastId,
-            });
+            showError(err?.response?.data?.message || err?.message);
         } finally {
             setDisableActions(false);
         }

@@ -33,14 +33,14 @@ export function OrderHistoryAccordion({
                     key={index}
                     type='single'
                     collapsible
-                    className='mb-3'
+                    className='mb-3 border'
                 >
                     <AccordionItem value={item.etapa.descricao}>
-                        <AccordionTrigger className='cursor-pointer hover:no-underline items-center py-2 px-2 border rounded-none bg-muted-foreground text-white'>
+                        <AccordionTrigger className='cursor-pointer hover:no-underline items-center py-2 px-2'>
                             <StageHeader stage={item.etapa} />
                         </AccordionTrigger>
 
-                        <AccordionContent className='grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 border'>
+                        <AccordionContent className='grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 border-t bg-muted'>
                             {item.etapa.descricao == 'Medição' && (
                                 <>
                                     <ListItem

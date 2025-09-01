@@ -1,90 +1,103 @@
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button"
-import { createAtribuicaoSchema, type CreateAtribuicao } from "@/features/order/types/OrderHistory"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus } from "lucide-react"
-import { useMemo, useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { SelectFormItem } from "@/shared/components/SelectFormItem";
-import type { StageUser } from "@/features/stages/types/Stage";
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+    createAtribuicaoSchema,
+    type CreateAtribuicao,
+} from '@/features/order/types/OrderHistory';
+import type { StageUser } from '@/features/stages/types/Stage';
+import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface AssignUserFormProps {
-   stageUsers: StageUser[]
-   onAtribuir: (userId: number) => void
+    stageUsers: StageUser[];
+    onAtribuir: (userId: string) => void;
 }
 
-export function AssignUserForm({ stageUsers, onAtribuir }: AssignUserFormProps) {
-   const [openModal, setOpenModal] = useState(false);
-   
-   const form = useForm<CreateAtribuicao>({
-      resolver: zodResolver(createAtribuicaoSchema)
-   })
+export function AssignUserForm({
+    stageUsers,
+    onAtribuir,
+}: AssignUserFormProps) {
+    const [openModal, setOpenModal] = useState(false);
 
-   const handleOpenChange = (isOpen: boolean) => {
-      setOpenModal(isOpen);
+    const form = useForm<CreateAtribuicao>({
+        resolver: zodResolver(createAtribuicaoSchema),
+    });
 
-      if (isOpen) {
-         form.reset();
-      }
-   };
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpenModal(isOpen);
 
-   const onSubmit = ({ userId }: CreateAtribuicao) => {
-      setOpenModal(false);
-      onAtribuir(userId);
-   }
+        if (isOpen) {
+            form.reset();
+        }
+    };
 
-   const stageUsersOptions = useMemo(
-      () =>
-         stageUsers.map((option) => ({
-            value: option.usuario.id,
-            label: option.usuario.nome
-         })),
-      [stageUsers]
-   );
+    const onSubmit = ({ userId }: CreateAtribuicao) => {
+        setOpenModal(false);
+        onAtribuir(userId);
+    };
 
-   return (
-      <FormProvider {...form}>
-         <Dialog 
-            open={openModal} 
-            onOpenChange={handleOpenChange}
-         >
-            <DialogTrigger asChild>
-               <button type="button" className="flex items-center gap-1 mt-1 text-primary text-sm cursor-pointer">
-                  <Plus size={20} /> Atribuir
-               </button>
-            </DialogTrigger>
+    const stageUsersOptions = useMemo(
+        () =>
+            stageUsers.map((option) => ({
+                value: option.usuario.id,
+                label: option.usuario.nome,
+            })),
+        [stageUsers]
+    );
 
-            <DialogContent>
-               <form 
-                  onSubmit={form.handleSubmit(onSubmit)} 
-                  className="space-y-6"
-               >
-                  <DialogHeader>
-                     <DialogTitle>Atribuir usuário</DialogTitle>
-                     <DialogDescription>
-                        O usuário atribuído poderá realizar ações nessa etapa
-                     </DialogDescription>
-                  </DialogHeader>
+    return (
+        <FormProvider {...form}>
+            <Dialog open={openModal} onOpenChange={handleOpenChange}>
+                <DialogTrigger asChild>
+                    <button
+                        type='button'
+                        className='flex items-center gap-1 mt-1 text-primary text-sm cursor-pointer'
+                    >
+                        <Plus size={20} /> Atribuir
+                    </button>
+                </DialogTrigger>
 
-                  <SelectFormItem 
-                     label="Usuário"
-                     name="userId"
-                     options={stageUsersOptions}
-                  />
+                <DialogContent>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className='space-y-6'
+                    >
+                        <DialogHeader>
+                            <DialogTitle>Atribuir usuário</DialogTitle>
+                            <DialogDescription>
+                                O usuário atribuído poderá realizar ações nessa
+                                etapa
+                            </DialogDescription>
+                        </DialogHeader>
 
-                  <DialogFooter>
-                     <DialogClose asChild>
-                        <Button variant="outline">
-                           Cancelar
-                        </Button>
-                     </DialogClose>
-                     <Button type="submit">
-                        Atribuir
-                     </Button>
-                  </DialogFooter>
-               </form>
-            </DialogContent>
-         </Dialog>
-      </FormProvider>
-   )
+                        <SelectFormItem
+                            label='Usuário'
+                            name='userId'
+                            options={stageUsersOptions}
+                            required
+                        />
+
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant='outline'>Cancelar</Button>
+                            </DialogClose>
+                            <Button type='submit'>Atribuir</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </FormProvider>
+    );
 }

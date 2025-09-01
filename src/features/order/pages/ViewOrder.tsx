@@ -18,7 +18,7 @@ import {
     UserRound,
     Waypoints,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AssignUserForm } from '../components/AssignUserForm';
 import { Attachment } from '../components/Attachment';
 import { CommentsForm } from '../components/CommentsForm';
@@ -28,6 +28,7 @@ import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
 
 export default function ViewOrder() {
     const { isAdmin, userLogged } = useAuthContext();
+    const navigate = useNavigate();
 
     const {
         order,
@@ -73,21 +74,16 @@ export default function ViewOrder() {
                             <Waypoints size={16} />
                             <h2>{historicoAtual.etapa.descricao}</h2>
                         </div>
-                        <Link
-                            to={`/sistema/clientes/${order.cliente.id}`}
-                            className='hover:bg-accent transition-colors'
-                        >
-                            <div className='flex items-center flex-wrap gap-4'>
-                                <div className='flex items-center gap-2'>
-                                    <UserRound size={16} />
-                                    <h2>{order.cliente.nome}</h2>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <Phone size={14} />
-                                    {formatTelefone(order.cliente.telefone)}
-                                </div>
+                        <div className='flex items-center flex-wrap gap-4'>
+                            <div className='flex items-center gap-2'>
+                                <UserRound size={16} />
+                                <h2>{order.cliente.nome}</h2>
                             </div>
-                        </Link>
+                            <div className='flex items-center gap-2'>
+                                <Phone size={14} />
+                                {formatTelefone(order.cliente.telefone)}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -98,6 +94,15 @@ export default function ViewOrder() {
                         onSubmitMeasurement={saveMeasurement}
                         onSubmitAssistance={saveAssistance}
                     />
+
+                    <Button
+                        onClick={() =>
+                            navigate(`/sistema/clientes/${order.cliente.id}`)
+                        }
+                        variant={'outline'}
+                    >
+                        <UserRound /> Informações do Cliente
+                    </Button>
 
                     {!historicoAtual.concluidoEm ? (
                         <ConfirmDialog

@@ -1,7 +1,9 @@
 import { OrderFilter } from '@/features/order/components/OrderFilter';
 import { OrderListTable } from '@/features/order/components/OrderListTable';
 import { PageHeader } from '@/shared/components/PageHeader';
-import { PaginationFooter } from '@/shared/components/PaginationFooter';
+import { PaginationFooter } from '@/shared/components/table-components/PaginationFooter';
+import { cleanObject } from '@/shared/utils/cleanObject';
+import { addMonths, startOfMonth, subDays, subMonths } from 'date-fns';
 import { useState } from 'react';
 import OrderForm from '../components/OrderForm';
 import { useGetOrdersQuery } from '../hooks/useOrderApi';
@@ -9,22 +11,16 @@ import type { OrderFilters } from '../types/OrderFilters';
 
 export default function ListOrders() {
     const [page, setPage] = useState(1);
-    const [filters, setFilters] = useState<OrderFilters>({});
+    const [filters, setFilters] = useState<OrderFilters>({
+        startDate: startOfMonth(subMonths(new Date(), 6)),
+        endDate: subDays(startOfMonth(addMonths(new Date(), 1)), 1),
+    });
 
     const { data: result, isFetching } = useGetOrdersQuery(page, filters);
 
-    function cleanFilters(filters: OrderFilters) {
-        return {
-            ...(filters.stageId !== -1 && { stageId: filters.stageId }),
-            ...(filters.userId !== -1 && { userId: filters.userId }),
-            ...(filters.status &&
-                filters.status !== 'todas' && { status: filters.status }),
-        };
-    }
-
     function onFilter(values: OrderFilters) {
         setPage(1);
-        setFilters(cleanFilters(values));
+        setFilters(cleanObject(values));
     }
 
     return (

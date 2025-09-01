@@ -1,129 +1,130 @@
-import { createCustomerSchema, type CreateCustomer } from "@/features/customer/types/Customer";
-import { InputFormItem } from "@/shared/components/InputFormItem";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useCreateCustomerMutation, useGetCustomerQuery, useUpdateCustomerMutation } from "../hooks/useCustomerApi";
-import { showError, showSuccess } from "@/shared/utils/showMessage";
-import { MaskFormItem } from "@/shared/components/InputMasked";
+import { Button } from '@/components/ui/button';
+import {
+    createCustomerSchema,
+    type CreateCustomer,
+} from '@/features/customer/types/Customer';
+import { InputFormItem } from '@/shared/components/inputs-components/InputFormItem';
+import { MaskFormItem } from '@/shared/components/inputs-components/MaskFormItem';
+import { showError, showSuccess } from '@/shared/utils/showMessage';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import {
+    useCreateCustomerMutation,
+    useGetCustomerQuery,
+    useUpdateCustomerMutation,
+} from '../hooks/useCustomerApi';
 
 interface CustomerFormProps {
-   customerId?: string
+    customerId?: string;
 }
 
-export default function CustomerForm({ customerId }: CustomerFormProps){
-   const { data: customer } = useGetCustomerQuery(customerId);
-   const { mutateAsync: createCustomer } = useCreateCustomerMutation();
-   const { mutateAsync: updateCustomer } = useUpdateCustomerMutation();
-   const navigate = useNavigate();
+export default function CustomerForm({ customerId }: CustomerFormProps) {
+    const { data: customer } = useGetCustomerQuery(customerId);
+    const { mutateAsync: createCustomer } = useCreateCustomerMutation();
+    const { mutateAsync: updateCustomer } = useUpdateCustomerMutation();
+    const navigate = useNavigate();
 
-   const form = useForm<CreateCustomer>({
-      resolver: zodResolver(createCustomerSchema),
-      defaultValues: {
-         nome: '',
-         telefone: '',
-         cpf: '',
-         endereco: {
-            descricao: ''
-         }
-      },
-   });
+    const form = useForm<CreateCustomer>({
+        resolver: zodResolver(createCustomerSchema),
+        defaultValues: {
+            nome: '',
+            telefone: '',
+            cpf: '',
+            endereco: {
+                descricao: '',
+            },
+        },
+    });
 
-   const onSubmit = async (values: CreateCustomer) => {
-      try {
-         if (customerId) {
-            await updateCustomer({ id: customerId, data: values });
-         } else {
-            await createCustomer(values);
-         }
+    const onSubmit = async (values: CreateCustomer) => {
+        try {
+            if (customerId) {
+                await updateCustomer({ id: customerId, data: values });
+            } else {
+                await createCustomer(values);
+            }
 
-         showSuccess("Operação realizada com sucesso.");
-         navigate("/sistema/clientes");
+            showSuccess('Operação realizada com sucesso.');
+            navigate('/sistema/clientes');
+        } catch (err: any) {
+            showError(err.message);
+        }
+    };
 
-      } catch (err: any) {
-         showError(err.message);
-      }
-   };
+    useEffect(() => {
+        if (customer) {
+            form.reset(customer);
+        }
+    }, [customer, form]);
 
+    return (
+        <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='mt-10'>
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+                    <InputFormItem label='Nome' name='nome' required />
 
-   useEffect(() => {
-      if (customer) {
-         form.reset(customer);
-      }
-   }, [customer, form]);
+                    <MaskFormItem
+                        label='Telefone'
+                        name='telefone'
+                        format='(##) #####-####'
+                        placeholder='(99) 99999-9999'
+                        required
+                    />
 
+                    <MaskFormItem
+                        label='CPF'
+                        name='cpf'
+                        format='###.###.###-##'
+                        placeholder='999.999.999-99'
+                        required
+                    />
 
-   return (
-      <FormProvider {...form}>
-         <form 
-            onSubmit={form.handleSubmit(onSubmit)} 
-            className="mt-10"
-         >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-               <InputFormItem 
-                  label="Nome"
-                  name="nome"
-               />
+                    <InputFormItem
+                        label='Endereço'
+                        name='endereco.descricao'
+                        required
+                    />
 
-               <MaskFormItem 
-                  label="Telefone"
-                  name="telefone"
-                  format="(##) #####-####"
-                  placeholder="(99) 99999-9999"
-               />
+                    <InputFormItem
+                        label='Hectare'
+                        name='endereco.hectare'
+                        type='number'
+                    />
 
-               <MaskFormItem 
-                  label="CPF"
-                  name="cpf"
-                  format="###.###.###-##"
-                  placeholder="999.999.999-99"
-               />
+                    <InputFormItem
+                        label='Coordenadas'
+                        name='endereco.coordenadasGeograficas'
+                        placeholder='https://maps.app.goo.gl/yc9B8mFg6T8zUJTz8'
+                    />
 
-               <InputFormItem 
-                  label="Endereço"
-                  name="endereco.descricao"
-               />
+                    <InputFormItem
+                        label='Loja x cliente (km)'
+                        name='endereco.kmLojaCliente'
+                        type='number'
+                    />
 
-               <InputFormItem 
-                  label="Hectare"
-                  name="endereco.hectare"
-                  type="number"
-               />
+                    <InputFormItem
+                        label='Referência'
+                        name='endereco.referencia'
+                    />
+                </div>
 
-               <InputFormItem 
-                  label="Coordenadas"
-                  name="endereco.coordenadasGeograficas"
-                  placeholder="https://maps.app.goo.gl/yc9B8mFg6T8zUJTz8"
-               />
+                <div className='flex items-center gap-4 mt-10'>
+                    <Button type='submit'>
+                        {customerId ? 'Salvar' : 'Cadastrar'}
+                    </Button>
 
-               <InputFormItem 
-                  label="Loja x cliente (km)"
-                  name="endereco.kmLojaCliente"
-                  type="number"
-               />
-
-               <InputFormItem 
-                  label="Referência"
-                  name="endereco.referencia"
-               />
-            </div>
-
-            <div className="flex items-center gap-4 mt-10">
-               <Button type="submit">
-                  { customerId ? "Salvar" : "Cadastrar" }
-               </Button>
-
-               <Button 
-                  type="button"
-                  variant={"outline"} 
-                  onClick={() => navigate(-1)}
-               >
-                  Cancelar
-               </Button>
-            </div>
-         </form>
-      </FormProvider>
-   )
+                    <Button
+                        type='button'
+                        variant={'outline'}
+                        onClick={() => navigate(-1)}
+                    >
+                        Cancelar
+                    </Button>
+                </div>
+            </form>
+        </FormProvider>
+    );
 }

@@ -34,6 +34,7 @@ interface SelectFormItemProps {
     options: Option[];
     placeholder?: string;
     allowClear?: boolean;
+    required?: boolean;
 }
 
 export function SelectFormItem({
@@ -42,6 +43,7 @@ export function SelectFormItem({
     options,
     placeholder = 'Selecione uma opção',
     allowClear = true,
+    required = false,
 }: SelectFormItemProps) {
     const { control } = useFormContext();
     const [search, setSearch] = useState('');
@@ -59,8 +61,9 @@ export function SelectFormItem({
             name={name}
             render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                    <FormLabel className='self-start text-slate-600'>
+                    <FormLabel className='flex items-center gap-1'>
                         {label}
+                        {required && <span style={{ color: 'red' }}>*</span>}
                     </FormLabel>
 
                     <Popover open={open} onOpenChange={setOpen}>
@@ -87,6 +90,8 @@ export function SelectFormItem({
 
                         <PopoverContent
                             onOpenAutoFocus={(e) => e.preventDefault()}
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
                         >
                             <Command>
                                 <CommandInput

@@ -12,6 +12,7 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useFormContext, type FieldValues, type Path } from 'react-hook-form';
@@ -48,14 +49,13 @@ export function DatePickerFormItem<T extends FieldValues>({
                                 <Button
                                     variant='outline'
                                     data-empty={!field.value}
-                                    className='data-[empty=true]:text-muted-foreground justify-start text-left font-normal'
+                                    className='data-[empty=true]:text-muted-foreground justify-between text-left font-normal'
                                 >
-                                    <CalendarIcon />
-                                    {field.value ? (
-                                        format(field.value, 'dd/MM/yyyy')
-                                    ) : (
-                                        <span>{placeholder}</span>
-                                    )}
+                                    {field.value
+                                        ? format(field.value, 'dd/MM/yyyy')
+                                        : placeholder}
+
+                                    <CalendarIcon className='opacity-50' />
                                 </Button>
                             </FormControl>
                         </PopoverTrigger>
@@ -68,6 +68,7 @@ export function DatePickerFormItem<T extends FieldValues>({
                                     setOpen(false);
                                 }}
                                 disabled={disabledDates}
+                                locale={ptBR}
                             />
                         </PopoverContent>
                     </Popover>

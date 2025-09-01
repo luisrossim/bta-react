@@ -14,8 +14,8 @@ import {
     type Assistance,
     type Order,
 } from '@/features/order/types/Order';
-import { InputFormItem } from '@/shared/components/InputFormItem';
-import { SelectFormItem } from '@/shared/components/SelectFormItem';
+import { InputFormItem } from '@/shared/components/inputs-components/InputFormItem';
+import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClipboardCheck, UserRound } from 'lucide-react';
 import { useEffect, useState } from 'react';

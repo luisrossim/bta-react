@@ -19,7 +19,7 @@ export function ListStages() {
         associate(data);
     };
 
-    const handleDisassociateUser = (stageId: number, userId: number) => {
+    const handleDisassociateUser = (stageId: number, userId: string) => {
         disassociate(stageId, userId);
     };
 

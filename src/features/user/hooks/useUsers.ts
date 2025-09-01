@@ -28,7 +28,7 @@ export function useUsers() {
         }
     };
 
-    const changeUserStatus = async (userId: number) => {
+    const changeUserStatus = async (userId: string) => {
         setDisableActions(true);
 
         try {
@@ -43,7 +43,7 @@ export function useUsers() {
     };
 
     const saveUser = async (
-        id: number | null,
+        id: string | null,
         data: CreateUser | UpdateUser
     ) => {
         setDisableActions(true);

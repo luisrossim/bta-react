@@ -19,11 +19,11 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { showError } from '@/shared/utils/showMessage';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { showError } from '../utils/showMessage';
-import { LoadingIcon } from './LoadingIcon';
+import { LoadingIcon } from '../LoadingIcon';
 
 type Option = {
     value: any;
@@ -38,6 +38,7 @@ interface SelectAsyncFormItemProps {
     getOptions: (data: any) => Option[];
     isLoading: boolean;
     allowClear?: boolean;
+    required?: boolean;
 }
 
 export function SelectAsyncFormItem({
@@ -48,6 +49,7 @@ export function SelectAsyncFormItem({
     getOptions,
     isLoading,
     allowClear = true,
+    required = false,
 }: SelectAsyncFormItemProps) {
     const { control } = useFormContext();
     const [search, setSearch] = useState('');
@@ -79,8 +81,9 @@ export function SelectAsyncFormItem({
             name={name}
             render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                    <FormLabel className='self-start text-slate-600'>
+                    <FormLabel className='flex items-center gap-1'>
                         {label}
+                        {required && <span style={{ color: 'red' }}>*</span>}
                     </FormLabel>
 
                     <Popover open={open} onOpenChange={handleOpenChange}>

@@ -5,9 +5,9 @@ import {
     type CreateUser,
     type UpdateUser,
 } from '@/features/user/types/User';
-import { InputFormItem } from '@/shared/components/InputFormItem';
-import { MaskFormItem } from '@/shared/components/InputMasked';
-import { SelectFormItem } from '@/shared/components/SelectFormItem';
+import { InputFormItem } from '@/shared/components/inputs-components/InputFormItem';
+import { MaskFormItem } from '@/shared/components/inputs-components/MaskFormItem';
+import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
 import { roles } from '@/shared/mocks/roles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
@@ -36,7 +36,7 @@ export function UserForm({ id }: UserFormProps) {
     );
 
     const onSubmit = (data: CreateUser | UpdateUser) => {
-        const userId = id ? Number(id) : null;
+        const userId = id ? String(id) : null;
         saveUser(userId, data);
     };
 
@@ -55,20 +55,27 @@ export function UserForm({ id }: UserFormProps) {
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='mt-10'>
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-                    <InputFormItem label='Nome' name='nome' />
+                    <InputFormItem label='Nome' name='nome' required />
 
-                    <InputFormItem label='Email' name='email' type='email' />
+                    <InputFormItem
+                        label='Email'
+                        name='email'
+                        type='email'
+                        required
+                    />
 
                     <InputFormItem
                         label='Senha de acesso'
                         name='password'
                         type='password'
+                        required={!id}
                     />
 
                     <SelectFormItem
                         label='Cargo'
                         name='role.id'
                         options={rolesOptions}
+                        required
                     />
 
                     <MaskFormItem
@@ -76,6 +83,7 @@ export function UserForm({ id }: UserFormProps) {
                         name='telefone'
                         format='(##) #####-####'
                         placeholder='(99) 99999-9999'
+                        required
                     />
                 </div>
 

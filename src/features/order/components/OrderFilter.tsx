@@ -7,69 +7,45 @@ import { useGetStagesQuery } from '@/features/stages/hooks/useStageApi';
 import type { Stage } from '@/features/stages/types/Stage';
 import { useGetUsersQuery } from '@/features/user/hooks/useUserApi';
 import type { User } from '@/features/user/types/User';
-import { DatePickerFormItem } from '@/shared/components/DatePickerFormItem';
-import { SelectAsyncFormItem } from '@/shared/components/SelectAsyncFormItem';
-import { SelectFormItem } from '@/shared/components/SelectFormItem';
+import { DatePickerFormItem } from '@/shared/components/inputs-components/DatePickerFormItem';
+import { SelectAsyncFormItem } from '@/shared/components/inputs-components/SelectAsyncFormItem';
+import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { addMonths, startOfMonth, subDays, subMonths } from 'date-fns';
 import { useEffect } from 'react';
-import {
-    FormProvider,
-    useForm,
-    useWatch,
-} from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { situationOptions } from '../constants/situationOptions';
 
 interface OrderFilterProps {
     onSubmit: (data: OrderFilters) => void;
 }
 
-export function OrderFilter({
-    onSubmit,
-}: OrderFilterProps) {
+export function OrderFilter({ onSubmit }: OrderFilterProps) {
     const { isAdmin } = useAuthContext();
-    const {
-        isFetching: loadingStages,
-        refetch: getStages,
-    } = useGetStagesQuery({ enabled: false });
-
-    const { isFetching: loadingUsers, refetch: getUsers } =
-        useGetUsersQuery({
-            enabled: false,
-        });
+    const { isFetching: loadingStages, refetch: getStages } = useGetStagesQuery(
+        { enabled: false }
+    );
+    const { isFetching: loadingUsers, refetch: getUsers } = useGetUsersQuery({
+        enabled: false,
+    });
 
     const form = useForm<OrderFilters>({
         resolver: zodResolver(orderFiltersSchema),
         defaultValues: {
-            startDate: startOfMonth(new Date()),
-            endDate: endOfMonth(new Date()),
+            startDate: startOfMonth(subMonths(new Date(), 6)),
+            endDate: subDays(startOfMonth(addMonths(new Date(), 1)), 1),
         },
     });
 
-    const watchedValues = useWatch({
-        control: form.control,
-    });
+    const watchedFormValues = useWatch({ control: form.control });
 
     useEffect(() => {
-        onSubmit(watchedValues);
-    }, [watchedValues]);
+        onSubmit(watchedFormValues);
+    }, [watchedFormValues]);
 
     return (
         <FormProvider {...form}>
-            <form className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end my-4'>
-                <SelectAsyncFormItem
-                    name='stageId'
-                    label='Etapa'
-                    fetchOptions={getStages}
-                    isLoading={loadingStages}
-                    getOptions={(data) =>
-                        data.map((u: Stage) => ({
-                            label: u.descricao,
-                            value: u.id,
-                        }))
-                    }
-                />
-
+            <form className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-end my-4'>
                 {isAdmin && (
                     <SelectAsyncFormItem
                         name='userId'
@@ -85,6 +61,19 @@ export function OrderFilter({
                     />
                 )}
 
+                <SelectAsyncFormItem
+                    name='stageId'
+                    label='Etapa'
+                    fetchOptions={getStages}
+                    isLoading={loadingStages}
+                    getOptions={(data) =>
+                        data.map((u: Stage) => ({
+                            label: u.descricao,
+                            value: u.id,
+                        }))
+                    }
+                />
+
                 <SelectFormItem
                     name='status'
                     label='Situação'
@@ -95,7 +84,7 @@ export function OrderFilter({
                     name='startDate'
                     label='Data inicial'
                     disabledDates={{
-                        after: watchedValues.endDate,
+                        after: watchedFormValues.endDate,
                     }}
                 />
 
@@ -103,7 +92,7 @@ export function OrderFilter({
                     name='endDate'
                     label='Data final'
                     disabledDates={{
-                        before: watchedValues.startDate,
+                        before: watchedFormValues.startDate,
                     }}
                 />
             </form>

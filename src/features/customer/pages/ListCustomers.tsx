@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/shared/components/PageHeader';
-import { PaginationFooter } from '@/shared/components/PaginationFooter';
+import { PaginationFooter } from '@/shared/components/table-components/PaginationFooter';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';

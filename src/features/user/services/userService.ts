@@ -13,7 +13,7 @@ class UserService extends CrudService<User> {
         return response.data;
     }
 
-    async changeStatus(userId: number) {
+    async changeStatus(userId: string) {
         const response = await this.axios.patch(
             `${this.path}/${userId}/status`
         );

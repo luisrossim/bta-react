@@ -1,7 +1,10 @@
 import { RoleBadge } from '@/features/user/components/RoleBadge';
 import type { Roles } from '@/features/user/types/Role';
-import { GenericTable, type Column } from '@/shared/components/GenericTable';
 import { LoadingIcon } from '@/shared/components/LoadingIcon';
+import {
+    GenericTable,
+    type Column,
+} from '@/shared/components/table-components/GenericTable';
 import { formatTimestamp } from '@/shared/utils/formatDate';
 import { PatternFormat } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +13,7 @@ import { UserStatusToggle } from './UserStatusToggle';
 
 interface UserListProps {
     users?: User[];
-    onChangeUserStatus: (userId: number) => Promise<void>;
+    onChangeUserStatus: (userId: string) => Promise<void>;
     isFetching: boolean;
     disableActions: boolean;
 }
@@ -28,7 +31,7 @@ export function UserList({
     const columns: Column<User>[] = [
         {
             header: 'Nome',
-            render: (user) => <span className="font-medium">{user.nome}</span>,
+            render: (user) => <span className='font-medium'>{user.nome}</span>,
         },
         {
             header: 'Cargo',
@@ -47,8 +50,8 @@ export function UserList({
             header: 'Telefone',
             render: (user) => (
                 <PatternFormat
-                    format="(##) #####-####"
-                    displayType="text"
+                    format='(##) #####-####'
+                    displayType='text'
                     value={user.telefone}
                 />
             ),
@@ -56,7 +59,7 @@ export function UserList({
         {
             header: 'Criado em',
             render: (user) => (
-                <span className="text-muted-foreground">
+                <span className='text-muted-foreground'>
                     {formatTimestamp(user.criadoEm)}
                 </span>
             ),

@@ -1,6 +1,9 @@
 import { Badge } from '@/components/ui/badge';
-import { GenericTable, type Column } from '@/shared/components/GenericTable';
 import { LoadingIcon } from '@/shared/components/LoadingIcon';
+import {
+    GenericTable,
+    type Column,
+} from '@/shared/components/table-components/GenericTable';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { formatTimestamp } from '@/shared/utils/formatDate';
 import { useNavigate } from 'react-router-dom';
@@ -78,14 +81,6 @@ export function OrderListTable({ data, isFetching }: OrderListTableProps) {
                         order.historico_criado_em,
                         order.historico_concluido_em
                     )}
-                </span>
-            ),
-        },
-        {
-            header: 'Atualizado em',
-            render: (order) => (
-                <span className='text-muted-foreground'>
-                    {formatTimestamp(order.historico_atualizado_em)}
                 </span>
             ),
         },

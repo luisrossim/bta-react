@@ -1,4 +1,5 @@
 import { orderService } from '@/features/order/services/orderService';
+import { showSuccess } from '@/shared/utils/showMessage';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { CreateOrder, Order } from '../types/Order';
 import type { OrderFilters } from '../types/OrderFilters';
@@ -20,6 +21,7 @@ function useCreateOrderMutation() {
         mutationFn: (data: CreateOrder) => orderService.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders'] });
+            showSuccess('Ordem de serviço criada com sucesso!');
         },
     });
 }

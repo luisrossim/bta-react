@@ -6,7 +6,7 @@ import { DisassociateForm } from './DisassociateForm';
 interface AssociatedListProps {
     stages: Stage[];
     associated: AssociatedUsers[];
-    onDisassociate: (stageId: number, userId: number) => void;
+    onDisassociate: (stageId: number, userId: string) => void;
     disableActions: boolean;
 }
 
@@ -21,7 +21,7 @@ export function AssociatedList({
     }
 
     return (
-        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 my-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 my-4'>
             {stages.map((stage, index) => {
                 const vinculados = associated.find(
                     (a) => a.stageId === stage.id
@@ -57,17 +57,11 @@ export function AssociatedList({
                                             />
                                             <span>{user.nome}</span>
                                         </div>
-
-                                        <span className='text-muted-foreground text-xs'>
-                                            {user.role?.descricao
-                                                ?.slice(0, 3)
-                                                .toUpperCase()}
-                                        </span>
                                     </li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className='text-muted-foreground text-sm'>
+                            <p className='text-muted-foreground opacity-70 text-sm'>
                                 Nenhum usuário vinculado
                             </p>
                         )}

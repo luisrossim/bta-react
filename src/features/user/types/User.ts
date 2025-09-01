@@ -30,7 +30,7 @@ export type CreateUser = z.infer<typeof createUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 
 export interface User extends CreateUser {
-    id: number;
+    id: string;
     isAtivo: boolean;
     atualizadoEm: Date;
     criadoEm: Date;
