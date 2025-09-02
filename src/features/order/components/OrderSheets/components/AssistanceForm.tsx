@@ -77,7 +77,7 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger>
                     <Button variant='outline'>
-                        <ClipboardCheck className='mr-2' /> Ficha de Assistência
+                        <ClipboardCheck className='mr-2' /> Assistência
                     </Button>
                 </SheetTrigger>
 

@@ -11,7 +11,7 @@
     --card-foreground: oklch(0.3211 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.3211 0 0);
-    --primary: oklch(0.493 0.1321 259.5867);
+    --primary: oklch(0.4929 0.2051 263.3946);
     --primary-foreground: oklch(1 0 0);
     --secondary: oklch(0.967 0.0029 264.5419);
     --secondary-foreground: oklch(0.4461 0.0263 256.8018);
@@ -23,7 +23,7 @@
     --destructive-foreground: oklch(1 0 0);
     --border: oklch(0.9276 0.0058 264.5313);
     --input: oklch(0.9276 0.0058 264.5313);
-    --ring: oklch(0.493 0.1321 259.5867);
+    --ring: oklch(0.4929 0.2051 263.3946);
     --chart-1: oklch(0.6231 0.188 259.8145);
     --chart-2: oklch(0.5461 0.2152 262.8809);
     --chart-3: oklch(0.4882 0.2172 264.3763);
@@ -31,16 +31,16 @@
     --chart-5: oklch(0.3791 0.1378 265.5222);
     --sidebar: oklch(0.9846 0.0017 247.8389);
     --sidebar-foreground: oklch(0.3211 0 0);
-    --sidebar-primary: oklch(0.493 0.1321 259.5867);
+    --sidebar-primary: oklch(0.4929 0.2051 263.3946);
     --sidebar-primary-foreground: oklch(1 0 0);
     --sidebar-accent: oklch(0.9388 0.0342 235.8601);
     --sidebar-accent-foreground: oklch(0.3791 0.1378 265.5222);
     --sidebar-border: oklch(0.9276 0.0058 264.5313);
-    --sidebar-ring: oklch(0.493 0.1321 259.5867);
+    --sidebar-ring: oklch(0.4929 0.2051 263.3946);
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
-    --radius: 1.6em;
+    --radius: 0.6rem;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0);
     --shadow-sm:
@@ -93,7 +93,7 @@
     --font-sans: Inter, sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
-    --radius: 1.6rem;
+    --radius: 0.6rem;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0);
     --shadow-sm:
@@ -176,4 +176,8 @@
 
 .table-striped tr:nth-child(even) {
     background-color: #f9fafb;
+}
+
+button:hover {
+    cursor: pointer;
 }

@@ -1,11 +1,11 @@
 import { Badge } from '@/components/ui/badge';
-import { LoadingIcon } from '@/shared/components/LoadingIcon';
 import {
     GenericTable,
     type Column,
 } from '@/shared/components/table-components/GenericTable';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { formatTimestamp } from '@/shared/utils/formatDate';
+import { Check, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
 import type { OrderPaginated } from '../types/OrderPaginated';
@@ -24,8 +24,6 @@ export function OrderListTable({ data, isFetching }: OrderListTableProps) {
     const handleCustomerName = (name: string) => {
         return name.length > 28 && isMobile ? name.slice(0, 28) : name;
     };
-
-    if (isFetching) return <LoadingIcon />;
 
     const columns: Column<OrderPaginated>[] = [
         {
@@ -66,9 +64,15 @@ export function OrderListTable({ data, isFetching }: OrderListTableProps) {
             render: (order) => (
                 <>
                     {order.historico_concluido_em ? (
-                        <Badge variant={'success'}>Concluída</Badge>
+                        <Badge variant={'success'}>
+                            <Check />
+                            Concluída
+                        </Badge>
                     ) : (
-                        <Badge variant={'warning'}>Em andamento</Badge>
+                        <Badge variant={'warning'}>
+                            <Loader />
+                            Em andamento
+                        </Badge>
                     )}
                 </>
             ),
@@ -98,6 +102,7 @@ export function OrderListTable({ data, isFetching }: OrderListTableProps) {
         <GenericTable
             data={data}
             columns={columns}
+            isLoading={isFetching}
             actions={(order) => [
                 {
                     label: 'Visualizar',

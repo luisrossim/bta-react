@@ -7,6 +7,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { DropdownActions } from '@/shared/components/table-components/DropdownActions';
+import { LoadingIcon } from '../LoadingIcon';
 import { EmptyTable } from './EmptyTable';
 
 type DropdownAction = {
@@ -22,8 +23,9 @@ export type Column<T> = {
 };
 
 interface GenericTableProps<T> {
-    data: T[];
+    data?: T[];
     columns: Column<T>[];
+    isLoading: boolean;
     getRowId?: (row: T) => string | number;
     actions?: (row: T) => DropdownAction[];
 }
@@ -31,10 +33,13 @@ interface GenericTableProps<T> {
 export function GenericTable<T>({
     data,
     columns,
+    isLoading,
     getRowId = (row: any) => row.id,
     actions,
 }: GenericTableProps<T>) {
     if (!data || data.length === 0) return <EmptyTable />;
+
+    if (isLoading) return <LoadingIcon />;
 
     return (
         <Table className='table-striped'>

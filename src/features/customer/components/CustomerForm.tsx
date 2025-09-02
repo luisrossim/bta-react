@@ -121,7 +121,7 @@ export default function CustomerForm({ customerId }: CustomerFormProps) {
                         variant={'outline'}
                         onClick={() => navigate(-1)}
                     >
-                        Cancelar
+                        Voltar
                     </Button>
                 </div>
             </form>

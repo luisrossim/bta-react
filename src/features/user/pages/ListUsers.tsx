@@ -18,7 +18,7 @@ export default function ListUsers() {
     return (
         <div className='space-y-14'>
             <PageHeader
-                title='Usuários e permissões'
+                title='Usuários'
                 subtitle='Gerencie as informações e permissões dos usuários do sistema.'
                 action={
                     <Button onClick={() => navigate('/sistema/usuarios/form')}>
@@ -27,12 +27,14 @@ export default function ListUsers() {
                 }
             />
 
-            <UserList
-                isFetching={false}
-                users={users}
-                onChangeUserStatus={changeUserStatus}
-                disableActions={disableActions}
-            />
+            <div className='grid grid-cols-1'>
+                <UserList
+                    isFetching={false}
+                    users={users}
+                    onChangeUserStatus={changeUserStatus}
+                    disableActions={disableActions}
+                />
+            </div>
         </div>
     );
 }

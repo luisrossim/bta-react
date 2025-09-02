@@ -56,7 +56,7 @@ export function MeasurementForm({ order, onSubmit }: MeasurementFormProps) {
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger>
                     <Button variant='outline'>
-                        <ClipboardCheck className='mr-2' /> Ficha de Medição
+                        <ClipboardCheck className='mr-2' /> Medição
                     </Button>
                 </SheetTrigger>
 

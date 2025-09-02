@@ -87,11 +87,11 @@ export function UserForm({ id }: UserFormProps) {
                     />
                 </div>
 
-                <div className='flex items-center gap-4 mt-20'>
+                <div className='flex items-center gap-4 mt-12'>
                     <Button type='submit'>{id ? 'Salvar' : 'Cadastrar'}</Button>
 
                     <Link to={'/sistema/usuarios'}>
-                        <Button variant={'outline'}>Cancelar</Button>
+                        <Button variant={'outline'}>Voltar</Button>
                     </Link>
                 </div>
             </form>

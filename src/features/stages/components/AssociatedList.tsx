@@ -30,7 +30,7 @@ export function AssociatedList({
                 return (
                     <div
                         key={index}
-                        className='space-y-4 border min-h-[150px] rounded-lg p-4'
+                        className='space-y-4 border min-h-[150px] rounded-sm p-4'
                     >
                         <div className='flex items-center gap-2'>
                             <Badge className='w-[24px] h-[24px]'>

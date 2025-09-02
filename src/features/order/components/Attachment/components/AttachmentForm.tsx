@@ -30,7 +30,7 @@ export function AttachmentForm({
 }: AttachmentFormProps) {
     const form = useForm<UploadFile>();
     const [openModal, setOpenModal] = useState(false);
-    const maxSizeInBytes = 5 * 1024 * 1024;
+    const maxSizeInBytes = 8 * 1024 * 1024;
 
     const onSubmit = async (values: UploadFile) => {
         const file = values.file?.[0];
@@ -41,7 +41,7 @@ export function AttachmentForm({
         }
 
         if (file.size > maxSizeInBytes) {
-            showWarning('O tamanho máximo permitido de arquivos é de 5MB');
+            showWarning('O tamanho máximo permitido de arquivos é de 8MB');
             return;
         }
 

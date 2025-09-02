@@ -1,7 +1,7 @@
 import AuthGuard from '@/components/layout/AuthGuard';
 import MainLayout from '@/components/layout/MainLayout';
 import NotFoundPage from '@/components/layout/NotFoundPage';
-import Login from '@/features/auth/pages/Login';
+import LoginFormPage from '@/features/auth/pages/LoginFormPage';
 import CreateCustomer from '@/features/customer/pages/CreateCustomer';
 import ListCustomers from '@/features/customer/pages/ListCustomers';
 import ViewCustomer from '@/features/customer/pages/ViewCustomer';
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/login',
-        element: <Login />,
+        element: <LoginFormPage />,
     },
     {
         path: '/sistema',

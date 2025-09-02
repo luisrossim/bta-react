@@ -1,34 +1,27 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthContext } from '@/features/auth/contexts/AuthContext';
 import { useOrderInfo } from '@/features/order/hooks/useOrderInfo';
-import { DisassociateForm } from '@/features/stages/components/DisassociateForm';
+import { AccordionList } from '@/shared/components/AccordionList';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { EmptyData } from '@/shared/components/EmptyData';
-import { ListItem } from '@/shared/components/ListItem';
-import { PageTitle } from '@/shared/components/PageHeader';
 import { formatTimestamp } from '@/shared/utils/formatDate';
-import { formatTelefone } from '@/shared/utils/formatTelephone';
 import {
     ArrowRight,
-    CheckCircle,
-    ClipboardList,
-    Phone,
-    UserRound,
+    Check,
+    CircleCheck,
+    Clock,
+    Clock2,
+    File,
+    Loader,
+    UserRoundCheck,
     Waypoints,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { AssignUserForm } from '../components/AssignUserForm';
-import { Attachment } from '../components/Attachment';
-import { CommentsForm } from '../components/CommentsForm';
-import { OrderHistoryAccordion } from '../components/OrderHistoryAccordion';
 import { OrderSheets } from '../components/OrderSheets';
 import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
 
 export default function ViewOrder() {
     const { isAdmin, userLogged } = useAuthContext();
-    const navigate = useNavigate();
 
     const {
         order,
@@ -47,6 +40,8 @@ export default function ViewOrder() {
         disableActions,
     } = useOrderInfo();
 
+    const isFinished = !!historicoAtual?.concluidoEm;
+
     const { calculateExecutionTime } = useCalculateExecutionTime();
 
     const handleViewAttachment = async (attachmentId: string) => {
@@ -60,30 +55,32 @@ export default function ViewOrder() {
     if (!historicoAtual || !order?.cliente) return <EmptyData />;
 
     return (
-        <div className='space-y-14 mb-14'>
-            <div className='flex flex-wrap justify-between items-center gap-10'>
-                <div>
-                    <PageTitle title='Ordem de serviço' />
+        <div className='space-y-10'>
+            <div className='flex flex-wrap justify-between items-start gap-10'>
+                <div className='flex lg:items-center flex-col lg:flex-row gap-2 lg:gap-4'>
+                    <div className='flex flex-col gap-2'>
+                        <div className='flex items-center gap-4'>
+                            <h1 className='text-xl md:text-2xl font-semibold'>
+                                OS #{order.numero}
+                            </h1>
 
-                    <div className='flex flex-col gap-2 text-sm text-primary mt-4'>
-                        <div className='flex items-center gap-2'>
-                            <ClipboardList size={16} />
-                            <h2>N° {order.numero}</h2>
-                        </div>
-                        <div className='flex items-center gap-2'>
-                            <Waypoints size={16} />
-                            <h2>{historicoAtual.etapa.descricao}</h2>
-                        </div>
-                        <div className='flex items-center flex-wrap gap-4'>
-                            <div className='flex items-center gap-2'>
-                                <UserRound size={16} />
-                                <h2>{order.cliente.nome}</h2>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <Phone size={14} />
-                                {formatTelefone(order.cliente.telefone)}
+                            <div>
+                                {historicoAtual.concluidoEm ? (
+                                    <Badge variant={'success'}>
+                                        <Check /> Concluída
+                                    </Badge>
+                                ) : (
+                                    <Badge variant={'warning'}>
+                                        <Loader />
+                                        Em andamento
+                                    </Badge>
+                                )}
                             </div>
                         </div>
+                        <p className='text-sm text-muted-foreground'>
+                            Iniciada em{' '}
+                            {formatTimestamp(historicoAtual.criadoEm)}
+                        </p>
                     </div>
                 </div>
 
@@ -95,22 +92,13 @@ export default function ViewOrder() {
                         onSubmitAssistance={saveAssistance}
                     />
 
-                    <Button
-                        onClick={() =>
-                            navigate(`/sistema/clientes/${order.cliente.id}`)
-                        }
-                        variant={'outline'}
-                    >
-                        <UserRound /> Informações do Cliente
-                    </Button>
-
                     {!historicoAtual.concluidoEm ? (
                         <ConfirmDialog
                             onConfirm={concluir}
                             title='Concluir etapa?'
                             trigger={
                                 <Button>
-                                    <CheckCircle />
+                                    <Check />
                                     Concluir
                                 </Button>
                             }
@@ -120,7 +108,7 @@ export default function ViewOrder() {
                             onConfirm={avancar}
                             title='Avançar etapa?'
                             trigger={
-                                <Button size={'lg'}>
+                                <Button disabled={!isAdmin}>
                                     <ArrowRight /> Avançar
                                 </Button>
                             }
@@ -129,111 +117,156 @@ export default function ViewOrder() {
                 </div>
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4'>
-                <ListItem
-                    label='Situação'
-                    className='bg-muted p-3 rounded-sm'
-                    value={
-                        <div>
-                            {historicoAtual.concluidoEm ? (
-                                <Badge variant={'success'}>Concluída</Badge>
-                            ) : (
-                                <Badge variant={'warning'}>Em andamento</Badge>
-                            )}
-                        </div>
-                    }
-                />
+            <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4'>
+                <div className='space-y-6'>
+                    <AccordionList title='Etapa atual' collapsible={false}>
+                        <p className='flex items-center gap-2 text-primary'>
+                            <Waypoints size={16} />{' '}
+                            {historicoAtual.etapa.descricao}
+                        </p>
+                    </AccordionList>
 
-                <ListItem
-                    label='Técnicos atribuídos'
-                    className='bg-muted p-3 rounded-sm'
-                    value={
-                        <>
-                            {historicoAtual.atribuicoes.length > 0 &&
-                                historicoAtual.atribuicoes?.map(
-                                    ({ usuario }, index) => (
-                                        <div className='flex items-center gap-2'>
-                                            <DisassociateForm
-                                                key={index}
-                                                title='Desatribuir usuário?'
-                                                stage={historicoAtual.etapa}
-                                                user={usuario}
-                                                onSubmit={() =>
-                                                    desatribuir(usuario.id)
-                                                }
-                                                disableActions={disableActions}
-                                            />
-                                            <span className='font-medium'>
-                                                {usuario.nome}
-                                            </span>
-                                        </div>
-                                    )
-                                )}
+                    <AccordionList title='Técnicos atribuídos'>
+                        <p>Bruno</p>
+                    </AccordionList>
 
-                            {isAdmin && (
-                                <AssignUserForm
-                                    stageUsers={
-                                        historicoAtual.etapa.etapaUsuario
-                                    }
-                                    onAtribuir={atribuir}
+                    <AccordionList title='Informações de progresso'>
+                        <div className='space-y-3'>
+                            <div className='flex items-center gap-2'>
+                                <Clock
+                                    size={17}
+                                    className={`${isFinished ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
+                                />{' '}
+                                Tempo de execução:
+                                <span>
+                                    {calculateExecutionTime(
+                                        historicoAtual.criadoEm,
+                                        historicoAtual.concluidoEm!
+                                    )}
+                                </span>
+                            </div>
+
+                            <div
+                                className={`flex items-center gap-2 ${!isFinished && 'opacity-60'}`}
+                            >
+                                <CircleCheck
+                                    size={17}
+                                    className={`${isFinished ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
                                 />
-                            )}
+                                Concluída em:
+                                <span>
+                                    {formatTimestamp(
+                                        historicoAtual.concluidoEm
+                                    )}
+                                </span>
+                            </div>
 
-                            {!isAdmin &&
-                                !historicoAtual.atribuicoes.some(
-                                    (attr) => attr.usuario.id == userLogged?.id
-                                ) && (
-                                    <ConfirmDialog
-                                        onConfirm={() => {
-                                            seAtribuir(userLogged!.id);
-                                        }}
-                                        disabled={disableActions}
-                                        title={'Auto atribuição'}
-                                        confirmLabel='Confirmar'
-                                        description={`Deseja se auto atribuir nessa ordem de serviço?`}
-                                        trigger={
-                                            <Button
-                                                size={'sm'}
-                                                variant={'dark'}
-                                            >
-                                                Auto atribuir
-                                            </Button>
-                                        }
-                                    />
-                                )}
-                        </>
-                    }
-                />
+                            <div
+                                className={`flex items-center gap-2 ${!isFinished && 'opacity-60'}`}
+                            >
+                                <UserRoundCheck size={17} />
+                                Responsável:
+                                <span>{historicoAtual.concluidoPor?.nome}</span>
+                            </div>
+                        </div>
+                    </AccordionList>
 
-                <ListItem
-                    label='Tempo de execução'
-                    className='bg-muted p-3 rounded-sm'
-                    value={calculateExecutionTime(
-                        historicoAtual.criadoEm,
-                        historicoAtual.concluidoEm!
-                    )}
-                />
+                    <AccordionList title='Observações'>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Quasi nisi illo, nam a, quo iusto eius dicta
+                            quae numquam ea harum dolore aut magnam magni
+                            ducimus repudiandae sunt, hic tempora minus quod
+                            quaerat. Sed, impedit esse atque exercitationem
+                            velit natus incidunt. Enim a blanditiis qui
+                            reiciendis quae nemo rem ipsa?
+                        </p>
+                    </AccordionList>
 
-                <ListItem
-                    label='Iniciada em'
-                    className='bg-muted p-3 rounded-sm'
-                    value={formatTimestamp(historicoAtual.criadoEm)}
-                />
+                    {/* <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-10'>
+                        <ListItem
+                            label='Técnicos atribuídos'
+                            className='bg-muted p-3 rounded-sm'
+                            value={
+                                <>
+                                    {historicoAtual.atribuicoes.length > 0 &&
+                                        historicoAtual.atribuicoes?.map(
+                                            ({ usuario }, index) => (
+                                                <div className='flex items-center gap-2'>
+                                                    <DisassociateForm
+                                                        key={index}
+                                                        title='Desatribuir usuário?'
+                                                        stage={
+                                                            historicoAtual.etapa
+                                                        }
+                                                        user={usuario}
+                                                        onSubmit={() =>
+                                                            desatribuir(
+                                                                usuario.id
+                                                            )
+                                                        }
+                                                        disableActions={
+                                                            disableActions
+                                                        }
+                                                    />
+                                                    <span className='font-medium'>
+                                                        {usuario.nome}
+                                                    </span>
+                                                </div>
+                                            )
+                                        )}
 
-                <ListItem
-                    label='Concluída em'
-                    className='bg-muted p-3 rounded-sm'
-                    value={formatTimestamp(historicoAtual.concluidoEm)}
-                />
+                                    {isAdmin && (
+                                        <AssignUserForm
+                                            stageUsers={
+                                                historicoAtual.etapa
+                                                    .etapaUsuario
+                                            }
+                                            onAtribuir={atribuir}
+                                        />
+                                    )}
 
-                <ListItem
-                    label='Concluída por'
-                    className='bg-muted p-3 rounded-sm'
-                    value={historicoAtual.concluidoPor?.nome}
-                />
+                                    {!isAdmin &&
+                                        !historicoAtual.atribuicoes.some(
+                                            (attr) =>
+                                                attr.usuario.id ==
+                                                userLogged?.id
+                                        ) && (
+                                            <ConfirmDialog
+                                                onConfirm={() => {
+                                                    seAtribuir(userLogged!.id);
+                                                }}
+                                                disabled={disableActions}
+                                                title={'Auto atribuição'}
+                                                confirmLabel='Confirmar'
+                                                description={`Deseja se auto atribuir nessa ordem de serviço?`}
+                                                trigger={
+                                                    <Button
+                                                        size={'sm'}
+                                                        variant={'dark'}
+                                                    >
+                                                        Auto atribuir
+                                                    </Button>
+                                                }
+                                            />
+                                        )}
+                                </>
+                            }
+                        />
+                    </div> */}
+                </div>
+                <aside className='space-y-6'>
+                    <AccordionList title='Anexos'>
+                        <File />
+                    </AccordionList>
+
+                    <AccordionList title='Histórico'>
+                        <Clock2 />
+                    </AccordionList>
+                </aside>
             </div>
 
-            <Tabs defaultValue='anexos'>
+            {/* <Tabs defaultValue='anexos'>
                 <TabsList className='mb-2'>
                     <TabsTrigger value='anexos'>Anexos</TabsTrigger>
                     <TabsTrigger value='history'>Histórico</TabsTrigger>
@@ -263,7 +296,7 @@ export default function ViewOrder() {
                         onSubmit={comments}
                     />
                 </TabsContent>
-            </Tabs>
+            </Tabs> */}
         </div>
     );
 }

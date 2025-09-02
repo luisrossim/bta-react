@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/shared/components/PageHeader';
+import { GenericTable } from '@/shared/components/table-components/GenericTable';
 import { PaginationFooter } from '@/shared/components/table-components/PaginationFooter';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { customerColumns } from '../components/CustomerColumns';
 import { CustomerFilter } from '../components/CustomerFilter';
-import { CustomerTable } from '../components/CustomerTable';
 import { useGetCustomersQuery } from '../hooks/useCustomerApi';
 
 export default function ListCustomers() {
@@ -38,21 +39,38 @@ export default function ListCustomers() {
                 }
             />
 
-            <CustomerFilter search={search} onSearch={handleSearchChange} />
+            <div className='grid grid-cols-1 gap-8'>
+                <CustomerFilter search={search} onSearch={handleSearchChange} />
 
-            <CustomerTable
-                customers={result?.data ?? []}
-                isFetching={isFetching}
-            />
-
-            {result && result.data.length > 0 && (
-                <PaginationFooter
-                    page={result.page}
-                    totalItems={result.totalItems}
-                    totalPages={result.totalPages}
-                    onPageChange={setPage}
+                <GenericTable
+                    data={result?.data}
+                    columns={customerColumns}
+                    isLoading={isFetching}
+                    actions={(customer) => [
+                        {
+                            label: 'Visualizar',
+                            onClick: () =>
+                                navigate(`/sistema/clientes/${customer.id}`),
+                        },
+                        {
+                            label: 'Editar',
+                            onClick: () =>
+                                navigate(
+                                    `/sistema/clientes/form/${customer.id}`
+                                ),
+                        },
+                    ]}
                 />
-            )}
+
+                {result && result.data.length > 0 && (
+                    <PaginationFooter
+                        page={result.page}
+                        totalItems={result.totalItems}
+                        totalPages={result.totalPages}
+                        onPageChange={setPage}
+                    />
+                )}
+            </div>
         </div>
     );
 }
