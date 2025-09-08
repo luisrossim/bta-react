@@ -18,8 +18,8 @@ export default function ListCustomers() {
     const debouncedSearch = useDebounce(search, 500);
 
     const { data: result, isFetching } = useGetCustomersQuery(
-        page,
-        debouncedSearch
+        debouncedSearch,
+        page
     );
 
     function handleSearchChange(search: string) {
@@ -31,7 +31,7 @@ export default function ListCustomers() {
         <div className='space-y-10'>
             <PageHeader
                 title='Clientes'
-                subtitle='Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade.'
+                subtitle='Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços do cliente específico.'
                 action={
                     <Button onClick={() => navigate('/sistema/clientes/form')}>
                         <Plus /> Novo cliente

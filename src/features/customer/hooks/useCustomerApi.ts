@@ -7,18 +7,8 @@ import {
 import type { PaginatedResponse } from '@/shared/types/PaginatedResponse';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-function useGetCustomersQuery(page: number, search: string) {
-    const params: Record<string, any> = { page };
-
-    if (search.trim()) {
-        const isCpf = /^\d/.test(search);
-
-        if (isCpf) {
-            params.cpf = search;
-        } else {
-            params.nome = search;
-        }
-    }
+function useGetCustomersQuery(search: string, page: number) {
+    const params: Record<string, any> = { search, page };
 
     return useQuery<PaginatedResponse<Customer>, Error>({
         queryKey: ['customers', page, search],

@@ -16,7 +16,7 @@ import {
 import type { StageUser } from '@/features/stages/types/Stage';
 import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -61,12 +61,13 @@ export function AssignUserForm({
         <FormProvider {...form}>
             <Dialog open={openModal} onOpenChange={handleOpenChange}>
                 <DialogTrigger asChild>
-                    <button
-                        type='button'
-                        className='flex items-center gap-1 mt-1 text-primary text-sm cursor-pointer'
+                    <Button
+                        variant='ghost'
+                        className='text-primary !p-1'
+                        size='sm'
                     >
-                        <Plus size={20} /> Atribuir
-                    </button>
+                        <UserPlus /> Atribuir
+                    </Button>
                 </DialogTrigger>
 
                 <DialogContent>

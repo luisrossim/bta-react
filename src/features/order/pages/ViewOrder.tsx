@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/features/auth/contexts/AuthContext';
 import { useOrderInfo } from '@/features/order/hooks/useOrderInfo';
+import { DisassociateForm } from '@/features/stages/components/DisassociateForm';
 import { AccordionList } from '@/shared/components/AccordionList';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { EmptyData } from '@/shared/components/EmptyData';
@@ -11,12 +12,14 @@ import {
     Check,
     CircleCheck,
     Clock,
-    Clock2,
-    File,
     Loader,
     UserRoundCheck,
     Waypoints,
 } from 'lucide-react';
+import { AssignUserForm } from '../components/AssignUserForm';
+import { Attachment } from '../components/Attachment';
+import { CommentsForm } from '../components/CommentsForm';
+import { OrderHistoryAccordion } from '../components/OrderHistoryAccordion';
 import { OrderSheets } from '../components/OrderSheets';
 import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
 
@@ -127,7 +130,60 @@ export default function ViewOrder() {
                     </AccordionList>
 
                     <AccordionList title='Técnicos atribuídos'>
-                        <p>Bruno</p>
+                        <div>
+                            {historicoAtual.atribuicoes.length > 0 &&
+                                historicoAtual.atribuicoes?.map(
+                                    ({ usuario }, index) => (
+                                        <div className='flex items-center gap-2 mb-1'>
+                                            <DisassociateForm
+                                                key={index}
+                                                title='Desatribuir usuário?'
+                                                stage={historicoAtual.etapa}
+                                                user={usuario}
+                                                onSubmit={() =>
+                                                    desatribuir(usuario.id)
+                                                }
+                                                disableActions={disableActions}
+                                            />
+                                            <span className='font-medium'>
+                                                {usuario.nome}
+                                            </span>
+                                        </div>
+                                    )
+                                )}
+
+                            {isAdmin && (
+                                <AssignUserForm
+                                    stageUsers={
+                                        historicoAtual.etapa.etapaUsuario
+                                    }
+                                    onAtribuir={atribuir}
+                                />
+                            )}
+
+                            {!isAdmin &&
+                                !historicoAtual.atribuicoes.some(
+                                    (attr) => attr.usuario.id == userLogged?.id
+                                ) && (
+                                    <ConfirmDialog
+                                        onConfirm={() => {
+                                            seAtribuir(userLogged!.id);
+                                        }}
+                                        disabled={disableActions}
+                                        title={'Auto atribuição'}
+                                        confirmLabel='Confirmar'
+                                        description={`Deseja se auto atribuir nessa ordem de serviço?`}
+                                        trigger={
+                                            <Button
+                                                size={'sm'}
+                                                variant={'dark'}
+                                            >
+                                                Auto atribuir
+                                            </Button>
+                                        }
+                                    />
+                                )}
+                        </div>
                     </AccordionList>
 
                     <AccordionList title='Informações de progresso'>
@@ -135,7 +191,7 @@ export default function ViewOrder() {
                             <div className='flex items-center gap-2'>
                                 <Clock
                                     size={17}
-                                    className={`${isFinished ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
+                                    className={`${isFinished ? 'bg-green-500' : 'bg-amber-600'} rounded-full text-white`}
                                 />{' '}
                                 Tempo de execução:
                                 <span>
@@ -172,131 +228,35 @@ export default function ViewOrder() {
                     </AccordionList>
 
                     <AccordionList title='Observações'>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Quasi nisi illo, nam a, quo iusto eius dicta
-                            quae numquam ea harum dolore aut magnam magni
-                            ducimus repudiandae sunt, hic tempora minus quod
-                            quaerat. Sed, impedit esse atque exercitationem
-                            velit natus incidunt. Enim a blanditiis qui
-                            reiciendis quae nemo rem ipsa?
-                        </p>
+                        <div className='flex items-center'>
+                            <p>{historicoAtual.observacoes}</p>
+
+                            <CommentsForm
+                                key={historicoAtual.id}
+                                observacoes={historicoAtual.observacoes}
+                                onSubmit={comments}
+                            />
+                        </div>
                     </AccordionList>
-
-                    {/* <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-10'>
-                        <ListItem
-                            label='Técnicos atribuídos'
-                            className='bg-muted p-3 rounded-sm'
-                            value={
-                                <>
-                                    {historicoAtual.atribuicoes.length > 0 &&
-                                        historicoAtual.atribuicoes?.map(
-                                            ({ usuario }, index) => (
-                                                <div className='flex items-center gap-2'>
-                                                    <DisassociateForm
-                                                        key={index}
-                                                        title='Desatribuir usuário?'
-                                                        stage={
-                                                            historicoAtual.etapa
-                                                        }
-                                                        user={usuario}
-                                                        onSubmit={() =>
-                                                            desatribuir(
-                                                                usuario.id
-                                                            )
-                                                        }
-                                                        disableActions={
-                                                            disableActions
-                                                        }
-                                                    />
-                                                    <span className='font-medium'>
-                                                        {usuario.nome}
-                                                    </span>
-                                                </div>
-                                            )
-                                        )}
-
-                                    {isAdmin && (
-                                        <AssignUserForm
-                                            stageUsers={
-                                                historicoAtual.etapa
-                                                    .etapaUsuario
-                                            }
-                                            onAtribuir={atribuir}
-                                        />
-                                    )}
-
-                                    {!isAdmin &&
-                                        !historicoAtual.atribuicoes.some(
-                                            (attr) =>
-                                                attr.usuario.id ==
-                                                userLogged?.id
-                                        ) && (
-                                            <ConfirmDialog
-                                                onConfirm={() => {
-                                                    seAtribuir(userLogged!.id);
-                                                }}
-                                                disabled={disableActions}
-                                                title={'Auto atribuição'}
-                                                confirmLabel='Confirmar'
-                                                description={`Deseja se auto atribuir nessa ordem de serviço?`}
-                                                trigger={
-                                                    <Button
-                                                        size={'sm'}
-                                                        variant={'dark'}
-                                                    >
-                                                        Auto atribuir
-                                                    </Button>
-                                                }
-                                            />
-                                        )}
-                                </>
-                            }
-                        />
-                    </div> */}
                 </div>
                 <aside className='space-y-6'>
                     <AccordionList title='Anexos'>
-                        <File />
+                        <Attachment
+                            attachments={order.anexos ?? []}
+                            onUpload={uploadFile}
+                            onRequestView={handleViewAttachment}
+                            disableActions={disableActions}
+                        />
                     </AccordionList>
 
                     <AccordionList title='Histórico'>
-                        <Clock2 />
+                        <OrderHistoryAccordion
+                            order={order}
+                            orderHistory={historicoPassados}
+                        />
                     </AccordionList>
                 </aside>
             </div>
-
-            {/* <Tabs defaultValue='anexos'>
-                <TabsList className='mb-2'>
-                    <TabsTrigger value='anexos'>Anexos</TabsTrigger>
-                    <TabsTrigger value='history'>Histórico</TabsTrigger>
-                    <TabsTrigger value='comments'>Observações</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value='anexos'>
-                    <Attachment
-                        attachments={order.anexos ?? []}
-                        onUpload={uploadFile}
-                        onRequestView={handleViewAttachment}
-                        disableActions={disableActions}
-                    />
-                </TabsContent>
-
-                <TabsContent value='history'>
-                    <OrderHistoryAccordion
-                        order={order}
-                        orderHistory={historicoPassados}
-                    />
-                </TabsContent>
-
-                <TabsContent value='comments'>
-                    <CommentsForm
-                        key={historicoAtual.id}
-                        observacoes={historicoAtual.observacoes}
-                        onSubmit={comments}
-                    />
-                </TabsContent>
-            </Tabs> */}
         </div>
     );
 }

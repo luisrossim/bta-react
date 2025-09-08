@@ -1,6 +1,5 @@
 import { RoleBadge } from '@/features/user/components/RoleBadge';
 import type { Roles } from '@/features/user/types/Role';
-import { LoadingIcon } from '@/shared/components/LoadingIcon';
 import {
     GenericTable,
     type Column,
@@ -25,8 +24,6 @@ export function UserList({
     disableActions,
 }: UserListProps) {
     const navigate = useNavigate();
-
-    if (isFetching) return <LoadingIcon />;
 
     const columns: Column<User>[] = [
         {
@@ -79,6 +76,7 @@ export function UserList({
     return (
         <GenericTable
             data={users}
+            isLoading={isFetching}
             columns={columns}
             actions={(user) => [
                 {

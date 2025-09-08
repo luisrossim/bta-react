@@ -1,31 +1,30 @@
-import { AttachmentList } from "./components/AttachmentList"
-import { AttachmentForm } from "./components/AttachmentForm"
+import { AttachmentForm } from './components/AttachmentForm';
+import { AttachmentList } from './components/AttachmentList';
 
 interface AttachmentProps {
-   attachments: any[]
-   onUpload: (file: FormData) => Promise<void>
-   onRequestView: (attachmentId: string) => Promise<void>
-   disableActions: boolean
+    attachments: any[];
+    onUpload: (file: FormData) => Promise<void>;
+    onRequestView: (attachmentId: string) => Promise<void>;
+    disableActions: boolean;
 }
 
-export function Attachment({ 
-   attachments,
-   onUpload, 
-   onRequestView, 
-   disableActions 
+export function Attachment({
+    attachments,
+    onUpload,
+    onRequestView,
+    disableActions,
 }: AttachmentProps) {
+    return (
+        <div className='grid grid-cols-1 xl:grid-cols-2 gap-4 mt-1'>
+            <AttachmentList
+                attachments={attachments}
+                onRequest={onRequestView}
+            />
 
-   return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
-         <AttachmentList 
-            attachments={attachments} 
-            onRequest={onRequestView} 
-         />
-
-         <AttachmentForm 
-            onUpload={onUpload} 
-            disableActions={disableActions} 
-         />
-      </div>
-   )
+            <AttachmentForm
+                onUpload={onUpload}
+                disableActions={disableActions}
+            />
+        </div>
+    );
 }

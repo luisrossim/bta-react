@@ -49,7 +49,7 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
                 {isAdmin && (
                     <SelectAsyncFormItem
                         name='userId'
-                        label='Usuário'
+                        label='Técnico'
                         fetchOptions={getUsers}
                         isLoading={loadingUsers}
                         getOptions={(data) =>

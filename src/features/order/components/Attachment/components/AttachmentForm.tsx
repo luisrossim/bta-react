@@ -63,7 +63,7 @@ export function AttachmentForm({
     return (
         <Dialog open={openModal} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <button className='group flex flex-col gap-2 cursor-pointer items-center justify-center p-4 rounded-lg hover:bg-accent outline outline-dashed transition-colors min-h-[140px]'>
+                <button className='group flex flex-col gap-2 cursor-pointer items-center justify-center p-4 rounded-lg hover:bg-accent outline outline-dashed transition-colors min-h-[100px]'>
                     <div className='flex items-center justify-center'>
                         <FilePlus2 className='text-primary' />
                     </div>

@@ -33,7 +33,7 @@ export default function LoginFormPage() {
             </div>
 
             <div
-                className='bg-muted relative hidden lg:block bg-cover bg-center hue-rotate-15 m-3 rounded'
+                className='bg-muted relative hidden lg:block bg-cover bg-center hue-rotate-15 m-4 rounded-2xl'
                 style={{
                     backgroundImage: `url(${welcome})`,
                     backgroundPosition: 'bottom',
