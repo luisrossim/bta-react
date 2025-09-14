@@ -12,27 +12,34 @@ import {
 import {
     associateFormSchema,
     type AssociateForm,
+    type Stage,
 } from '@/features/stages/types/Stage';
-import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
+import { useGetUsersQuery } from '@/features/user/hooks/useUserApi';
+import type { User } from '@/features/user/types/User';
+import { SelectAsyncFormItem } from '@/shared/components/inputs-components/SelectAsyncFormItem';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'lucide-react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useGetStagesQuery } from '../hooks/useStageApi';
 
 interface AssociatedFormProps {
     onAssociate: (data: AssociateForm) => void;
-    stageOptions: { value: number; label: string }[];
-    userOptions: { value: string; label: string }[];
     disableActions: boolean;
 }
 
 export function AssociatedForm({
     onAssociate,
-    stageOptions,
-    userOptions,
     disableActions,
 }: AssociatedFormProps) {
     const [openModal, setOpenModal] = useState(false);
+
+    const { isFetching: loadingStages, refetch: getStages } = useGetStagesQuery(
+        { enabled: false }
+    );
+    const { isFetching: loadingUsers, refetch: getUsers } = useGetUsersQuery({
+        enabled: false,
+    });
 
     const form = useForm<AssociateForm>({
         resolver: zodResolver(associateFormSchema),
@@ -74,18 +81,32 @@ export function AssociatedForm({
                             </DialogDescription>
                         </DialogHeader>
 
-                        <SelectFormItem
-                            label='Etapa'
-                            name='stageId'
-                            options={stageOptions}
-                            required
-                        />
-
-                        <SelectFormItem
+                        <SelectAsyncFormItem
                             label='Usuário'
                             name='userId'
-                            options={userOptions}
+                            fetchOptions={getUsers}
+                            loading={loadingUsers}
                             required
+                            getOptions={(data) =>
+                                data.map((user: User) => ({
+                                    label: user.nome,
+                                    value: user.id,
+                                }))
+                            }
+                        />
+
+                        <SelectAsyncFormItem
+                            label='Etapa'
+                            name='stageId'
+                            fetchOptions={getStages}
+                            loading={loadingStages}
+                            required
+                            getOptions={(data) =>
+                                data.map((stage: Stage) => ({
+                                    label: stage.descricao,
+                                    value: stage.id,
+                                }))
+                            }
                         />
 
                         <DialogFooter>

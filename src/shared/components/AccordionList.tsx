@@ -26,7 +26,7 @@ export const AccordionList: React.FC<AccordionListProps> = ({
         className={`border rounded-lg ${className}`}
     >
         <AccordionItem value='item-1' className='border-0'>
-            <AccordionTrigger className='font-semibold px-4 py-3 rounded-t-lg'>
+            <AccordionTrigger className='font-bold px-4 py-3 rounded-t-lg'>
                 {title}
             </AccordionTrigger>
             <AccordionContent className='px-4 rounded-b-lg'>

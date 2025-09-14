@@ -51,7 +51,7 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
                         name='userId'
                         label='Técnico'
                         fetchOptions={getUsers}
-                        isLoading={loadingUsers}
+                        loading={loadingUsers}
                         getOptions={(data) =>
                             data.map((u: User) => ({
                                 label: u.nome,
@@ -65,7 +65,7 @@ export function OrderFilter({ onSubmit }: OrderFilterProps) {
                     name='stageId'
                     label='Etapa'
                     fetchOptions={getStages}
-                    isLoading={loadingStages}
+                    loading={loadingStages}
                     getOptions={(data) =>
                         data.map((u: Stage) => ({
                             label: u.descricao,

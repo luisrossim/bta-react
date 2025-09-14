@@ -5,15 +5,8 @@ import { AssociatedList } from '../components/AssociatedList';
 import { useStageAssociate } from '../hooks/useStageAssociate';
 
 export function ListStages() {
-    const {
-        stages,
-        associated,
-        associate,
-        disassociate,
-        stageOptions,
-        userOptions,
-        disableActions,
-    } = useStageAssociate();
+    const { stages, associated, associate, disassociate, disableActions } =
+        useStageAssociate();
 
     const handleAssociateUser = (data: AssociateForm) => {
         associate(data);
@@ -31,8 +24,6 @@ export function ListStages() {
                 action={
                     <AssociatedForm
                         onAssociate={handleAssociateUser}
-                        stageOptions={stageOptions}
-                        userOptions={userOptions}
                         disableActions={disableActions}
                     />
                 }

@@ -25,21 +25,21 @@ export type Column<T> = {
 interface GenericTableProps<T> {
     data?: T[];
     columns: Column<T>[];
-    isLoading: boolean;
+    loading: boolean;
     getRowId?: (row: T) => string | number;
     actions?: (row: T) => DropdownAction[];
 }
 
 export function GenericTable<T>({
-    data,
+    data = [],
     columns,
-    isLoading,
+    loading,
     getRowId = (row: any) => row.id,
     actions,
 }: GenericTableProps<T>) {
     if (!data || data.length === 0) return <EmptyTable />;
 
-    if (isLoading) return <LoadingIcon />;
+    if (loading) return <LoadingIcon />;
 
     return (
         <Table className='table-striped'>

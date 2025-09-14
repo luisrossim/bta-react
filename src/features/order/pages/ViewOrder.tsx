@@ -7,15 +7,21 @@ import { AccordionList } from '@/shared/components/AccordionList';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { EmptyData } from '@/shared/components/EmptyData';
 import { formatTimestamp } from '@/shared/utils/formatDate';
+import { formatTelefone } from '@/shared/utils/formatTelephone';
 import {
     ArrowRight,
     Check,
     CircleCheck,
     Clock,
+    Eye,
     Loader,
+    Phone,
+    Trash2,
+    UserRound,
     UserRoundCheck,
     Waypoints,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { AssignUserForm } from '../components/AssignUserForm';
 import { Attachment } from '../components/Attachment';
 import { CommentsForm } from '../components/CommentsForm';
@@ -25,6 +31,7 @@ import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
 
 export default function ViewOrder() {
     const { isAdmin, userLogged } = useAuthContext();
+    const navigate = useNavigate();
 
     const {
         order,
@@ -95,6 +102,10 @@ export default function ViewOrder() {
                         onSubmitAssistance={saveAssistance}
                     />
 
+                    <Button variant='destructive'>
+                        <Trash2 />
+                    </Button>
+
                     {!historicoAtual.concluidoEm ? (
                         <ConfirmDialog
                             onConfirm={concluir}
@@ -129,6 +140,33 @@ export default function ViewOrder() {
                         </p>
                     </AccordionList>
 
+                    <AccordionList title='Cliente' collapsible={false}>
+                        <div className='grid grid-cols-1 gap-2'>
+                            <div className='flex items-center gap-2'>
+                                <UserRound size={16} />
+                                {order.cliente.nome}
+                                <Button
+                                    variant='ghost'
+                                    size='sm'
+                                    onClick={() =>
+                                        navigate(
+                                            `/sistema/clientes/${order.cliente.id}`
+                                        )
+                                    }
+                                >
+                                    <Eye className='text-primary' />
+                                </Button>
+                            </div>
+                            <a
+                                href={`tel:${order.cliente.telefone}`}
+                                className='flex items-center gap-2 '
+                            >
+                                <Phone size={16} />
+                                {formatTelefone(order.cliente.telefone)}
+                            </a>
+                        </div>
+                    </AccordionList>
+
                     <AccordionList title='Técnicos atribuídos'>
                         <div>
                             {historicoAtual.atribuicoes.length > 0 &&
@@ -145,9 +183,7 @@ export default function ViewOrder() {
                                                 }
                                                 disableActions={disableActions}
                                             />
-                                            <span className='font-medium'>
-                                                {usuario.nome}
-                                            </span>
+                                            <span>{usuario.nome}</span>
                                         </div>
                                     )
                                 )}
@@ -174,10 +210,7 @@ export default function ViewOrder() {
                                         confirmLabel='Confirmar'
                                         description={`Deseja se auto atribuir nessa ordem de serviço?`}
                                         trigger={
-                                            <Button
-                                                size={'sm'}
-                                                variant={'dark'}
-                                            >
+                                            <Button size={'sm'}>
                                                 Auto atribuir
                                             </Button>
                                         }

@@ -1,14 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/shared/components/PageHeader';
-import { GenericTable } from '@/shared/components/table-components/GenericTable';
+import {
+    GenericTable,
+    type Column,
+} from '@/shared/components/table-components/GenericTable';
 import { PaginationFooter } from '@/shared/components/table-components/PaginationFooter';
 import { useDebounce } from '@/shared/hooks/useDebounce';
+import { formatDate } from '@/shared/utils/formatDate';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { PatternFormat } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
-import { customerColumns } from '../components/CustomerColumns';
 import { CustomerFilter } from '../components/CustomerFilter';
 import { useGetCustomersQuery } from '../hooks/useCustomerApi';
+import type { Customer } from '../types/Customer';
 
 export default function ListCustomers() {
     const navigate = useNavigate();
@@ -26,6 +31,51 @@ export default function ListCustomers() {
         setSearch(search);
         setPage(1);
     }
+
+    const customerColumns: Column<Customer>[] = [
+        {
+            header: 'Nome',
+            render: (customer) => (
+                <span className='font-medium'>{customer.nome}</span>
+            ),
+        },
+        {
+            header: 'CPF',
+            render: (customer) => (
+                <PatternFormat
+                    format='###.###.###-##'
+                    displayType='text'
+                    value={customer.cpf}
+                />
+            ),
+        },
+        {
+            header: 'Telefone',
+            render: (customer) => (
+                <PatternFormat
+                    format='(##) #####-####'
+                    displayType='text'
+                    value={customer.telefone}
+                />
+            ),
+        },
+        {
+            header: 'Endereço',
+            render: (customer) => (
+                <div className='w-[180px] truncate'>
+                    <span>{customer.endereco.descricao}</span>
+                </div>
+            ),
+        },
+        {
+            header: 'Criado em',
+            render: (customer) => (
+                <span className='text-muted-foreground'>
+                    {formatDate(customer.criadoEm)}
+                </span>
+            ),
+        },
+    ];
 
     return (
         <div className='space-y-10'>
@@ -45,7 +95,7 @@ export default function ListCustomers() {
                 <GenericTable
                     data={result?.data}
                     columns={customerColumns}
-                    isLoading={isFetching}
+                    loading={isFetching}
                     actions={(customer) => [
                         {
                             label: 'Visualizar',

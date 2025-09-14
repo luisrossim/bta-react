@@ -9,18 +9,27 @@ import { InputFormItem } from '@/shared/components/inputs-components/InputFormIt
 import { MaskFormItem } from '@/shared/components/inputs-components/MaskFormItem';
 import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
 import { roles } from '@/shared/mocks/roles';
+import { showError, showSuccess } from '@/shared/utils/showMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { useUsers } from '../hooks/useUsers';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+    useCreateUserMutation,
+    useGetUserQuery,
+    useUpdateUserMutation,
+} from '../hooks/useUserApi';
 
 interface UserFormProps {
     id?: string;
 }
 
 export function UserForm({ id }: UserFormProps) {
-    const { fetchUserById, saveUser } = useUsers();
+    const navigate = useNavigate();
+
+    const { data: user } = useGetUserQuery(id);
+    const { mutateAsync: createUser } = useCreateUserMutation();
+    const { mutateAsync: updateUser } = useUpdateUserMutation();
 
     const form = useForm<CreateUser | UpdateUser>({
         resolver: zodResolver(id ? updateUserSchema : createUserSchema),
@@ -35,21 +44,26 @@ export function UserForm({ id }: UserFormProps) {
         []
     );
 
-    const onSubmit = (data: CreateUser | UpdateUser) => {
-        const userId = id ? String(id) : null;
-        saveUser(userId, data);
-    };
+    const onSubmit = async (values: CreateUser | UpdateUser) => {
+        try {
+            if (id) {
+                await updateUser({ id, values });
+            } else {
+                await createUser(values);
+            }
 
-    const handeFetchUser = async (id: string) => {
-        const user = await fetchUserById(id);
-        if (user) {
-            form.reset(user);
+            showSuccess('Operação realizada com sucesso.');
+            navigate('/sistema/usuarios');
+        } catch (error: any) {
+            showError(error.message);
         }
     };
 
     useEffect(() => {
-        if (id) handeFetchUser(id);
-    }, [id]);
+        if (user) {
+            form.reset(user);
+        }
+    }, [user, form]);
 
     return (
         <FormProvider {...form}>

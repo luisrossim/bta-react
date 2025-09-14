@@ -4,16 +4,16 @@ import axios from 'axios';
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create({
-  baseURL,
-  withCredentials: true
+    baseURL,
+    withCredentials: true,
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const normalizedError = extractAxiosError(error);
-    return Promise.reject(normalizedError);
-  }
+    (response) => response,
+    (error) => {
+        const normalizedError = extractAxiosError(error);
+        return Promise.reject(normalizedError);
+    }
 );
 
 export { axiosInstance };

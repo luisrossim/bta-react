@@ -4,29 +4,24 @@ import type {
     AssociateForm,
     Stage,
 } from '@/features/stages/types/Stage';
-import { userService } from '@/features/user/services/userService';
-import type { User } from '@/features/user/types/User';
 import { showError } from '@/shared/utils/showMessage';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function useStageAssociate() {
     const [stages, setStages] = useState<Stage[]>([]);
     const [associated, setAssociated] = useState<AssociatedUsers[]>([]);
-    const [users, setUsers] = useState<User[]>([]);
     const [disableActions, setDisableActions] = useState<boolean>(false);
 
     const fetchStagesAndAssociated = async () => {
         try {
-            const [_stages, _associated, _users] = await Promise.all([
+            const [_stages, _associated] = await Promise.all([
                 stageService.get(),
                 stageService.getVinculados(),
-                userService.get(),
             ]);
 
             setStages(_stages);
             setAssociated(_associated);
-            setUsers(_users);
         } catch (err: any) {
             showError(err.message);
         }
@@ -68,24 +63,6 @@ export function useStageAssociate() {
         }
     };
 
-    const stageOptions = useMemo(
-        () =>
-            stages.map((stage) => ({
-                value: stage.id,
-                label: stage.descricao,
-            })),
-        [stages]
-    );
-
-    const userOptions = useMemo(
-        () =>
-            users.map((user) => ({
-                value: user.id,
-                label: user.nome,
-            })),
-        [users]
-    );
-
     useEffect(() => {
         fetchStagesAndAssociated();
     }, []);
@@ -95,8 +72,6 @@ export function useStageAssociate() {
         disassociate,
         associated,
         stages,
-        stageOptions,
-        userOptions,
         disableActions,
     };
 }

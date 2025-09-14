@@ -40,7 +40,7 @@ export function OrderHistoryAccordion({
                             <StageHeader stage={item.etapa} />
                         </AccordionTrigger>
 
-                        <AccordionContent className='grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 p-4 lg:p-6 border-t bg-muted'>
+                        <AccordionContent className='flex flex-col gap-4 p-4'>
                             {item.etapa.descricao == 'Medição' && (
                                 <>
                                     <ListItem

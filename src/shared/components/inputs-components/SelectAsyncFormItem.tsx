@@ -36,7 +36,7 @@ interface SelectAsyncFormItemProps {
     placeholder?: string;
     fetchOptions: () => Promise<any>;
     getOptions: (data: any) => Option[];
-    isLoading: boolean;
+    loading: boolean;
     allowClear?: boolean;
     required?: boolean;
 }
@@ -47,7 +47,7 @@ export function SelectAsyncFormItem({
     placeholder = 'Selecione uma opção',
     fetchOptions,
     getOptions,
-    isLoading,
+    loading,
     allowClear = true,
     required = false,
 }: SelectAsyncFormItemProps) {
@@ -111,6 +111,8 @@ export function SelectAsyncFormItem({
 
                         <PopoverContent
                             onOpenAutoFocus={(e) => e.preventDefault()}
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
                         >
                             <Command>
                                 <CommandInput
@@ -124,7 +126,7 @@ export function SelectAsyncFormItem({
                                 {allowClear && hasValue(field.value) && (
                                     <Button
                                         type='button'
-                                        variant='destructive'
+                                        variant='secondary'
                                         size='sm'
                                         className='w-full my-2'
                                         onClick={() => {
@@ -138,7 +140,7 @@ export function SelectAsyncFormItem({
                                 )}
 
                                 <CommandList>
-                                    {isLoading ? (
+                                    {loading ? (
                                         <div className='py-4'>
                                             <LoadingIcon />
                                         </div>
