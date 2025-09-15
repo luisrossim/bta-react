@@ -5,8 +5,8 @@ export abstract class CrudService<T> {
     protected readonly axios = axiosInstance;
     protected readonly path: string;
 
-    constructor(path: string){
-        this.path = path
+    constructor(path: string) {
+        this.path = path;
     }
 
     async create(data: Partial<T>): Promise<T> {
@@ -19,20 +19,22 @@ export abstract class CrudService<T> {
         return response.data;
     }
 
-    async getPaginated(params?: Record<string, any>): Promise<PaginatedResponse<T>> {
-        const response = await this.axios.get<PaginatedResponse<T>>(
-            this.path, { params }
-        );
+    async getPaginated(
+        params?: Record<string, any>
+    ): Promise<PaginatedResponse<T>> {
+        const response = await this.axios.get<PaginatedResponse<T>>(this.path, {
+            params,
+        });
         return response.data;
     }
 
-    async getById(id: number | string): Promise<T>{
+    async getById(id: number | string): Promise<T> {
         const response = await this.axios.get<T>(`${this.path}/${id}`);
         return response.data;
     }
 
     async update(id: number | string, data: Partial<T>): Promise<T> {
-        const response = await this.axios.put<T>(`${this.path}/${id}`, data)
+        const response = await this.axios.put<T>(`${this.path}/${id}`, data);
         return response.data;
     }
 

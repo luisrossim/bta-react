@@ -1,10 +1,10 @@
-import z from "zod"
+import z from 'zod';
 
 export const roleSchema = z.object({
-   id: z.number(),
-   descricao: z.string().optional()
-})
+    id: z.number(),
+    descricao: z.string().optional(),
+});
 
-export type Role = z.infer<typeof roleSchema>
+export type Role = z.infer<typeof roleSchema>;
 
-export type Roles = 'Administrador' | 'Técnico' | 'Assistente'
+export type Roles = 'Administrador' | 'Técnico' | 'Assistente';

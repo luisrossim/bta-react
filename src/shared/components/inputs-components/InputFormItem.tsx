@@ -15,6 +15,7 @@ interface InputFormItemProps<T extends FieldValues> {
     type?: string;
     placeholder?: string;
     disabled?: boolean;
+    required?: boolean;
     className?: string;
 }
 
@@ -24,6 +25,7 @@ export function InputFormItem<T extends FieldValues>({
     type = 'text',
     placeholder,
     disabled = false,
+    required = false,
     className,
 }: InputFormItemProps<T>) {
     const { control } = useFormContext();
@@ -34,7 +36,10 @@ export function InputFormItem<T extends FieldValues>({
             name={name}
             render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                    <FormLabel>{label}</FormLabel>
+                    <FormLabel className='flex items-center gap-1'>
+                        {label}
+                        {required && <span style={{ color: 'red' }}>*</span>}
+                    </FormLabel>
 
                     <FormControl>
                         <Input

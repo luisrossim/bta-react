@@ -1,121 +1,123 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthContext } from '@/features/auth/contexts/AuthContext';
 import { useOrderInfo } from '@/features/order/hooks/useOrderInfo';
 import { DisassociateForm } from '@/features/stages/components/DisassociateForm';
+import { AccordionList } from '@/shared/components/AccordionList';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { EmptyData } from '@/shared/components/EmptyData';
-import { ListItem } from '@/shared/components/ListItem';
-import { PageTitle } from '@/shared/components/PageHeader';
+import { LoadingIcon } from '@/shared/components/LoadingIcon';
 import { formatTimestamp } from '@/shared/utils/formatDate';
 import { formatTelefone } from '@/shared/utils/formatTelephone';
 import {
     ArrowRight,
-    CheckCircle,
-    ClipboardList,
+    Check,
+    CircleCheck,
+    Clock,
+    Eye,
     Phone,
     UserRound,
+    UserRoundCheck,
     Waypoints,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AssignUserForm } from '../components/AssignUserForm';
-import { Attachment } from '../components/Attachment';
+import { AttachmentForm } from '../components/Attachment/AttachmentForm';
+import { AttachmentList } from '../components/Attachment/AttachmentList';
 import { CommentsForm } from '../components/CommentsForm';
-import { OrderHistoryAccordion } from '../components/OrderHistoryAccordion';
+import { OrderHistoryModal } from '../components/OrderHistoryModal';
 import { OrderSheets } from '../components/OrderSheets';
-import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
+import { OrderStatusBadge } from '../components/OrderStatusBadge';
+import {
+    useAdvanceMutation,
+    useCommentsMutation,
+    useConcludeMutation,
+    useSelfAssignMutation,
+    useUploadFileMutation,
+    useUserAssignMutation,
+    useUserDisassociateMutation,
+} from '../hooks/useOrderApi';
+import { useOrderDetails } from '../hooks/useOrderDetails';
+import { orderService } from '../services/orderService';
 
 export default function ViewOrder() {
     const { isAdmin, userLogged } = useAuthContext();
+    const { calculateExecutionTime } = useOrderDetails();
+    const navigate = useNavigate();
 
-    const {
-        order,
-        historicoAtual,
-        historicoPassados,
-        atribuir,
-        seAtribuir,
-        desatribuir,
-        concluir,
-        avancar,
-        comments,
-        viewAttachment,
-        uploadFile,
-        saveMeasurement,
-        saveAssistance,
-        disableActions,
-    } = useOrderInfo();
+    const { mutate: assign } = useUserAssignMutation();
+    const { mutate: selfAssign } = useSelfAssignMutation();
+    const { mutate: disassociate } = useUserDisassociateMutation();
+    const { mutate: conclude } = useConcludeMutation();
+    const { mutate: advance } = useAdvanceMutation();
+    const { mutate: comments } = useCommentsMutation();
+    const { mutate: uploadFile, isPending: isUploading } =
+        useUploadFileMutation();
 
-    const { calculateExecutionTime } = useCalculateExecutionTime();
+    const { order, currentOrder, pastOrders, orderIsCompleted, isFetching } =
+        useOrderInfo();
+
+    if (isFetching) return <LoadingIcon />;
+
+    if (!order || !currentOrder) return <EmptyData />;
+
+    const handleUploadFile = (file: FormData) => {
+        uploadFile({
+            orderId: order.id,
+            file,
+        });
+    };
 
     const handleViewAttachment = async (attachmentId: string) => {
-        const attachment = await viewAttachment(attachmentId);
+        const attachment = await orderService.viewAttachment(attachmentId);
 
         if (attachment) {
             window.open(attachment.url_temporaria, '_blank');
         }
     };
 
-    if (!historicoAtual || !order?.cliente) return <EmptyData />;
-
     return (
-        <div className='space-y-14 mb-14'>
-            <div className='flex flex-wrap justify-between items-center gap-10'>
-                <div>
-                    <PageTitle title='Ordem de serviço' />
+        <div className='space-y-10'>
+            <div className='flex flex-wrap justify-between items-start gap-10'>
+                <div className='flex lg:items-center flex-col lg:flex-row gap-2 lg:gap-4'>
+                    <div className='flex flex-col gap-2'>
+                        <div className='flex items-center gap-4'>
+                            <h1 className='text-xl md:text-2xl font-semibold'>
+                                OS #{order.numero}
+                            </h1>
 
-                    <div className='flex flex-col gap-2 text-sm text-primary mt-4'>
-                        <div className='flex items-center gap-2'>
-                            <ClipboardList size={16} />
-                            <h2>N° {order.numero}</h2>
+                            <OrderStatusBadge
+                                completedDate={currentOrder.concluidoEm}
+                            />
                         </div>
-                        <div className='flex items-center gap-2'>
-                            <Waypoints size={16} />
-                            <h2>{historicoAtual.etapa.descricao}</h2>
-                        </div>
-                        <Link
-                            to={`/sistema/clientes/${order.cliente.id}`}
-                            className='hover:bg-accent transition-colors'
-                        >
-                            <div className='flex items-center flex-wrap gap-4'>
-                                <div className='flex items-center gap-2'>
-                                    <UserRound size={16} />
-                                    <h2>{order.cliente.nome}</h2>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <Phone size={14} />
-                                    {formatTelefone(order.cliente.telefone)}
-                                </div>
-                            </div>
-                        </Link>
+                        <p className='text-sm text-muted-foreground'>
+                            Iniciada em {formatTimestamp(currentOrder.criadoEm)}
+                        </p>
                     </div>
                 </div>
 
                 <div className='flex items-center gap-4 flex-wrap'>
                     <OrderSheets
                         order={order}
-                        stage={historicoAtual.etapa.descricao}
-                        onSubmitMeasurement={saveMeasurement}
-                        onSubmitAssistance={saveAssistance}
+                        stage={currentOrder.etapa.descricao}
                     />
 
-                    {!historicoAtual.concluidoEm ? (
+                    {!currentOrder.concluidoEm ? (
                         <ConfirmDialog
-                            onConfirm={concluir}
+                            onConfirm={() => conclude(currentOrder.id)}
                             title='Concluir etapa?'
                             trigger={
                                 <Button>
-                                    <CheckCircle />
+                                    <Check />
                                     Concluir
                                 </Button>
                             }
                         />
                     ) : (
                         <ConfirmDialog
-                            onConfirm={avancar}
+                            onConfirm={() => advance(currentOrder.id)}
                             title='Avançar etapa?'
                             trigger={
-                                <Button size={'lg'}>
+                                <Button disabled={!isAdmin}>
                                     <ArrowRight /> Avançar
                                 </Button>
                             }
@@ -124,141 +126,185 @@ export default function ViewOrder() {
                 </div>
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4'>
-                <ListItem
-                    label='Situação'
-                    className='bg-muted p-3 rounded-sm'
-                    value={
-                        <div>
-                            {historicoAtual.concluidoEm ? (
-                                <Badge variant={'success'}>Concluída</Badge>
-                            ) : (
-                                <Badge variant={'warning'}>Em andamento</Badge>
-                            )}
-                        </div>
-                    }
-                />
+            <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4'>
+                <div className='space-y-6'>
+                    <AccordionList title='Etapa atual' collapsible={false}>
+                        <p className='flex items-center gap-2 text-primary'>
+                            <Waypoints size={16} />{' '}
+                            {currentOrder.etapa.descricao}
+                        </p>
+                    </AccordionList>
 
-                <ListItem
-                    label='Técnicos atribuídos'
-                    className='bg-muted p-3 rounded-sm'
-                    value={
-                        <>
-                            {historicoAtual.atribuicoes.length > 0 &&
-                                historicoAtual.atribuicoes?.map(
+                    <AccordionList title='Cliente' collapsible={false}>
+                        <div className='grid grid-cols-1 gap-2'>
+                            <div className='flex items-center gap-2'>
+                                <UserRound size={16} />
+                                {order.cliente.nome}
+                                <Button
+                                    variant='ghost'
+                                    size='sm'
+                                    onClick={() =>
+                                        navigate(
+                                            `/sistema/clientes/${order.cliente.id}`
+                                        )
+                                    }
+                                >
+                                    <Eye className='text-primary' />
+                                </Button>
+                            </div>
+                            <a
+                                href={`tel:${order.cliente.telefone}`}
+                                className='flex items-center gap-2 '
+                            >
+                                <Phone size={16} />
+                                {formatTelefone(order.cliente.telefone)}
+                            </a>
+                        </div>
+                    </AccordionList>
+
+                    <AccordionList title='Técnicos atribuídos'>
+                        <div>
+                            {currentOrder.atribuicoes.length > 0 &&
+                                currentOrder.atribuicoes?.map(
                                     ({ usuario }, index) => (
-                                        <div className='flex items-center gap-2'>
+                                        <div
+                                            key={index}
+                                            className='flex items-center gap-2 mb-2'
+                                        >
                                             <DisassociateForm
-                                                key={index}
+                                                key={usuario.id}
                                                 title='Desatribuir usuário?'
-                                                stage={historicoAtual.etapa}
+                                                stage={currentOrder.etapa}
                                                 user={usuario}
                                                 onSubmit={() =>
-                                                    desatribuir(usuario.id)
+                                                    disassociate({
+                                                        historyId:
+                                                            currentOrder.id,
+                                                        userId: usuario.id,
+                                                    })
                                                 }
-                                                disableActions={disableActions}
                                             />
-                                            <span className='font-medium'>
-                                                {usuario.nome}
-                                            </span>
+                                            <span>{usuario.nome}</span>
                                         </div>
                                     )
                                 )}
 
                             {isAdmin && (
                                 <AssignUserForm
-                                    stageUsers={
-                                        historicoAtual.etapa.etapaUsuario
+                                    stageUsers={currentOrder.etapa.etapaUsuario}
+                                    onAssign={(userId) =>
+                                        assign({
+                                            historyId: currentOrder.id,
+                                            userId,
+                                        })
                                     }
-                                    onAtribuir={atribuir}
                                 />
                             )}
 
                             {!isAdmin &&
-                                !historicoAtual.atribuicoes.some(
+                                !currentOrder.atribuicoes.some(
                                     (attr) => attr.usuario.id == userLogged?.id
                                 ) && (
                                     <ConfirmDialog
                                         onConfirm={() => {
-                                            seAtribuir(userLogged!.id);
+                                            selfAssign({
+                                                historyId: currentOrder.id,
+                                                userId: userLogged!.id,
+                                            });
                                         }}
-                                        disabled={disableActions}
+                                        disabled={false}
                                         title={'Auto atribuição'}
                                         confirmLabel='Confirmar'
                                         description={`Deseja se auto atribuir nessa ordem de serviço?`}
                                         trigger={
-                                            <Button
-                                                size={'sm'}
-                                                variant={'dark'}
-                                            >
+                                            <Button size={'sm'}>
                                                 Auto atribuir
                                             </Button>
                                         }
                                     />
                                 )}
-                        </>
-                    }
-                />
+                        </div>
+                    </AccordionList>
 
-                <ListItem
-                    label='Tempo de execução'
-                    className='bg-muted p-3 rounded-sm'
-                    value={calculateExecutionTime(
-                        historicoAtual.criadoEm,
-                        historicoAtual.concluidoEm!
-                    )}
-                />
+                    <AccordionList title='Informações de progresso'>
+                        <div className='space-y-3'>
+                            <div className='flex items-center gap-2'>
+                                <Clock
+                                    size={17}
+                                    className={`${orderIsCompleted ? 'bg-green-500' : 'bg-amber-600'} rounded-full text-white`}
+                                />
+                                Tempo de execução:
+                                <span>
+                                    {calculateExecutionTime(
+                                        currentOrder.criadoEm,
+                                        currentOrder.concluidoEm!
+                                    )}
+                                </span>
+                            </div>
 
-                <ListItem
-                    label='Iniciada em'
-                    className='bg-muted p-3 rounded-sm'
-                    value={formatTimestamp(historicoAtual.criadoEm)}
-                />
+                            <div
+                                className={`flex items-center gap-2 ${!orderIsCompleted && 'opacity-60'}`}
+                            >
+                                <CircleCheck
+                                    size={17}
+                                    className={`${orderIsCompleted ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
+                                />
+                                Concluída em:
+                                <span>
+                                    {formatTimestamp(currentOrder.concluidoEm)}
+                                </span>
+                            </div>
 
-                <ListItem
-                    label='Concluída em'
-                    className='bg-muted p-3 rounded-sm'
-                    value={formatTimestamp(historicoAtual.concluidoEm)}
-                />
+                            <div
+                                className={`flex items-center gap-2 ${!orderIsCompleted && 'opacity-60'}`}
+                            >
+                                <UserRoundCheck size={17} />
+                                Responsável:
+                                <span>{currentOrder.concluidoPor?.nome}</span>
+                            </div>
+                        </div>
+                    </AccordionList>
 
-                <ListItem
-                    label='Concluída por'
-                    className='bg-muted p-3 rounded-sm'
-                    value={historicoAtual.concluidoPor?.nome}
-                />
+                    <AccordionList title='Observações'>
+                        <div className='flex items-center gap-2'>
+                            <p>
+                                {currentOrder.observacoes ?? 'Sem observações'}
+                            </p>
+
+                            <CommentsForm
+                                key={currentOrder.id}
+                                observacoes={currentOrder.observacoes}
+                                onSubmit={(values) =>
+                                    comments({
+                                        historyId: currentOrder.id,
+                                        values,
+                                    })
+                                }
+                            />
+                        </div>
+                    </AccordionList>
+                </div>
+
+                <aside className='space-y-6'>
+                    <AccordionList title='Anexos'>
+                        <AttachmentList
+                            attachments={order.anexos ?? []}
+                            onRequest={handleViewAttachment}
+                        />
+                        <AttachmentForm
+                            onSubmit={handleUploadFile}
+                            isUploading={isUploading}
+                        />
+                    </AccordionList>
+
+                    <AccordionList title='Histórico'>
+                        <OrderHistoryModal
+                            order={order}
+                            pastOrders={pastOrders}
+                        />
+                    </AccordionList>
+                </aside>
             </div>
-
-            <Tabs defaultValue='anexos'>
-                <TabsList className='mb-2'>
-                    <TabsTrigger value='anexos'>Anexos</TabsTrigger>
-                    <TabsTrigger value='history'>Histórico</TabsTrigger>
-                    <TabsTrigger value='comments'>Observações</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value='anexos'>
-                    <Attachment
-                        attachments={order.anexos ?? []}
-                        onUpload={uploadFile}
-                        onRequestView={handleViewAttachment}
-                        disableActions={disableActions}
-                    />
-                </TabsContent>
-
-                <TabsContent value='history'>
-                    <OrderHistoryAccordion
-                        order={order}
-                        orderHistory={historicoPassados}
-                    />
-                </TabsContent>
-
-                <TabsContent value='comments'>
-                    <CommentsForm
-                        key={historicoAtual.id}
-                        observacoes={historicoAtual.observacoes}
-                        onSubmit={comments}
-                    />
-                </TabsContent>
-            </Tabs>
         </div>
     );
 }

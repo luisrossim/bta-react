@@ -1,13 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/shared/components/PageHeader';
-import { PaginationFooter } from '@/shared/components/PaginationFooter';
+import {
+    GenericTable,
+    type Column,
+} from '@/shared/components/table-components/GenericTable';
+import { PaginationFooter } from '@/shared/components/table-components/PaginationFooter';
 import { useDebounce } from '@/shared/hooks/useDebounce';
+import { formatDate } from '@/shared/utils/formatDate';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { PatternFormat } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { CustomerFilter } from '../components/CustomerFilter';
-import { CustomerTable } from '../components/CustomerTable';
 import { useGetCustomersQuery } from '../hooks/useCustomerApi';
+import type { Customer } from '../types/Customer';
 
 export default function ListCustomers() {
     const navigate = useNavigate();
@@ -17,8 +23,8 @@ export default function ListCustomers() {
     const debouncedSearch = useDebounce(search, 500);
 
     const { data: result, isFetching } = useGetCustomersQuery(
-        page,
-        debouncedSearch
+        debouncedSearch,
+        page
     );
 
     function handleSearchChange(search: string) {
@@ -26,11 +32,56 @@ export default function ListCustomers() {
         setPage(1);
     }
 
+    const customerColumns: Column<Customer>[] = [
+        {
+            header: 'Nome',
+            render: (customer) => (
+                <span className='font-medium'>{customer.nome}</span>
+            ),
+        },
+        {
+            header: 'CPF',
+            render: (customer) => (
+                <PatternFormat
+                    format='###.###.###-##'
+                    displayType='text'
+                    value={customer.cpf}
+                />
+            ),
+        },
+        {
+            header: 'Telefone',
+            render: (customer) => (
+                <PatternFormat
+                    format='(##) #####-####'
+                    displayType='text'
+                    value={customer.telefone}
+                />
+            ),
+        },
+        {
+            header: 'Endereço',
+            render: (customer) => (
+                <div className='w-[180px] truncate'>
+                    <span>{customer.endereco.descricao}</span>
+                </div>
+            ),
+        },
+        {
+            header: 'Criado em',
+            render: (customer) => (
+                <span className='text-muted-foreground'>
+                    {formatDate(customer.criadoEm)}
+                </span>
+            ),
+        },
+    ];
+
     return (
         <div className='space-y-10'>
             <PageHeader
                 title='Clientes'
-                subtitle='Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços com facilidade.'
+                subtitle='Gerencie seus clientes, visualize endereços e acompanhe o histórico de serviços do cliente específico.'
                 action={
                     <Button onClick={() => navigate('/sistema/clientes/form')}>
                         <Plus /> Novo cliente
@@ -38,21 +89,38 @@ export default function ListCustomers() {
                 }
             />
 
-            <CustomerFilter search={search} onSearch={handleSearchChange} />
+            <div className='grid grid-cols-1 gap-8'>
+                <CustomerFilter search={search} onSearch={handleSearchChange} />
 
-            <CustomerTable
-                customers={result?.data ?? []}
-                isFetching={isFetching}
-            />
-
-            {result && result.data.length > 0 && (
-                <PaginationFooter
-                    page={result.page}
-                    totalItems={result.totalItems}
-                    totalPages={result.totalPages}
-                    onPageChange={setPage}
+                <GenericTable
+                    data={result?.data}
+                    columns={customerColumns}
+                    loading={isFetching}
+                    actions={(customer) => [
+                        {
+                            label: 'Visualizar',
+                            onClick: () =>
+                                navigate(`/sistema/clientes/${customer.id}`),
+                        },
+                        {
+                            label: 'Editar',
+                            onClick: () =>
+                                navigate(
+                                    `/sistema/clientes/form/${customer.id}`
+                                ),
+                        },
+                    ]}
                 />
-            )}
+
+                {result && result.data.length > 0 && (
+                    <PaginationFooter
+                        page={result.page}
+                        totalItems={result.totalItems}
+                        totalPages={result.totalPages}
+                        onPageChange={setPage}
+                    />
+                )}
+            </div>
         </div>
     );
 }

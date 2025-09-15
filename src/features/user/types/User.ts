@@ -1,36 +1,30 @@
 import { z } from 'zod';
 import { roleSchema } from './Role';
 
-export const updateUserSchema = z.object({
+const userSchema = z.object({
     nome: z.string().min(2, 'O nome deve possuir pelo menos 2 caracteres'),
     email: z.string().email({ message: 'Email inválido' }),
-    telefone: z.string().min(1, { message: 'Telefone inválido' }),
+    telefone: z.string({ message: 'Telefone inválido' }),
+    role: roleSchema,
+});
+
+export const updateUserSchema = userSchema.extend({
     password: z
         .string()
-        .transform((val) => (val === '' ? null : val))
+        .min(6, 'A senha deve possuir pelo menos 6 caracteres')
         .nullable()
-        .refine((val) => val === null || val.length >= 6, {
-            message: 'A senha deve ter pelo menos 6 caracteres',
-        })
         .optional(),
-    role: roleSchema,
 });
 
-export const createUserSchema = z.object({
-    nome: z.string().min(2, 'O nome deve possuir pelo menos 2 caracteres'),
-    email: z.string().email({ message: 'Email inválido' }),
-    telefone: z.string().min(1, { message: 'Telefone inválido' }),
-    password: z
-        .string({ message: 'Senha é obrigatória' })
-        .min(6, 'A senha deve ter pelo menos 6 caracteres'),
-    role: roleSchema,
+export const createUserSchema = userSchema.extend({
+    password: z.string().min(6, 'A senha deve possuir pelo menos 6 caracteres'),
 });
 
-export type CreateUser = z.infer<typeof createUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
+export type CreateUser = z.infer<typeof createUserSchema>;
 
 export interface User extends CreateUser {
-    id: number;
+    id: string;
     isAtivo: boolean;
     atualizadoEm: Date;
     criadoEm: Date;

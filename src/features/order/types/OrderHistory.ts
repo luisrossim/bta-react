@@ -1,37 +1,35 @@
-import z from "zod";
-import type { Stage } from "../../stages/types/Stage";
-import type { User } from "../../user/types/User";
+import z from 'zod';
+import type { Stage } from '../../stages/types/Stage';
+import type { User } from '../../user/types/User';
 
 export interface AtribuicaoRequest {
-   historyId: string
-   userId: number
+    historyId: string;
+    userId: string;
 }
 
 export interface Atribuicao {
-   usuario: User
+    usuario: User;
 }
 
 export interface OrderHistory {
-   id: string;
-   etapa: Stage
-   atribuicoes: Atribuicao[]
-   observacoes?: string;
-   concluidoPor: User;
-   concluidoEm?: Date;
-   atualizadoEm?: Date;
-   criadoEm: Date;
+    id: string;
+    etapa: Stage;
+    atribuicoes: Atribuicao[];
+    observacoes?: string;
+    concluidoPor: User;
+    concluidoEm?: Date;
+    atualizadoEm?: Date;
+    criadoEm: Date;
 }
 
-
 export const commentsHistorySchema = z.object({
-  observacoes: z.string()
-})
+    observacoes: z.string(),
+});
 
-export type CommentsHistory = z.infer<typeof commentsHistorySchema>
-
+export type CommentsHistory = z.infer<typeof commentsHistorySchema>;
 
 export const createAtribuicaoSchema = z.object({
-   userId: z.number()
-})
+    userId: z.string(),
+});
 
-export type CreateAtribuicao = z.infer<typeof createAtribuicaoSchema>
+export type CreateAtribuicao = z.infer<typeof createAtribuicaoSchema>;

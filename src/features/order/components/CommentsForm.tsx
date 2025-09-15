@@ -1,94 +1,87 @@
-import { Button } from "@/components/ui/button";
-import { commentsHistorySchema, type CommentsHistory } from "@/features/order/types/OrderHistory";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+    commentsHistorySchema,
+    type CommentsHistory,
+} from '@/features/order/types/OrderHistory';
+import { TextAreaFormItem } from '@/shared/components/inputs-components/TextAreaFormItem';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Edit } from 'lucide-react';
+import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface CommentsFormProps {
-   observacoes?: string;
-   onSubmit: (values: CommentsHistory) => void;
+    observacoes?: string;
+    onSubmit: (values: CommentsHistory) => void;
 }
 
-export function CommentsForm({ 
-   observacoes,
-   onSubmit 
-}: CommentsFormProps) {
-   const [edit, setEdit] = useState(true);
+export function CommentsForm({ observacoes, onSubmit }: CommentsFormProps) {
+    const [openModal, setOpenModal] = useState(false);
 
-   const form = useForm<CommentsHistory>({
-      resolver: zodResolver(commentsHistorySchema),
-      defaultValues: { observacoes }
-   });
+    const form = useForm<CommentsHistory>({
+        resolver: zodResolver(commentsHistorySchema),
+        defaultValues: { observacoes },
+    });
 
-   const resetForm = () => {
-      form.reset({ observacoes })
-   }
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpenModal(isOpen);
 
-   useEffect(() => {
-      resetForm();
-   }, [observacoes])
+        if (isOpen) {
+            form.reset({ observacoes });
+        }
+    };
 
-   return (
-      <Form {...form}>
-         <form 
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6"
-         >
-            <FormField
-               control={form.control}
-               name="observacoes"
-               disabled={edit}
-               render={({ field }) => (
-                  <FormItem>
-                     <FormControl>
-                        <Textarea
-                           placeholder="Nada informado"
-                           className="min-h-[100px] rounded-[12px] text-sm"
-                           {...field}
-                        />
-                     </FormControl>
+    const handleSubmit = async (values: CommentsHistory) => {
+        onSubmit(values);
+        setOpenModal(false);
+    };
 
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+    return (
+        <FormProvider {...form}>
+            <Dialog open={openModal} onOpenChange={handleOpenChange}>
+                <DialogTrigger asChild>
+                    <Button variant='ghost' size='sm'>
+                        <Edit className='text-primary' />
+                    </Button>
+                </DialogTrigger>
 
-            <div className="flex justify-end gap-2">
-               {edit 
-                  ? (
-                     <Button 
-                        type="button"
-                        onClick={() => setEdit(false)}
-                     >
-                        Editar observações
-                     </Button>
-                  ) 
-                  : (
-                     <>
-                        <Button 
-                           type="button" 
-                           variant={"outline"}
-                           onClick={() => {
-                              resetForm();
-                              setEdit(true);
-                           }}
-                        >
-                           Cancelar
-                        </Button>
+                <DialogContent>
+                    <form
+                        onSubmit={form.handleSubmit(handleSubmit)}
+                        className='flex flex-col justify-between gap-8'
+                    >
+                        <div className='space-y-6'>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    Editar observações da etapa
+                                </DialogTitle>
+                            </DialogHeader>
 
-                        <Button 
-                           type="submit" 
-                           variant={"dark"}
-                        >
-                           Salvar observações
-                        </Button>
-                     </>
-                  )
-               }
-            </div>
-         </form>
-      </Form>
-   )
+                            <TextAreaFormItem
+                                label='Observações'
+                                name='observacoes'
+                                className='min-h-[100px] rounded-[12px] text-sm'
+                                required
+                            />
+                        </div>
+
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant='outline'>Cancelar</Button>
+                            </DialogClose>
+                            <Button type='submit'>Salvar</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </FormProvider>
+    );
 }
