@@ -1,6 +1,11 @@
 import { useTruncateText } from '../../hooks/useTruncateText';
 
-export function TruncateCell({ text }: { text: string }) {
-    const truncated = useTruncateText(text);
+interface TruncateCellProps {
+    text: string;
+    maxLength?: number;
+}
+
+export function TruncateCell({ text, maxLength }: TruncateCellProps) {
+    const truncated = useTruncateText(text, maxLength);
     return <span>{truncated}</span>;
 }

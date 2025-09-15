@@ -105,7 +105,7 @@ export function SelectFormItem({
                                 {allowClear && hasValue(field.value) && (
                                     <Button
                                         type='button'
-                                        variant='destructive'
+                                        variant='secondary'
                                         size='sm'
                                         className='w-full my-2'
                                         onClick={() => {

@@ -20,19 +20,16 @@ type UploadFile = {
 };
 
 interface AttachmentFormProps {
-    onUpload: (file: FormData) => Promise<void>;
-    disableActions: boolean;
+    onSubmit: (file: FormData) => void;
+    isUploading: boolean;
 }
 
-export function AttachmentForm({
-    onUpload,
-    disableActions,
-}: AttachmentFormProps) {
+export function AttachmentForm({ onSubmit, isUploading }: AttachmentFormProps) {
     const form = useForm<UploadFile>();
     const [openModal, setOpenModal] = useState(false);
     const maxSizeInBytes = 8 * 1024 * 1024;
 
-    const onSubmit = async (values: UploadFile) => {
+    const handleOnSubmit = async (values: UploadFile) => {
         const file = values.file?.[0];
 
         if (!file) {
@@ -48,7 +45,7 @@ export function AttachmentForm({
         const formData = new FormData();
         formData.append('file', file);
 
-        onUpload(formData);
+        onSubmit(formData);
         setOpenModal(false);
     };
 
@@ -63,16 +60,14 @@ export function AttachmentForm({
     return (
         <Dialog open={openModal} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <button className='group flex flex-col gap-2 cursor-pointer items-center justify-center p-4 rounded-lg hover:bg-accent outline outline-dashed transition-colors min-h-[100px]'>
-                    <div className='flex items-center justify-center'>
-                        <FilePlus2 className='text-primary' />
-                    </div>
-                </button>
+                <Button className='w-full' variant='secondary' size='sm'>
+                    <FilePlus2 /> Anexar
+                </Button>
             </DialogTrigger>
 
             <DialogContent>
                 <form
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    onSubmit={form.handleSubmit(handleOnSubmit)}
                     className='flex flex-col gap-4'
                 >
                     <DialogHeader>
@@ -106,7 +101,7 @@ export function AttachmentForm({
                             <Button variant='outline'>Cancelar</Button>
                         </DialogClose>
 
-                        <Button type='submit' disabled={disableActions}>
+                        <Button type='submit' disabled={isUploading}>
                             Anexar
                         </Button>
                     </DialogFooter>

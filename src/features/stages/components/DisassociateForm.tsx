@@ -9,14 +9,14 @@ interface DisassociateFormProps {
     stage: Stage;
     user: Partial<User>;
     onSubmit: (stageId: number, userId: string) => void;
-    disableActions: boolean;
+    disableActions?: boolean;
 }
 
 export function DisassociateForm({
     stage,
     user,
     onSubmit,
-    disableActions,
+    disableActions = false,
     title = 'Desvincular usuário?',
 }: DisassociateFormProps) {
     const handleConfirm = () => {
@@ -28,7 +28,6 @@ export function DisassociateForm({
             onConfirm={handleConfirm}
             disabled={disableActions}
             title={title}
-            confirmLabel='Desatribuir'
             description={`Deseja remover o vínculo de "${user.nome}" da etapa "${stage.descricao}"?`}
             trigger={
                 <Button

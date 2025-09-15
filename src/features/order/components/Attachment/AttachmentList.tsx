@@ -25,24 +25,27 @@ export function AttachmentList({
     onRequest,
 }: AttachmentListProps) {
     return (
-        <>
+        <div className='grid grid-cols-1 gap-4 mb-4'>
             {attachments.map((attachment) => (
                 <button
                     key={attachment.id}
                     onClick={() => onRequest(attachment.id)}
-                    className='group flex gap-1 flex-col cursor-pointer items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors'
+                    className='flex items-center gap-2 hover:bg-accent transition-colors p-1 rounded-sm'
                 >
                     <div className='flex items-center justify-center'>
                         {getFileIcon(attachment.tipo)}
                     </div>
-                    <span className='text-xs text-center font-medium truncate w-full mt-2'>
-                        {attachment.descricao}
-                    </span>
-                    <span className='text-xs text-center text-muted-foreground truncate w-full'>
-                        {formatTimestamp(attachment.criadoEm)}
-                    </span>
+
+                    <div className='flex flex-col items-start gap-1 text-xs text-start'>
+                        <p className='font-medium text-wrap'>
+                            {attachment.descricao}
+                        </p>
+                        <p className='text-muted-foreground'>
+                            {formatTimestamp(attachment.criadoEm)}
+                        </p>
+                    </div>
                 </button>
             ))}
-        </>
+        </div>
     );
 }

@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/features/auth/contexts/AuthContext';
 import { useOrderInfo } from '@/features/order/hooks/useOrderInfo';
@@ -6,6 +5,7 @@ import { DisassociateForm } from '@/features/stages/components/DisassociateForm'
 import { AccordionList } from '@/shared/components/AccordionList';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { EmptyData } from '@/shared/components/EmptyData';
+import { LoadingIcon } from '@/shared/components/LoadingIcon';
 import { formatTimestamp } from '@/shared/utils/formatDate';
 import { formatTelefone } from '@/shared/utils/formatTelephone';
 import {
@@ -14,55 +14,66 @@ import {
     CircleCheck,
     Clock,
     Eye,
-    Loader,
     Phone,
-    Trash2,
     UserRound,
     UserRoundCheck,
     Waypoints,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AssignUserForm } from '../components/AssignUserForm';
-import { Attachment } from '../components/Attachment';
+import { AttachmentForm } from '../components/Attachment/AttachmentForm';
+import { AttachmentList } from '../components/Attachment/AttachmentList';
 import { CommentsForm } from '../components/CommentsForm';
-import { OrderHistoryAccordion } from '../components/OrderHistoryAccordion';
+import { OrderHistoryModal } from '../components/OrderHistoryModal';
 import { OrderSheets } from '../components/OrderSheets';
-import { useCalculateExecutionTime } from '../hooks/useCalculateExecutionTime';
+import { OrderStatusBadge } from '../components/OrderStatusBadge';
+import {
+    useAdvanceMutation,
+    useCommentsMutation,
+    useConcludeMutation,
+    useSelfAssignMutation,
+    useUploadFileMutation,
+    useUserAssignMutation,
+    useUserDisassociateMutation,
+} from '../hooks/useOrderApi';
+import { useOrderDetails } from '../hooks/useOrderDetails';
+import { orderService } from '../services/orderService';
 
 export default function ViewOrder() {
     const { isAdmin, userLogged } = useAuthContext();
+    const { calculateExecutionTime } = useOrderDetails();
     const navigate = useNavigate();
 
-    const {
-        order,
-        historicoAtual,
-        historicoPassados,
-        atribuir,
-        seAtribuir,
-        desatribuir,
-        concluir,
-        avancar,
-        comments,
-        viewAttachment,
-        uploadFile,
-        saveMeasurement,
-        saveAssistance,
-        disableActions,
-    } = useOrderInfo();
+    const { mutate: assign } = useUserAssignMutation();
+    const { mutate: selfAssign } = useSelfAssignMutation();
+    const { mutate: disassociate } = useUserDisassociateMutation();
+    const { mutate: conclude } = useConcludeMutation();
+    const { mutate: advance } = useAdvanceMutation();
+    const { mutate: comments } = useCommentsMutation();
+    const { mutate: uploadFile, isPending: isUploading } =
+        useUploadFileMutation();
 
-    const isFinished = !!historicoAtual?.concluidoEm;
+    const { order, currentOrder, pastOrders, orderIsCompleted, isFetching } =
+        useOrderInfo();
 
-    const { calculateExecutionTime } = useCalculateExecutionTime();
+    if (isFetching) return <LoadingIcon />;
+
+    if (!order || !currentOrder) return <EmptyData />;
+
+    const handleUploadFile = (file: FormData) => {
+        uploadFile({
+            orderId: order.id,
+            file,
+        });
+    };
 
     const handleViewAttachment = async (attachmentId: string) => {
-        const attachment = await viewAttachment(attachmentId);
+        const attachment = await orderService.viewAttachment(attachmentId);
 
         if (attachment) {
             window.open(attachment.url_temporaria, '_blank');
         }
     };
-
-    if (!historicoAtual || !order?.cliente) return <EmptyData />;
 
     return (
         <div className='space-y-10'>
@@ -74,22 +85,12 @@ export default function ViewOrder() {
                                 OS #{order.numero}
                             </h1>
 
-                            <div>
-                                {historicoAtual.concluidoEm ? (
-                                    <Badge variant={'success'}>
-                                        <Check /> Concluída
-                                    </Badge>
-                                ) : (
-                                    <Badge variant={'warning'}>
-                                        <Loader />
-                                        Em andamento
-                                    </Badge>
-                                )}
-                            </div>
+                            <OrderStatusBadge
+                                completedDate={currentOrder.concluidoEm}
+                            />
                         </div>
                         <p className='text-sm text-muted-foreground'>
-                            Iniciada em{' '}
-                            {formatTimestamp(historicoAtual.criadoEm)}
+                            Iniciada em {formatTimestamp(currentOrder.criadoEm)}
                         </p>
                     </div>
                 </div>
@@ -97,18 +98,12 @@ export default function ViewOrder() {
                 <div className='flex items-center gap-4 flex-wrap'>
                     <OrderSheets
                         order={order}
-                        stage={historicoAtual.etapa.descricao}
-                        onSubmitMeasurement={saveMeasurement}
-                        onSubmitAssistance={saveAssistance}
+                        stage={currentOrder.etapa.descricao}
                     />
 
-                    <Button variant='destructive'>
-                        <Trash2 />
-                    </Button>
-
-                    {!historicoAtual.concluidoEm ? (
+                    {!currentOrder.concluidoEm ? (
                         <ConfirmDialog
-                            onConfirm={concluir}
+                            onConfirm={() => conclude(currentOrder.id)}
                             title='Concluir etapa?'
                             trigger={
                                 <Button>
@@ -119,7 +114,7 @@ export default function ViewOrder() {
                         />
                     ) : (
                         <ConfirmDialog
-                            onConfirm={avancar}
+                            onConfirm={() => advance(currentOrder.id)}
                             title='Avançar etapa?'
                             trigger={
                                 <Button disabled={!isAdmin}>
@@ -136,7 +131,7 @@ export default function ViewOrder() {
                     <AccordionList title='Etapa atual' collapsible={false}>
                         <p className='flex items-center gap-2 text-primary'>
                             <Waypoints size={16} />{' '}
-                            {historicoAtual.etapa.descricao}
+                            {currentOrder.etapa.descricao}
                         </p>
                     </AccordionList>
 
@@ -169,19 +164,25 @@ export default function ViewOrder() {
 
                     <AccordionList title='Técnicos atribuídos'>
                         <div>
-                            {historicoAtual.atribuicoes.length > 0 &&
-                                historicoAtual.atribuicoes?.map(
+                            {currentOrder.atribuicoes.length > 0 &&
+                                currentOrder.atribuicoes?.map(
                                     ({ usuario }, index) => (
-                                        <div className='flex items-center gap-2 mb-1'>
+                                        <div
+                                            key={index}
+                                            className='flex items-center gap-2 mb-2'
+                                        >
                                             <DisassociateForm
-                                                key={index}
+                                                key={usuario.id}
                                                 title='Desatribuir usuário?'
-                                                stage={historicoAtual.etapa}
+                                                stage={currentOrder.etapa}
                                                 user={usuario}
                                                 onSubmit={() =>
-                                                    desatribuir(usuario.id)
+                                                    disassociate({
+                                                        historyId:
+                                                            currentOrder.id,
+                                                        userId: usuario.id,
+                                                    })
                                                 }
-                                                disableActions={disableActions}
                                             />
                                             <span>{usuario.nome}</span>
                                         </div>
@@ -190,22 +191,28 @@ export default function ViewOrder() {
 
                             {isAdmin && (
                                 <AssignUserForm
-                                    stageUsers={
-                                        historicoAtual.etapa.etapaUsuario
+                                    stageUsers={currentOrder.etapa.etapaUsuario}
+                                    onAssign={(userId) =>
+                                        assign({
+                                            historyId: currentOrder.id,
+                                            userId,
+                                        })
                                     }
-                                    onAtribuir={atribuir}
                                 />
                             )}
 
                             {!isAdmin &&
-                                !historicoAtual.atribuicoes.some(
+                                !currentOrder.atribuicoes.some(
                                     (attr) => attr.usuario.id == userLogged?.id
                                 ) && (
                                     <ConfirmDialog
                                         onConfirm={() => {
-                                            seAtribuir(userLogged!.id);
+                                            selfAssign({
+                                                historyId: currentOrder.id,
+                                                userId: userLogged!.id,
+                                            });
                                         }}
-                                        disabled={disableActions}
+                                        disabled={false}
                                         title={'Auto atribuição'}
                                         confirmLabel='Confirmar'
                                         description={`Deseja se auto atribuir nessa ordem de serviço?`}
@@ -224,68 +231,76 @@ export default function ViewOrder() {
                             <div className='flex items-center gap-2'>
                                 <Clock
                                     size={17}
-                                    className={`${isFinished ? 'bg-green-500' : 'bg-amber-600'} rounded-full text-white`}
-                                />{' '}
+                                    className={`${orderIsCompleted ? 'bg-green-500' : 'bg-amber-600'} rounded-full text-white`}
+                                />
                                 Tempo de execução:
                                 <span>
                                     {calculateExecutionTime(
-                                        historicoAtual.criadoEm,
-                                        historicoAtual.concluidoEm!
+                                        currentOrder.criadoEm,
+                                        currentOrder.concluidoEm!
                                     )}
                                 </span>
                             </div>
 
                             <div
-                                className={`flex items-center gap-2 ${!isFinished && 'opacity-60'}`}
+                                className={`flex items-center gap-2 ${!orderIsCompleted && 'opacity-60'}`}
                             >
                                 <CircleCheck
                                     size={17}
-                                    className={`${isFinished ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
+                                    className={`${orderIsCompleted ? 'bg-green-500' : 'bg-muted-foreground'} rounded-full text-white`}
                                 />
                                 Concluída em:
                                 <span>
-                                    {formatTimestamp(
-                                        historicoAtual.concluidoEm
-                                    )}
+                                    {formatTimestamp(currentOrder.concluidoEm)}
                                 </span>
                             </div>
 
                             <div
-                                className={`flex items-center gap-2 ${!isFinished && 'opacity-60'}`}
+                                className={`flex items-center gap-2 ${!orderIsCompleted && 'opacity-60'}`}
                             >
                                 <UserRoundCheck size={17} />
                                 Responsável:
-                                <span>{historicoAtual.concluidoPor?.nome}</span>
+                                <span>{currentOrder.concluidoPor?.nome}</span>
                             </div>
                         </div>
                     </AccordionList>
 
                     <AccordionList title='Observações'>
-                        <div className='flex items-center'>
-                            <p>{historicoAtual.observacoes}</p>
+                        <div className='flex items-center gap-2'>
+                            <p>
+                                {currentOrder.observacoes ?? 'Sem observações'}
+                            </p>
 
                             <CommentsForm
-                                key={historicoAtual.id}
-                                observacoes={historicoAtual.observacoes}
-                                onSubmit={comments}
+                                key={currentOrder.id}
+                                observacoes={currentOrder.observacoes}
+                                onSubmit={(values) =>
+                                    comments({
+                                        historyId: currentOrder.id,
+                                        values,
+                                    })
+                                }
                             />
                         </div>
                     </AccordionList>
                 </div>
+
                 <aside className='space-y-6'>
                     <AccordionList title='Anexos'>
-                        <Attachment
+                        <AttachmentList
                             attachments={order.anexos ?? []}
-                            onUpload={uploadFile}
-                            onRequestView={handleViewAttachment}
-                            disableActions={disableActions}
+                            onRequest={handleViewAttachment}
+                        />
+                        <AttachmentForm
+                            onSubmit={handleUploadFile}
+                            isUploading={isUploading}
                         />
                     </AccordionList>
 
                     <AccordionList title='Histórico'>
-                        <OrderHistoryAccordion
+                        <OrderHistoryModal
                             order={order}
-                            orderHistory={historicoPassados}
+                            pastOrders={pastOrders}
                         />
                     </AccordionList>
                 </aside>

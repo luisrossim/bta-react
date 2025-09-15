@@ -76,9 +76,10 @@ export function AssistanceForm({ order, onSubmit }: AssistanceFormProps) {
         <FormProvider {...form}>
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger>
-                    <Button variant='outline'>
-                        <ClipboardCheck className='mr-2' /> Assistência
-                    </Button>
+                    <span className='flex items-center border rounded-md hover:bg-muted transition-colors gap-2 px-3 py-2'>
+                        <ClipboardCheck size={16} />
+                        <span>Assistência</span>
+                    </span>
                 </SheetTrigger>
 
                 <SheetContent>

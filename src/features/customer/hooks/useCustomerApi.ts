@@ -2,10 +2,15 @@ import { customerService } from '@/features/customer/services/customerService';
 import {
     type CreateCustomer,
     type Customer,
+    type CustomerRaw,
     type UpdateCustomer,
 } from '@/features/customer/types/Customer';
 import type { PaginatedResponse } from '@/shared/types/PaginatedResponse';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+    useMutation,
+    useQuery,
+    type UseQueryOptions,
+} from '@tanstack/react-query';
 
 function useGetCustomersQuery(search: string, page: number) {
     const params: Record<string, any> = { search, page };
@@ -17,9 +22,19 @@ function useGetCustomersQuery(search: string, page: number) {
     });
 }
 
+function useGetCustomersRawQuery(
+    options?: Partial<UseQueryOptions<CustomerRaw[]>>
+) {
+    return useQuery({
+        queryKey: ['customers-raw'],
+        queryFn: () => customerService.getAll(),
+        ...options,
+    });
+}
+
 function useGetCustomerQuery(id?: string) {
     return useQuery<Customer, Error>({
-        queryKey: ['get-customer-id', id],
+        queryKey: ['customer', id],
         queryFn: () => {
             if (!id) throw new Error('ID is required');
             return customerService.getById(id);
@@ -44,5 +59,6 @@ export {
     useCreateCustomerMutation,
     useGetCustomerQuery,
     useGetCustomersQuery,
+    useGetCustomersRawQuery,
     useUpdateCustomerMutation,
 };

@@ -1,4 +1,5 @@
 import { extractAxiosError } from '@/shared/utils/extractAxiosError';
+import { showError } from '@/shared/utils/showMessage';
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -12,6 +13,7 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         const normalizedError = extractAxiosError(error);
+        showError(normalizedError.message);
         return Promise.reject(normalizedError);
     }
 );

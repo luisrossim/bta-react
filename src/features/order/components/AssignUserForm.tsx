@@ -22,13 +22,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 interface AssignUserFormProps {
     stageUsers: StageUser[];
-    onAtribuir: (userId: string) => void;
+    onAssign: (userId: string) => void;
 }
 
-export function AssignUserForm({
-    stageUsers,
-    onAtribuir,
-}: AssignUserFormProps) {
+export function AssignUserForm({ stageUsers, onAssign }: AssignUserFormProps) {
     const [openModal, setOpenModal] = useState(false);
 
     const form = useForm<CreateAtribuicao>({
@@ -45,7 +42,7 @@ export function AssignUserForm({
 
     const onSubmit = ({ userId }: CreateAtribuicao) => {
         setOpenModal(false);
-        onAtribuir(userId);
+        onAssign(userId);
     };
 
     const stageUsersOptions = useMemo(
@@ -61,11 +58,7 @@ export function AssignUserForm({
         <FormProvider {...form}>
             <Dialog open={openModal} onOpenChange={handleOpenChange}>
                 <DialogTrigger asChild>
-                    <Button
-                        variant='ghost'
-                        className='text-primary !p-1'
-                        size='sm'
-                    >
+                    <Button variant='secondary' size='sm'>
                         <UserPlus /> Atribuir
                     </Button>
                 </DialogTrigger>

@@ -11,5 +11,5 @@ export interface OrderPaginated {
     historico_concluido_em?: Date;
     historico_atualizado_em: Date;
     historico_criado_em: Date;
-    usuarios_atribuidos: { id: number; nome: string }[];
+    usuarios_atribuidos: { id: string; nome: string }[];
 }

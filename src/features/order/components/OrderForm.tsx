@@ -8,19 +8,27 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { SelectFormItem } from '@/shared/components/inputs-components/SelectFormItem';
+import { useGetCustomersRawQuery } from '@/features/customer/hooks/useCustomerApi';
+import type { CustomerRaw } from '@/features/customer/types/Customer';
+import { useGetStagesQuery } from '@/features/stages/hooks/useStageApi';
+import type { Stage } from '@/features/stages/types/Stage';
+import { SelectAsyncFormItem } from '@/shared/components/inputs-components/SelectAsyncFormItem';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useCreateOrderMutation } from '../hooks/useOrderApi';
-import { useOrderForm } from '../hooks/useOrderForm';
 import { createOrderSchema, type CreateOrder } from '../types/Order';
 
 export default function OrderForm() {
     const [openModal, setOpenModal] = useState(false);
 
-    const { customersOptions, stageOptions } = useOrderForm();
+    const { isFetching: loadingStages, refetch: getStages } = useGetStagesQuery(
+        { enabled: false }
+    );
+
+    const { isFetching: loadingCustomersRaw, refetch: getCustomersRaw } =
+        useGetCustomersRawQuery({ enabled: false });
 
     const { mutateAsync: createOrder, isPending } = useCreateOrderMutation();
 
@@ -61,18 +69,32 @@ export default function OrderForm() {
                                 <DialogTitle>Nova ordem de serviço</DialogTitle>
                             </DialogHeader>
 
-                            <SelectFormItem
+                            <SelectAsyncFormItem
                                 label='Etapa'
                                 name='etapaId'
-                                options={stageOptions}
+                                fetchOptions={getStages}
+                                loading={loadingStages}
                                 required
+                                getOptions={(data) =>
+                                    data.map((stage: Stage) => ({
+                                        label: stage.descricao,
+                                        value: stage.id,
+                                    }))
+                                }
                             />
 
-                            <SelectFormItem
+                            <SelectAsyncFormItem
                                 label='Cliente'
                                 name='clienteId'
-                                options={customersOptions}
+                                fetchOptions={getCustomersRaw}
+                                loading={loadingCustomersRaw}
                                 required
+                                getOptions={(data) =>
+                                    data.map((customer: CustomerRaw) => ({
+                                        label: customer.nome,
+                                        value: customer.id,
+                                    }))
+                                }
                             />
                         </div>
 

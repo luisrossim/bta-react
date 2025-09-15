@@ -1,6 +1,5 @@
 import { queryClient } from '@/lib/reactQuery';
-import type { ApiErrorDetails } from '@/shared/utils/extractAxiosError';
-import { showError, showSuccess } from '@/shared/utils/showMessage';
+import { showSuccess } from '@/shared/utils/showMessage';
 import {
     useMutation,
     useQuery,
@@ -34,9 +33,6 @@ function useChangeStatusMutation() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
             showSuccess('Status alterado com sucesso');
-        },
-        onError: (error: ApiErrorDetails) => {
-            showError(error.message);
         },
     });
 }

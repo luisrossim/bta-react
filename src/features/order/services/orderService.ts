@@ -29,11 +29,11 @@ class OrderService extends CrudService<Order> {
         return response.data;
     }
 
-    async saveMeasurement(orderId: string, values: Measurement) {
+    async measurement(orderId: string, values: Measurement) {
         await this.axios.patch(`${this.path}/${orderId}/measurement`, values);
     }
 
-    async saveAssistance(orderId: string, values: Assistance) {
+    async assistance(orderId: string, values: Assistance) {
         await this.axios.patch(`${this.path}/${orderId}/assistance`, values);
     }
 }

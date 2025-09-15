@@ -4,11 +4,11 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
-import * as React from 'react';
+import type { ReactNode } from 'react';
 
 interface AccordionListProps {
     title: string;
-    children: React.ReactNode;
+    children: ReactNode;
     collapsible?: boolean;
     className?: string;
 }
@@ -26,7 +26,7 @@ export const AccordionList: React.FC<AccordionListProps> = ({
         className={`border rounded-lg ${className}`}
     >
         <AccordionItem value='item-1' className='border-0'>
-            <AccordionTrigger className='font-bold px-4 py-3 rounded-t-lg'>
+            <AccordionTrigger className='font-bold px-4 py-3'>
                 {title}
             </AccordionTrigger>
             <AccordionContent className='px-4 rounded-b-lg'>

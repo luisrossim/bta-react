@@ -48,7 +48,7 @@ export function CommentsForm({ observacoes, onSubmit }: CommentsFormProps) {
         <FormProvider {...form}>
             <Dialog open={openModal} onOpenChange={handleOpenChange}>
                 <DialogTrigger asChild>
-                    <Button variant='ghost' size='icon'>
+                    <Button variant='ghost' size='sm'>
                         <Edit className='text-primary' />
                     </Button>
                 </DialogTrigger>

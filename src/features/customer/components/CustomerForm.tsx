@@ -112,9 +112,7 @@ export default function CustomerForm({ customerId }: CustomerFormProps) {
                 </div>
 
                 <div className='flex items-center gap-4 mt-10'>
-                    <Button type='submit'>
-                        {customerId ? 'Salvar' : 'Cadastrar'}
-                    </Button>
+                    <Button type='submit'>Salvar</Button>
 
                     <Button
                         type='button'
